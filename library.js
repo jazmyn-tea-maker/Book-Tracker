@@ -72,9 +72,5 @@ gibberish.pIL();
 gibberish2.pIL();
 gibberish3.pIL();
 
-
-
-
-
 //If pages read is equal to pages, make a change in book appearance / move it to tag read.
 
