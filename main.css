@@ -18,6 +18,10 @@ body {
     margin-left: 20px;
 }
 
+.icon-div {
+    display: none;
+}
+
 .read-book-icon {
     height: 35px;
     width: auto;
@@ -27,29 +31,28 @@ body {
 }
 
 .search-icon {
-    position: absolute;
+    position: relative;
     display: block;
     height: 30px;
     width: auto;
-    margin-left: 35px;
-    top: 15px;
+    left: 35px;
+    align-self: center;
 }
 
 .book-search-input {
+    position: relative;
+    display: block;
     height: 20px;
     width: auto;
-    margin-left: 65px;
     top: 20px;
-    position: absolute;
+    left: 35px;
     border-radius: 10px;
-    display: none;
 }
 
 .end-nav-bar-items {
     margin-left: auto;
-    margin-right: 60px;
-    width: fit-content;
-    justify-self: flex-end;
+    margin-right: 10px;
+    width: 292px;
     display: flex;
     position: relative;
 }
@@ -94,6 +97,51 @@ body {
     width: auto;
     left: 45px;
     position: relative;
-    display: block;
     align-self: center;
+}
+
+
+@media (max-width: 850px) {
+    .nav {
+        flex-flow: column;
+    }
+    .read-book-icon {
+        display: none;
+    }
+    .search-icon {
+        display: none;
+    }
+    .book-search-input {
+        display: none;
+    }
+    .icon-div {
+        margin: 5px;
+        position: relative;
+        display: flex;
+        align-self: center;
+    }
+    .read-book-icon2 {
+        margin: inherit;
+        display: block;
+        height: 35px;
+        width: auto;
+    }
+    .search-icon2 {
+        position: relative;
+        margin: inherit;
+        display: block;
+        height: 30px;
+        width: auto;
+    }
+    .book-search-input2 {
+        position: relative;
+        display: block;
+        height: 20px;
+        width: 200px;
+        top: 10px;
+        border-radius: 10px;
+    }
+    .end-nav-bar-items {
+        margin: auto;
+    }
 }
