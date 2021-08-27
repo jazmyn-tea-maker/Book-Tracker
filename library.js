@@ -2,6 +2,7 @@ let tags = {
     userLibraryMain : [],
     toBeRead : [],
     read : [],
+    reading : [],
     putDown : [],
     favorites : []
 }
@@ -16,15 +17,64 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags) {
     this.tags = tags
 }
 
-let placeInLibrary = (obj) => {
-    tags.userLibraryMain.push(obj);
+book.prototype.pIL = function placeInLibrary() {
+    tags.userLibraryMain.push(this);
+    switch (this.tags) {
+        case ('toBeRead'): 
+            tags.toBeRead.push(this); 
+            break;
+        case 'read': 
+            tags.read.push(this); 
+            break;
+        case 'reading': 
+            tags.reading.push(this); 
+            break;
+        case 'putDown': 
+            tags.putDown.push(this); 
+            break;
+        case 'favorites': 
+            tags.favorites.push(this); 
+            break;
+    }
 }
 
-let hPBook3 = Object.assign(Object.create(book.prototype), {
-    
+let gibberish = Object.assign(Object.create(book.prototype), {
+    title: 'Gibberish',
+    author: 'Big Boy',
+    pages: 321,
+    pagesRead: 321,
+    reviewText: 'It was alright. Didn\'t make any sense, though.',
+    reviewStars: 3,
+    tags: 'read'
 });
 
-placeInLibrary(hPBook3);
-console.log(tags);
+let gibberish2 = Object.assign(Object.create(book.prototype), {
+    title: 'Gibberish the Sequel',
+    author: 'Big Boy',
+    pages: 365,
+    pagesRead: 56,
+    reviewText: '',
+    reviewStars: '',
+    tags: 'reading'
+});
+
+let gibberish3 = Object.assign(Object.create(book.prototype), {
+    title: 'Gibberish: the Prequel',
+    author: 'Big Boy',
+    pages: 450,
+    pagesRead: 0,
+    reviewText: '',
+    reviewStars: '',
+    tags: 'toBeRead'
+});
+
+gibberish.pIL();
+gibberish2.pIL();
+gibberish3.pIL();
+
+
+
+
+
 //If pages read is equal to pages, make a change in book appearance / move it to tag read.
 
