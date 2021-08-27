@@ -1,1 +1,99 @@
+body {
+    background-color: rgb(252, 230, 252);
+}
 
+.nav {
+    max-width: 100vw;
+    height: 60px;
+    position: relative;
+    background-color: thistle;
+    display: flex;
+}
+
+#Title {
+    top: 5px;
+    position: relative;
+    display: block;
+    align-self: center;
+    margin-left: 20px;
+}
+
+.read-book-icon {
+    height: 35px;
+    width: auto;
+    position: relative;
+    left: 10px;
+    align-self: center;
+}
+
+.search-icon {
+    position: absolute;
+    display: block;
+    height: 30px;
+    width: auto;
+    margin-left: 35px;
+    top: 15px;
+}
+
+.book-search-input {
+    height: 20px;
+    width: auto;
+    margin-left: 65px;
+    top: 20px;
+    position: absolute;
+    border-radius: 10px;
+    display: none;
+}
+
+.end-nav-bar-items {
+    margin-left: auto;
+    margin-right: 60px;
+    width: fit-content;
+    justify-self: flex-end;
+    display: flex;
+    position: relative;
+}
+
+.plus-icon {
+    height: 20px;
+    width: auto;
+    position: relative;
+    display: block;
+    align-self: center;
+}
+
+.person-profile {
+    height: 30px;
+    width: auto;
+    left: 20px;
+    position: relative;
+    display: block;
+    align-self: center;
+}
+
+#new-book-title {
+    font-size: 20px;
+    position: relative;
+    display: block;
+    align-self: center;
+    top: 3px;
+    left: 4px;
+}
+
+#account-title {
+    font-size: 20px;
+    position: relative;
+    display: block;
+    align-self: center;
+    top: 3px;
+    left: 25px;
+}
+
+#options {
+    height: 20px;
+    width: auto;
+    left: 45px;
+    position: relative;
+    display: block;
+    align-self: center;
+}
