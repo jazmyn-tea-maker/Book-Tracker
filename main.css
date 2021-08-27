@@ -104,6 +104,7 @@ body {
 @media (max-width: 850px) {
     .nav {
         flex-flow: column;
+        height: 145px;
     }
     .read-book-icon {
         display: none;
@@ -143,5 +144,6 @@ body {
     }
     .end-nav-bar-items {
         margin: auto;
+        bottom: 5px;
     }
 }
