@@ -34,8 +34,8 @@ body {
 .cover-div-book-search {
     position: absolute;
     margin-left: 274px;
-    background-color: rgb(167, 102, 167);
-    width: 215px;
+    background-color: thistle;
+    width: 250px;
     border-radius: 10px;
     top: 20px;
     height: 20px;
@@ -54,13 +54,13 @@ body {
 }
 
 .book-search-input {
-    position: relative;
+    position: absolute;
     display: block;
     height: 20px;
     width: auto;
     z-index: 2;
     top: 20px;
-    left: 35px;
+    left: 280px;
     border-radius: 10px;
 }
 
@@ -142,7 +142,7 @@ body {
         display: none;
     }
     .icon-div {
-        margin: 5px;
+        margin: auto;
         position: relative;
         display: flex;
         align-self: center;
@@ -152,10 +152,12 @@ body {
         display: block;
         height: 35px;
         width: auto;
+        z-index: 5;
     }
     .search-icon2 {
         position: relative;
-        margin: inherit;
+        margin: auto;
+        margin-left: 5px;
         display: block;
         height: 30px;
         background-color: thistle;
@@ -163,19 +165,20 @@ body {
         width: auto;
     }
     .book-search-input2 {
-        position: relative;
+        position: absolute;
         display: block;
         height: 20px;
         width: 200px;
         z-index: 2;
         top: 10px;
         border-radius: 10px;
+        
     }
     .cover-div-book-search {
-        background-color: rgb(87, 51, 87);
-        position: relative;
-        top: -41px;
-        left: 46px;
+        position: absolute;
+        bottom: 17px;
+        display: block;
+        left: 39%;
         z-index: 3;
         margin: auto;
     }
