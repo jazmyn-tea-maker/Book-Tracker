@@ -18,6 +18,8 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags) {
 }
 
 book.prototype.pIL = function placeInLibrary() {
+    let newBook = document.createElement('div');
+    let newTitle = document.createElement('h3');
     tags.userLibraryMain.push(this);
     switch (this.tags) {
         case ('toBeRead'): 
@@ -36,6 +38,12 @@ book.prototype.pIL = function placeInLibrary() {
             tags.favorites.push(this); 
             break;
     }
+    newTitle.innerText = this.title;
+    newTitle.className = 'book-titles'
+    newBook.className = 'book-div';
+    newBook.append(newTitle);
+    document.getElementById('book-container').appendChild(newBook);
+
 }
 
 let gibberish = Object.assign(Object.create(book.prototype), {
