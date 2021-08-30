@@ -38,13 +38,50 @@ book.prototype.pIL = function placeInLibrary() {
             tags.favorites.push(this); 
             break;
     }
+
     newTitle.innerText = this.title;
     newTitle.className = 'book-titles'
     newBook.className = 'book-div';
     newBook.append(newTitle);
     document.getElementById('book-container').appendChild(newBook);
+};
 
-}
+let bookSearchBox = document.getElementById('book-search-input');
+let bookSearchBoxMediaQuery = document.getElementById('book-search-input2')
+
+document.getElementById('cover-div-book-search').addEventListener('mouseenter', function (e) {
+    e.target.className = 'animatedCover';
+    bookSearchBox.addEventListener('mouseleave', function coverSearch () {
+        e.target.className = 'animatedCoverUp';
+    });
+});
+
+document.getElementById('search-icon').addEventListener('mouseenter', function (e) {
+    let coverDiv = document.getElementById('cover-div-book-search');
+    coverDiv.className = 'animatedCover';
+    bookSearchBox.addEventListener('mouseleave', function coverSearch () {
+        coverDiv.className = 'animatedCoverUp';
+    });
+});
+
+document.getElementById('cover-div-book-search2').addEventListener('mouseenter', function (e) {
+    e.target.className = 'animatedCover';
+    document.getElementById('icon-div').className = 'animateIcons';
+    bookSearchBoxMediaQuery.addEventListener('mouseleave', function coverSearch () {
+        e.target.className = 'animatedCoverUp';
+    });
+});
+
+document.getElementById('icon-div').addEventListener('mouseenter', function (e) {
+    let coverDiv = document.getElementById('cover-div-book-search2');
+    e.target.className = 'animateIcons';
+    coverDiv.className = 'animatedCover';
+    document.getElementById('cover-div-book-search2').className = 'animatedCover';
+    bookSearchBoxMediaQuery.addEventListener('mouseleave', function coverSearch () {
+        e.target.className = 'animateIconsBack';
+        coverDiv.className = 'animatedCoverUp';
+    });
+});
 
 let gibberish = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish',
