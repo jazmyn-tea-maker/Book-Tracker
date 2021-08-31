@@ -21,16 +21,6 @@ body {
     display: flex;
 }
 
-/* #transparentNav {
-    width: 100vw;
-    height: 60px;
-    position: absolute;
-    top: 0;
-    background-color: transparent;
-    display: block;
-    z-index: 100;
-} */
-
 #Title {
     color: var(--text-color);
     top: 5px;
@@ -193,7 +183,11 @@ body {
 .book-covers {
     position: relative;
     height: 275px;
+<<<<<<< HEAD
     width: 150px;
+=======
+    width: 155px;
+>>>>>>> 9e28189 (Major UI Changes/Book building/entering new book UI)
     border-radius: 10px;
     background-color: rgb(68, 61, 36);
     z-index: 31;
