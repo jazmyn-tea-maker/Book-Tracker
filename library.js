@@ -20,19 +20,21 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags) {
 book.prototype.pIL = function placeInLibrary() {
     let bookBuild = document.getElementById('book-build');
 <<<<<<< HEAD
+<<<<<<< HEAD
     console.log(bookBuild.style);
+=======
+>>>>>>> b207131 (Major UI Changes/Book building/entering new book UI)
     let bookContainer = document.getElementById('book-container');
     let newBook = bookBuild.cloneNode(true);
-    newBook.classList.add('newBook')
-    newBook.id = bookBuild.id + bookContainer.childElementCount;
-    for (i = 0; i < bookBuild.childElementCount; i++) {
-        let bookPart = newBook.children.item(i);
-    }
-    let colorArray = ['#635781', '#577d81', '#cbc25f', '#6fcb5f', '#685fcb', '#cb5fc8', '#cb5f5f', '#cba05f', '#905fcb', '#5fcbc1'];
+    newBook.classList.add('newBook');
+    newBook.id += bookContainer.childElementCount;
+
+    let colorsArray = ['#635781', '#577d81', '#cbc25f', '#6fcb5f', '#685fcb', '#cb5fc8', '#cb5f5f', '#cba05f', '#905fcb', '#5fcbc1'];
     let chooseColor = () => {
-        let length = colorArray.length;
+        let length = colorsArray.length;
         let randNum = Math.floor(Math.random() * (length + 1));
         return randNum;
+<<<<<<< HEAD
     }
     let chosenColor = colorArray[chooseColor()];
     newBook.children.item(0).style['background-color'] = chosenColor;
@@ -48,13 +50,18 @@ book.prototype.pIL = function placeInLibrary() {
         let length = colorsArray.length;
         let randNum = Math.floor(Math.random() * (length + 1));
         return randNum;
+=======
+>>>>>>> b207131 (Major UI Changes/Book building/entering new book UI)
     };
 
     let chosenColor = colorsArray[chooseColor()];
     newBook.children.item(0).style['background-color'] = chosenColor; //Front cover.
     newBook.children.item(2).style['background-color'] = chosenColor; //Back cover.
 
+<<<<<<< HEAD
 >>>>>>> 9e28189 (Major UI Changes/Book building/entering new book UI)
+=======
+>>>>>>> b207131 (Major UI Changes/Book building/entering new book UI)
     let newTitle = document.createElement('h3');
     tags.userLibraryMain.push(this);
     switch (this.tags) {
@@ -77,10 +84,14 @@ book.prototype.pIL = function placeInLibrary() {
 
     newTitle.innerText = this.title;
 <<<<<<< HEAD
+<<<<<<< HEAD
     newTitle.className = 'book-titles'
 =======
     newTitle.classList.add('book-titles');
 >>>>>>> 9e28189 (Major UI Changes/Book building/entering new book UI)
+=======
+    newTitle.classList.add('book-titles');
+>>>>>>> b207131 (Major UI Changes/Book building/entering new book UI)
     newBook.children.item(0).append(newTitle);
     bookContainer.appendChild(newBook);
 };
