@@ -183,15 +183,7 @@ body {
 .book-covers {
     position: relative;
     height: 275px;
-<<<<<<< HEAD
-<<<<<<< HEAD
-    width: 150px;
-=======
     width: 155px;
->>>>>>> 9e28189 (Major UI Changes/Book building/entering new book UI)
-=======
-    width: 155px;
->>>>>>> b207131 (Major UI Changes/Book building/entering new book UI)
     border-radius: 10px;
     background-color: rgb(68, 61, 36);
     z-index: 31;
