@@ -9,8 +9,22 @@
     <title>Book Tracker</title>
 </head>
 <body>
-    <!-- <div id='transparentNav'>
-    </div> -->
+    <div id='overlay'></div>
+    <div id='new-book-ui'>
+            <form id='book-input'>
+                <div id='text-inputs'>
+                    <input id='title-input' type='text'>
+                    <input id='author-input' type='text'>
+                    <input id='pages-input' type='text'>
+                    <input id='pages-read-input' type='text'>
+                </div>
+                
+                <input id='pages-read-range' type='range'>
+                <input id='img-upload' type='file'>
+                <button type=button>Upload Image</button>
+                <button>Done!</button>
+            </form>  
+    </div>
     <div id='nav'>
         <h1 id='Title'>Book Tracker</h1>
         <div id='icon-div'>
@@ -24,7 +38,7 @@
         <div id='cover-div-book-search'></div>
         <div id='cover-div-book-search2'></div>
         <div class='end-nav-bar-items'>
-            <img class='plus-icon' src='plus-icon.png'>
+            <img id='plus-icon' src='plus-icon.png'>
             <h2 id='new-book-title'>New Book</h2>
             <img class='person-profile' src='person-profile.png'>
             <h2 id='account-title'>Account</h2>
@@ -33,7 +47,11 @@
     </div>
     <div id='book-container'>
     </div>
-
+    <div id='book-build'>
+        <div class='book-covers front-cover'></div>
+        <div class='book-covers pages-div' style='background-color: white;'></div>
+        <div class='book-covers back-cover'></div>
+    </div>
     <footer id='footer'>
         
     </footer>

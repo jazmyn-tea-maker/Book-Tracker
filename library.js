@@ -18,7 +18,24 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags) {
 }
 
 book.prototype.pIL = function placeInLibrary() {
-    let newBook = document.createElement('div');
+    let bookBuild = document.getElementById('book-build');
+    console.log(bookBuild.style);
+    let bookContainer = document.getElementById('book-container');
+    let newBook = bookBuild.cloneNode(true);
+    newBook.classList.add('newBook')
+    newBook.id = bookBuild.id + bookContainer.childElementCount;
+    for (i = 0; i < bookBuild.childElementCount; i++) {
+        let bookPart = newBook.children.item(i);
+    }
+    let colorArray = ['#635781', '#577d81', '#cbc25f', '#6fcb5f', '#685fcb', '#cb5fc8', '#cb5f5f', '#cba05f', '#905fcb', '#5fcbc1'];
+    let chooseColor = () => {
+        let length = colorArray.length;
+        let randNum = Math.floor(Math.random() * (length + 1));
+        return randNum;
+    }
+    let chosenColor = colorArray[chooseColor()];
+    newBook.children.item(0).style['background-color'] = chosenColor;
+    newBook.children.item(2).style['background-color'] = chosenColor;
     let newTitle = document.createElement('h3');
     tags.userLibraryMain.push(this);
     switch (this.tags) {
@@ -41,9 +58,8 @@ book.prototype.pIL = function placeInLibrary() {
 
     newTitle.innerText = this.title;
     newTitle.className = 'book-titles'
-    newBook.className = 'book-div';
-    newBook.append(newTitle);
-    document.getElementById('book-container').appendChild(newBook);
+    newBook.children.item(0).append(newTitle);
+    bookContainer.appendChild(newBook);
 };
 
 let bookSearchBox = document.getElementById('book-search-input');
@@ -66,7 +82,7 @@ document.getElementById('search-icon').addEventListener('mouseenter', function (
     });
 });
 
-//Media query/mobile view:
+//Media query/mobile view search bar animations:
 
 document.getElementById('cover-div-book-search2').addEventListener('mouseenter', function (e) {
     e.target.className = 'animatedCover';
@@ -86,6 +102,17 @@ document.getElementById('icon-div').addEventListener('mouseenter', function (e) 
         coverDiv.className = 'animatedCoverUp';
     });
 });
+
+//New Book Button:
+
+// function addBookUI () {
+
+// }
+
+// document.getElementById('new-book-title').addEventListener('click',)
+
+// document.getElementById('plus-icon').addEventListener('click',)
+
 
 let gibberish = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish',
@@ -122,4 +149,3 @@ gibberish2.pIL();
 gibberish3.pIL();
 
 //If pages read is equal to pages, make a change in book appearance / move it to tag read.
-
