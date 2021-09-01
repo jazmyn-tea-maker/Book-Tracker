@@ -1,3 +1,11 @@
+let select = function (el) {
+    return document.getElementById(el);
+}
+
+let create = function (el) {
+    return document.createElement(el);
+}
+
 let tags = {
     userLibraryMain : [],
     toBeRead : [],
@@ -18,8 +26,8 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags) {
 }
 
 book.prototype.pIL = function placeInLibrary() {
-    let bookBuild = document.getElementById('book-build');
-    let bookContainer = document.getElementById('book-container');
+    let bookBuild = select('book-build');
+    let bookContainer = select('book-container');
     let newBook = bookBuild.cloneNode(true);
     newBook.classList.add('newBook');
     newBook.id += bookContainer.childElementCount;
@@ -35,7 +43,7 @@ book.prototype.pIL = function placeInLibrary() {
     newBook.children.item(0).style['background-color'] = chosenColor; //Front cover.
     newBook.children.item(2).style['background-color'] = chosenColor; //Back cover.
 
-    let newTitle = document.createElement('h3');
+    let newTitle = create('h3');
     tags.userLibraryMain.push(this);
     switch (this.tags) {
         case ('toBeRead'): 
@@ -61,19 +69,19 @@ book.prototype.pIL = function placeInLibrary() {
     bookContainer.appendChild(newBook);
 };
 
-let bookSearchBox = document.getElementById('book-search-input');
-let bookSearchBoxMediaQuery = document.getElementById('book-search-input2')
+let bookSearchBox = select('book-search-input');
+let bookSearchBoxMediaQuery = select('book-search-input2')
 
 //Website view search bar animations:
 
-document.getElementById('cover-div-book-search').addEventListener('mouseenter', function (e) {
+select('cover-div-book-search').addEventListener('mouseenter', function (e) {
     e.target.className = 'animatedCover';
     bookSearchBox.addEventListener('mouseleave', function coverSearch () {
         e.target.className = 'animatedCoverUp';
     });
 });
 
-document.getElementById('search-icon').addEventListener('mouseenter', function (e) {
+select('search-icon').addEventListener('mouseenter', function (e) {
     let coverDiv = document.getElementById('cover-div-book-search');
     coverDiv.className = 'animatedCover';
     bookSearchBox.addEventListener('mouseleave', function coverSearch () {
@@ -83,7 +91,7 @@ document.getElementById('search-icon').addEventListener('mouseenter', function (
 
 //Media query/mobile view search bar animations:
 
-document.getElementById('cover-div-book-search2').addEventListener('mouseenter', function (e) {
+select('cover-div-book-search2').addEventListener('mouseenter', function (e) {
     e.target.className = 'animatedCover';
     document.getElementById('icon-div').className = 'animateIcons';
     bookSearchBoxMediaQuery.addEventListener('mouseleave', function coverSearch () {
@@ -91,7 +99,7 @@ document.getElementById('cover-div-book-search2').addEventListener('mouseenter',
     });
 });
 
-document.getElementById('icon-div').addEventListener('mouseenter', function (e) {
+select('icon-div').addEventListener('mouseenter', function (e) {
     let coverDiv = document.getElementById('cover-div-book-search2');
     e.target.className = 'animateIcons';
     coverDiv.className = 'animatedCover';
