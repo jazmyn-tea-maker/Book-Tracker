@@ -254,7 +254,7 @@ body {
     width: 250px;
     z-index: 51;
     border-radius: 20px;
-    background-color: var(--accenting);
+    background-color: var(--main-color);
 }
 
 #text-inputs {
@@ -271,15 +271,88 @@ body {
     width: 90%;
 }
 
-#pages-read-range {
-    appearance: none;
+#pages-total-title {
     display: block;
-    margin: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
     position: relative;
+    text-align: center;
+    margin-left: 30px;
+    margin-top: 20px;
+    margin-bottom: 0;
+    width: 45%;
+    font-size: 18px;
 }
 
+#pagesTotal {
+    display: block;
+    position: relative;
+    margin-top: 21px;
+    width: 20%;
+    text-align: center;
+    font-size: 18px;
+}
+
+#pages-read-title {
+    display: block;
+    position: relative;
+    text-align: center;
+    margin-left: 30px;
+    width: 45%;
+    font-size: 18px;
+}
+
+#pagesRead {
+    display: block;
+    position: relative;
+    margin-top: 1px;
+    width: 20%;
+    text-align: center;
+    font-size: 18px;
+}
+
+.pRContainer {
+    display: flex;
+    flex-direction: row;
+    color: var(--text-color);
+}
+
+#pages-read-range {
+    appearance: none;
+    background-color: var(--accenting);
+    display: block;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    height: 20px;
+    padding: 5px;
+    position: relative;
+    border-radius: 10px;
+}
+
+.slider::-webkit-slider-thumb, .slider::-moz-range-thumb {
+    appearance: none !important;
+    border: none;
+    border-radius: 0;
+    margin-left: 20px;
+    height: 16px;
+    width: 8.63px;
+    background-color: violet;
+    background: url('bookmarkflag-01.svg');
+}
+
+  /* FF */
+  input[type="range"]::-moz-range-progress {
+    background-color: #4346f7; 
+  }
+  input[type="range"]::-moz-range-track {  
+    background-color: #ffffff;
+  }
+  /* IE*/
+  input[type="range"]::-ms-fill-lower {
+    background-color: #43e5f7; 
+  }
+  input[type="range"]::-ms-fill-upper {  
+    background-color: #9a905d;
+  }
 
 #overlay {
     display: block;

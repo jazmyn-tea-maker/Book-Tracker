@@ -116,10 +116,50 @@ select('icon-div').addEventListener('mouseenter', function (e) {
 
 // }
 
-// document.getElementById('new-book-title').addEventListener('click',)
+// select('new-book-title').addEventListener('click',)
 
-// document.getElementById('plus-icon').addEventListener('click',)
+// select('plus-icon').addEventListener('click',)
 
+(function inputClear () {
+    document.querySelectorAll('input').forEach(el => el.value = '');
+    console.log(document.querySelectorAll('input'));
+})();
+
+select('pages-input').addEventListener('keydown', function enterFunc (e) {
+    if (e.key == 'Enter' || e.eventCode == 13) {
+        let pages = e.target.value;
+        select('pages-read-range').setAttribute('max', pages);
+        select('pagesTotal').innerText = pages;
+        e.target.value = '';
+        e.preventDefault();
+    }
+})
+
+select('pages-read-range').addEventListener('input', function pageReadSlide (e) {
+    let pages = e.target.value;
+    select('pagesRead').innerText = pages;
+})
+
+select('pages-read-input').addEventListener('keydown', function enterFunc (e) {
+    if (e.key == 'Enter' || e.eventCode == 13) {
+        let numberOfPages = parseInt(select('pages-read-range').getAttribute('max'));
+        let pagesRead = parseInt(e.target.value);
+        if (numberOfPages == 0) {
+            alert('Please enter the number of pages first.');
+            e.preventDefault();
+            return;
+        } else if (pagesRead > numberOfPages) {
+            alert('I don\'t think that\'s possible...')
+            e.preventDefault();
+            return;
+        } else {
+            select('pagesRead').innerText = pagesRead;
+            select('pages-read-range').value = pagesRead;
+            e.target.value = '';
+            e.preventDefault();
+        }
+    }
+})
 
 let gibberish = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish',
