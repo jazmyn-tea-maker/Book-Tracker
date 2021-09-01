@@ -13,21 +13,26 @@
     <div id='new-book-ui'>
             <form id='book-input'>
                 <div id='text-inputs'>
-                    <input id='title-input' value='' placeholder='  Title' type='text'>
-                    <input id='author-input' placeholder= '  Author' type='text'>
-                    <input id='pages-input' placeholder='  Number of Pages' type='text'>
-                    <input id='pages-read-input' placeholder='  Pages Read' type='text'>
+                    <input id='title-input' value='' placeholder='Title' type='text'>
+                    <input id='author-input' placeholder= 'Author' type='text'>
+                    <input id='pages-input' placeholder='Number of Pages' type='text'>
+                    <input id='pages-read-input' placeholder='Pages Read' type='text'>
                 </div>
-                <div class='pRContainer'>
-                    <h4 id='pages-total-title'>Pages Total:</h4> <h4 id='pagesTotal'>0</h4>
+                <div class='pages-Titles-Div'>
+                    <div class='pRContainer'>
+                        <h4 id='pages-total-title'>Pages Total:</h4> <h4 id='pagesTotal'>0</h4>
+                    </div>
+                    <div class='pRContainer'>
+                        <h4 id='pages-read-title'>Pages Read:</h4> <h4 id='pagesRead'>0</h4>
+                    </div>
                 </div>
-                <div class='pRContainer'>
-                    <h4 id='pages-read-title'>Pages Read:</h4> <h4 id='pagesRead'>0</h4>
-                </div>
+                
                 <input id='pages-read-range' class='slider' type='range' min='0' max='0'>
-                <input id='img-upload' type='file'>
-                <button type=button>Upload Image</button>
-                <button>Done!</button>
+                <div id='img-div'><br>No image selected</div>
+                <div class='uploadContainer'>
+                    <input id='img-upload' type='file'><button id='upload-btn' type=button>Upload Image</button>
+                </div>
+                <button id='done-btn'>Done!</button>
             </form>  
     </div>
     <div id='nav'>

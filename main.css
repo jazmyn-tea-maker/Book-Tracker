@@ -266,6 +266,7 @@ body {
 #text-inputs > input {
     margin: auto;
     margin-top: 30px;
+    text-indent: 10px;
     border-radius: 10px;
     border: none;
     width: 90%;
@@ -275,17 +276,17 @@ body {
     display: block;
     position: relative;
     text-align: center;
-    margin-left: 30px;
-    margin-top: 20px;
+    margin-left: 14px;
+    margin-top: 10px;
     margin-bottom: 0;
-    width: 45%;
+    width: 60%;
     font-size: 18px;
 }
 
 #pagesTotal {
     display: block;
     position: relative;
-    margin-top: 21px;
+    margin-top: 11px;
     width: 20%;
     text-align: center;
     font-size: 18px;
@@ -295,8 +296,8 @@ body {
     display: block;
     position: relative;
     text-align: center;
-    margin-left: 30px;
-    width: 45%;
+    margin-left: 15px;
+    width: 60%;
     font-size: 18px;
 }
 
@@ -309,6 +310,17 @@ body {
     font-size: 18px;
 }
 
+.pages-Titles-Div {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border-radius: 10px;
+    top: 10px;
+    width: 80%;
+    background-color: #180e33;
+    margin: auto;
+}
+
 .pRContainer {
     display: flex;
     flex-direction: row;
@@ -317,13 +329,13 @@ body {
 
 #pages-read-range {
     appearance: none;
-    background-color: var(--accenting);
+    background-color: rgb(37, 32, 54);
     display: block;
     margin: auto;
-    margin-top: 5px;
+    margin-top: 20px;
     margin-bottom: 20px;
-    height: 20px;
-    padding: 5px;
+    height: 30px;
+    padding: 10px;
     position: relative;
     border-radius: 10px;
 }
@@ -335,24 +347,71 @@ body {
     margin-left: 20px;
     height: 16px;
     width: 8.63px;
-    background-color: violet;
     background: url('bookmarkflag-01.svg');
 }
 
   /* FF */
   input[type="range"]::-moz-range-progress {
-    background-color: #4346f7; 
+    background-color: #43c9c2; 
   }
   input[type="range"]::-moz-range-track {  
     background-color: #ffffff;
   }
   /* IE*/
   input[type="range"]::-ms-fill-lower {
-    background-color: #43e5f7; 
+    background-color: #43c9c2; 
   }
   input[type="range"]::-ms-fill-upper {  
-    background-color: #9a905d;
+    background-color: #ffffff;
   }
+
+.uploadContainer {
+    display: flex;
+    margin: auto;
+    margin-bottom: 30px;
+    margin-top: -17px;
+    gap: 10px;
+    width: 200px;
+    flex-direction: row;
+}
+
+#upload-btn {
+    background-color: rgb(37, 32, 54);
+    color: var(--text-color);
+    font-size: 13px;
+    border-color: #f78cca;
+    border-radius: 10px;
+    width: 300px;
+}
+
+#img-div {
+    display: block;
+    position: relative;
+    margin: auto;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    bottom: 15px;
+    height: 55px;
+    width: 40px;
+    border-radius: 5px;
+    background-color: rgb(250, 241, 193);
+    font-size: 9px;
+    text-align: center;
+    line-height: 15px;
+}
+
+#done-btn {
+    margin: auto;
+    display: block;
+    position: absolute;
+    background-color: #f78cca;
+    left: 0; right: 0;
+    bottom: 10px;
+    color: #380c49;
+    border-color:var(--main-color);
+    border-radius: 10px;
+    width: 200px;
+}
 
 #overlay {
     display: block;
