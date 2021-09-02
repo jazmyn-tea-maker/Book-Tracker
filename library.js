@@ -1,9 +1,9 @@
-let select = function (el) {
-    return document.getElementById(el);
+let select = function (element) {
+    return document.getElementById(element);
 }
 
-let create = function (el) {
-    return document.createElement(el);
+let create = function (element) {
+    return document.createElement(element);
 }
 
 let tags = {
@@ -112,13 +112,14 @@ select('icon-div').addEventListener('mouseenter', function (e) {
 
 //New Book Button:
 
-// function addBookUI () {
+let newBookUI = () => {
+    select('overlay').style.display = 'block';
+    select('new-book-ui').style.display = 'block';
+}
 
-// }
+select('new-book-title').addEventListener('click', newBookUI);
 
-// select('new-book-title').addEventListener('click',)
-
-// select('plus-icon').addEventListener('click',)
+select('plus-icon').addEventListener('click', newBookUI);
 
 (function inputClear () {
     document.querySelectorAll('input').forEach(el => el.value = '');
@@ -149,7 +150,7 @@ select('pages-read-input').addEventListener('keydown', function enterFunc (e) {
             e.preventDefault();
             return;
         } else if (pagesRead > numberOfPages) {
-            alert('I don\'t think that\'s possible...')
+            alert('I don\'t think that\'s possible...');
             e.preventDefault();
             return;
         } else {
@@ -159,6 +160,22 @@ select('pages-read-input').addEventListener('keydown', function enterFunc (e) {
             e.preventDefault();
         }
     }
+})
+
+select('done-btn').addEventListener('click', function submit (e) {
+    let title = select('title-input').value;
+    let author = select('author-input').value;
+    let pages = select('pagesTotal').innerText;
+    let pagesRead = select('pagesRead').innerText;
+    let reviewText = 'Your review would be exquisite, I\'m sure.';
+    let reviewStars = 0;
+    let tags = ''
+    let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags);
+    newBook.pIL();
+    select('overlay').style.display = 'none';
+    select('new-book-ui').style.display = 'none';
+    e.preventDefault();
+    return;
 })
 
 let gibberish = Object.assign(Object.create(book.prototype), {

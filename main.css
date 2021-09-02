@@ -5,11 +5,14 @@
 }
 
 html {
-    overflow: hidden;
+    overflow: scroll;
 }
 
 body {
     background-color:var(--accenting);
+    height: 100%;
+    width: 100%;
+    padding: 0;
     z-index: -1;
 }
 
@@ -175,9 +178,15 @@ body {
 
 #book-container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-auto-rows: max-content;
-    gap: 30px 30px;
+    position: relative;
+    margin: auto;
+    margin-top: 15px;
+    justify-content: center;
+    width: 95%;
+    grid-template-columns: repeat(auto-fill, 175px);
+    grid-template-rows: repeat(auto-fill, 280px);
+    grid-auto-flow: row;
+    gap: 20px 10px;
 }
 
 .book-covers {
@@ -196,8 +205,8 @@ body {
 
 .newBook {
     display: block;
-    margin: 20px;
     height: 280px;
+    width: 180px;
 }
 
 .pages-div {
@@ -237,16 +246,17 @@ body {
 }
 
 #footer {
-    position: absolute;
+    position: fixed;
     display: block;
     width: 100vw;
     background-color: #1d1435;
     bottom: 0;
+    z-index: 70;
     height: 20px;
 }
 
 #new-book-ui {
-    display: block;
+    display: none;
     margin: auto;
     position: absolute;
     top: 0; left: 0; bottom: 0; right: 0;
@@ -414,7 +424,7 @@ body {
 }
 
 #overlay {
-    display: block;
+    display: none;
     position: absolute;
     background-color: black;
     opacity: .4;
