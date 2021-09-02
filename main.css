@@ -189,6 +189,58 @@ body {
     gap: 20px 10px;
 }
 
+#book-hover-all {
+    position: absolute;
+    z-index: 71;
+}
+
+#star {
+    z-index: 72;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+}
+
+#tag {
+    z-index: 72;
+    position: absolute;
+    top: 10px;
+    left: 115px;
+    width: 30px;
+    height: 30px;
+}
+
+#edit-book {
+    height: 25px;
+    left: 10px;
+    top: 238px;
+}
+
+#delete-book {
+    height: 25px;
+    left: 52px;
+    top: 238px;
+}
+
+#book-hover-all > button {
+    position: absolute;
+    z-index: 72;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+#book-hover-overlay {
+    height: 275px;
+    width: 155px;
+    background-color: rgb(49, 2, 47);
+    border-radius: 10px;
+    opacity: .3;
+    display: block;
+    position: absolute;
+}
+
 .book-covers {
     position: relative;
     height: 275px;
