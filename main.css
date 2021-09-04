@@ -196,7 +196,7 @@ body {
     transition: opacity .5s;
 }
 
-.book-hover-all:hover {
+.hover:hover {
     opacity: 1;
 }
 

@@ -110,12 +110,35 @@ select('icon-div').addEventListener('mouseenter', function (e) {
     });
 });
 
+//Book overlay hover toggle:
+
+let turnHoverOff = () => {
+    let booksLength = select('book-container').childElementCount;
+    let books = document.getElementsByClassName('newBook');
+    for (i = 0; i < booksLength; i++) {
+        let overlays = books.item(i).childNodes.item(1);
+        overlays.classList.remove('hover');
+    }
+}
+
+let turnHoverOn = () => {
+    let booksLength = select('book-container').childElementCount;
+    let books = document.getElementsByClassName('newBook');
+    for (i = 0; i < booksLength; i++) {
+        let overlays = books.item(i).childNodes.item(1);
+        overlays.classList.add('hover');
+    }
+}
+
 //New Book Button:
 
 let newBookUI = () => {
     select('overlay').style.display = 'block';
     select('new-book-ui').style.display = 'block';
+    turnHoverOff();
 }
+
+console.log(select('book-container'));
 
 select('new-book-title').addEventListener('click', newBookUI);
 
@@ -125,6 +148,12 @@ select('plus-icon').addEventListener('click', newBookUI);
     document.querySelectorAll('input').forEach(el => el.value = '');
     // console.log(document.querySelectorAll('input'));
 })();
+
+select('overlay').addEventListener('click', function backToMain () {
+    select('overlay').style.display = 'none';
+    select('new-book-ui').style.display = 'none';
+    turnHoverOn();
+})
 
 select('pages-input').addEventListener('keydown', function enterFunc (e) {
     if (e.key == 'Enter' || e.eventCode == 13) {
@@ -177,6 +206,7 @@ select('done-btn').addEventListener('click', function submit (e) {
     newBook.pIL();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
+    turnHoverOn();
     e.preventDefault();
     return;
 })
