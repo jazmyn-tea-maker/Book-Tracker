@@ -32,16 +32,18 @@ book.prototype.pIL = function placeInLibrary() {
     newBook.classList.add('newBook');
     newBook.id += bookContainer.childElementCount;
 
-    let colorsArray = ['#635781', '#577d81', '#cbc25f', '#6fcb5f', '#685fcb', '#cb5fc8', '#cb5f5f', '#cba05f', '#905fcb', '#5fcbc1'];
+    let colorsArray = ['#635781', '#577d81', '#cbc25f', '#6fcb5f', '#685fcb', '#cb5fc8', '#cb5f5f', '#cba05f', '#905fcb', '#5fcbc1', '#af7cab'];
     let chooseColor = () => {
         let length = colorsArray.length;
-        let randNum = Math.floor(Math.random() * (length + 1));
+        let randNum = Math.floor(Math.random() * (length));
+        console.log(randNum);
         return randNum;
     };
 
     let chosenColor = colorsArray[chooseColor()];
     newBook.children.item(1).style['background-color'] = chosenColor; //Front cover.
     newBook.children.item(3).style['background-color'] = chosenColor; //Back cover.
+    console.log(chosenColor);
 
     let newTitle = create('h3');
     tags.userLibraryMain.push(this);
