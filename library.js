@@ -40,8 +40,8 @@ book.prototype.pIL = function placeInLibrary() {
     };
 
     let chosenColor = colorsArray[chooseColor()];
-    newBook.children.item(0).style['background-color'] = chosenColor; //Front cover.
-    newBook.children.item(2).style['background-color'] = chosenColor; //Back cover.
+    newBook.children.item(1).style['background-color'] = chosenColor; //Front cover.
+    newBook.children.item(3).style['background-color'] = chosenColor; //Back cover.
 
     let newTitle = create('h3');
     tags.userLibraryMain.push(this);
@@ -65,7 +65,7 @@ book.prototype.pIL = function placeInLibrary() {
 
     newTitle.innerText = this.title;
     newTitle.classList.add('book-titles');
-    newBook.children.item(0).append(newTitle);
+    newBook.children.item(1).append(newTitle);
     bookContainer.appendChild(newBook);
 };
 
@@ -123,7 +123,7 @@ select('plus-icon').addEventListener('click', newBookUI);
 
 (function inputClear () {
     document.querySelectorAll('input').forEach(el => el.value = '');
-    console.log(document.querySelectorAll('input'));
+    // console.log(document.querySelectorAll('input'));
 })();
 
 select('pages-input').addEventListener('keydown', function enterFunc (e) {
@@ -170,6 +170,9 @@ select('done-btn').addEventListener('click', function submit (e) {
     let reviewText = 'Your review would be exquisite, I\'m sure.';
     let reviewStars = 0;
     let tags = ''
+    if (pagesRead == 0) {
+        tags = 'toBeRead';
+    }
     let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags);
     newBook.pIL();
     select('overlay').style.display = 'none';
@@ -177,6 +180,7 @@ select('done-btn').addEventListener('click', function submit (e) {
     e.preventDefault();
     return;
 })
+
 
 let gibberish = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish',
@@ -208,8 +212,23 @@ let gibberish3 = Object.assign(Object.create(book.prototype), {
     tags: 'toBeRead'
 });
 
+let placeholderBook = Object.assign(Object.create(book.prototype), {
+    title: 'A Book',
+    author: 'An Author',
+    pages: 500,
+    pagesRead: 0,
+    reviewText: '',
+    reviewStars: '',
+    tags: 'toBeRead'
+});
+
 gibberish.pIL();
 gibberish2.pIL();
 gibberish3.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
 
 //If pages read is equal to pages, make a change in book appearance / move it to tag read.

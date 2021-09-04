@@ -189,9 +189,15 @@ body {
     gap: 20px 10px;
 }
 
-#book-hover-all {
+.book-hover-all {
     position: absolute;
     z-index: 71;
+    opacity: 0;
+    transition: opacity .5s;
+}
+
+.book-hover-all:hover {
+    opacity: 1;
 }
 
 #star {
@@ -201,6 +207,7 @@ body {
     left: 10px;
     width: 30px;
     height: 30px;
+    cursor: pointer;
 }
 
 #tag {
@@ -210,21 +217,33 @@ body {
     left: 115px;
     width: 30px;
     height: 30px;
+    cursor: pointer;
 }
+
+
 
 #edit-book {
     height: 25px;
     left: 10px;
     top: 238px;
+    line-height: 12px;
+    color: white;
+    background-color: rgb(39, 39, 136);
+    border-color: rgb(25, 25, 128);
 }
 
 #delete-book {
     height: 25px;
     left: 52px;
     top: 238px;
+    line-height: 10px;
+    font-size: 30px;
+    color: white;
+    background-color: rgb(136, 39, 39);
+    border-color: rgb(128, 25, 25);
 }
 
-#book-hover-all > button {
+.book-hover-all > button {
     position: absolute;
     z-index: 72;
     display: inline-block;
@@ -234,7 +253,7 @@ body {
 #book-hover-overlay {
     height: 275px;
     width: 155px;
-    background-color: rgb(49, 2, 47);
+    background-color: rgb(90, 1, 86);
     border-radius: 10px;
     opacity: .3;
     display: block;
