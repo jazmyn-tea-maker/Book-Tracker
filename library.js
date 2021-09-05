@@ -36,7 +36,6 @@ book.prototype.pIL = function placeInLibrary() {
     let chooseColor = () => {
         let length = colorsArray.length;
         let randNum = Math.floor(Math.random() * (length));
-        // console.log(randNum);
         return randNum;
     };
 
@@ -44,8 +43,6 @@ book.prototype.pIL = function placeInLibrary() {
     newBook.children.item(1).style['background-color'] = chosenColor; //Front cover.
     newBook.children.item(3).style['background-color'] = chosenColor; //Back cover.
 
-
-    // console.log(chosenColor);
     tags.userLibraryMain.push(this);
     switch (this.tags) {
         case ('toBeRead'): 
@@ -66,23 +63,20 @@ book.prototype.pIL = function placeInLibrary() {
     }
 
     if (select('cover-img')) {
-        // function insertAfter(newNode, referenceNode) {
-        //     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-        // }
         let img = document.createElement('img');
         img.src = select('cover-img').src;
         img.style = `height: 275px;
                     width: 155px;
                     border-radius: 10px;`;
-        newBook.children.item(1).appendChild(img);
-        // insertAfter(img, select(newTitle.id));
-    } else {
+        newBook.children.item(1).appendChild(img);//Puts image into front cover div.
+    } else {  //If there isn't a cover image, just use a h3 title.
         let newTitle = create('h3');
         newTitle.innerText = this.title;
         newTitle.classList.add('book-titles');
         newTitle.id = 'bookTitle' + bookContainer.childElementCount;
         newBook.children.item(1).append(newTitle);
     }
+
     bookContainer.appendChild(newBook);
 };
 
@@ -161,10 +155,15 @@ select('new-book-title').addEventListener('click', newBookUI);
 
 select('plus-icon').addEventListener('click', newBookUI);
 
-(function inputClear () {
+function inputClear () {
     document.querySelectorAll('input').forEach(el => el.value = '');
+    if (select('cover-img')) {
+        select('cover-img').src = '';
+    }
     // console.log(document.querySelectorAll('input'));
-})();
+};
+
+inputClear();
 
 select('overlay').addEventListener('click', function backToMain () {
     select('overlay').style.display = 'none';
@@ -240,11 +239,14 @@ select('done-btn').addEventListener('click', function submit (e) {
     let tags = ''
     if (pagesRead == 0) {
         tags = 'toBeRead';
+    } else if (pagesRead == pages) {
+        tags = 'read'
     }
     let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags);
     newBook.pIL();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
+    inputClear();
     turnHoverOn();
     e.preventDefault();
     return;
@@ -299,5 +301,14 @@ placeholderBook.pIL();
 placeholderBook.pIL();
 placeholderBook.pIL();
 placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+placeholderBook.pIL();
+
 
 //If pages read is equal to pages, make a change in book appearance / move it to tag read.

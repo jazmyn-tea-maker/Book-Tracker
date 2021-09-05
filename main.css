@@ -1,3 +1,4 @@
+
 :root {
     --main-color: #392d59;
     --text-color: white;
@@ -5,7 +6,9 @@
 }
 
 html {
-    overflow: scroll;
+    overflow-y: scroll;
+    height: 100%;
+    padding: 0;
 }
 
 body {
@@ -13,6 +16,7 @@ body {
     height: 100%;
     width: 100%;
     padding: 0;
+    margin: 0;
     z-index: -1;
 }
 
@@ -181,7 +185,9 @@ body {
     position: relative;
     margin: auto;
     margin-top: 15px;
+    margin-bottom: 50px;
     justify-content: center;
+    overflow: hidden;
     width: 95%;
     grid-template-columns: repeat(auto-fill, 175px);
     grid-template-rows: repeat(auto-fill, 280px);
@@ -276,8 +282,8 @@ body {
 
 .newBook {
     display: block;
-    height: 280px;
-    width: 180px;
+    height: 290px;
+    width: 175px;
 }
 
 .pages-div {
@@ -291,7 +297,7 @@ body {
 .back-cover {
     left: 0px;
     bottom: 540px;
-    border-radius: 0px 10px 10px 5px;
+    border-radius: 0px 10px 10px 15px;
     width: 170px;
     z-index: 29;
 }
@@ -313,7 +319,7 @@ body {
     position: relative;
     top: 25%;
     text-align: center;
-    color: var(--text-color)
+    color: var(--text-color);
 }
 
 #footer {
@@ -329,7 +335,7 @@ body {
 #new-book-ui {
     display: none;
     margin: auto;
-    position: absolute;
+    position: fixed;
     top: 0; left: 0; bottom: 0; right: 0;
     height: 500px;
     width: 250px;
@@ -506,7 +512,7 @@ body {
 
 #overlay {
     display: none;
-    position: absolute;
+    position: fixed;
     background-color: black;
     opacity: .4;
     height: 100%;
