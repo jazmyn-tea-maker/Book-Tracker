@@ -36,16 +36,16 @@ book.prototype.pIL = function placeInLibrary() {
     let chooseColor = () => {
         let length = colorsArray.length;
         let randNum = Math.floor(Math.random() * (length));
-        console.log(randNum);
+        // console.log(randNum);
         return randNum;
     };
 
     let chosenColor = colorsArray[chooseColor()];
     newBook.children.item(1).style['background-color'] = chosenColor; //Front cover.
     newBook.children.item(3).style['background-color'] = chosenColor; //Back cover.
-    console.log(chosenColor);
 
-    let newTitle = create('h3');
+
+    // console.log(chosenColor);
     tags.userLibraryMain.push(this);
     switch (this.tags) {
         case ('toBeRead'): 
@@ -65,9 +65,24 @@ book.prototype.pIL = function placeInLibrary() {
             break;
     }
 
-    newTitle.innerText = this.title;
-    newTitle.classList.add('book-titles');
-    newBook.children.item(1).append(newTitle);
+    if (select('cover-img')) {
+        // function insertAfter(newNode, referenceNode) {
+        //     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+        // }
+        let img = document.createElement('img');
+        img.src = select('cover-img').src;
+        img.style = `height: 275px;
+                    width: 155px;
+                    border-radius: 10px;`;
+        newBook.children.item(1).appendChild(img);
+        // insertAfter(img, select(newTitle.id));
+    } else {
+        let newTitle = create('h3');
+        newTitle.innerText = this.title;
+        newTitle.classList.add('book-titles');
+        newTitle.id = 'bookTitle' + bookContainer.childElementCount;
+        newBook.children.item(1).append(newTitle);
+    }
     bookContainer.appendChild(newBook);
 };
 
@@ -190,6 +205,28 @@ select('pages-read-input').addEventListener('keydown', function enterFunc (e) {
             e.target.value = '';
             e.preventDefault();
         }
+    }
+})
+
+select('img-upload').addEventListener('change', function getBookCover (e) {
+    let img = document.createElement('img');
+    img.id = 'cover-img';
+    img.alt = 'Cover preview';
+    let file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener('load', function convertTobase64 () {
+        img.src = reader.result;
+        img.style = `height: 55px;
+                    width: 40px;`
+        let imgdiv = select('img-div');
+        imgdiv.innerHTML = '';
+        imgdiv.appendChild(img);
+
+    }, false);
+
+    if (file) {
+        reader.readAsDataURL(file);
     }
 })
 
