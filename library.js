@@ -149,8 +149,6 @@ let newBookUI = () => {
     turnHoverOff();
 }
 
-console.log(select('book-container'));
-
 select('new-book-title').addEventListener('click', newBookUI);
 
 select('plus-icon').addEventListener('click', newBookUI);
@@ -229,6 +227,7 @@ select('img-upload').addEventListener('change', function getBookCover (e) {
     }
 })
 
+
 select('done-btn').addEventListener('click', function submit (e) {
     let title = select('title-input').value;
     let author = select('author-input').value;
@@ -251,6 +250,11 @@ select('done-btn').addEventListener('click', function submit (e) {
     e.preventDefault();
     return;
 })
+
+//Edit button:
+
+
+
 
 
 let gibberish = Object.assign(Object.create(book.prototype), {

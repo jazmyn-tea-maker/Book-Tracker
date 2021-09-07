@@ -344,6 +344,18 @@ body {
     background-color: var(--main-color);
 }
 
+#edit-book-ui {
+    display: none;
+    margin: auto;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    height: 500px;
+    width: 360px;
+    z-index: 100;
+    border-radius: 20px;
+    background-color: var(--main-color);
+}
+
 #text-inputs {
     position: relative;
     display: flex;
