@@ -256,7 +256,25 @@ body {
     border-radius: 5px;
 }
 
+.book-hover-search {
+    position: absolute;
+    cursor: pointer;
+    z-index: 71;
+    opacity: 0;
+    transition: opacity .5s;
+}
+
 #book-hover-overlay {
+    height: 275px;
+    width: 155px;
+    background-color: rgb(90, 1, 86);
+    border-radius: 10px;
+    opacity: .45;
+    display: block;
+    position: absolute;
+}
+
+#book-hover-overlay-search {
     height: 275px;
     width: 155px;
     background-color: rgb(90, 1, 86);
@@ -276,6 +294,11 @@ body {
 }
 
 #book-build {
+    display: none;
+    margin-top: 20px;
+}
+
+#search-book-build {
     display: none;
     margin-top: 20px;
 }
@@ -314,7 +337,6 @@ body {
 }
 
 .book-titles {
-    font-size: 27px;
     display: block;
     position: relative;
     top: 25%;
@@ -354,6 +376,34 @@ body {
     z-index: 100;
     border-radius: 20px;
     background-color: var(--main-color);
+}
+
+#search-books-ui {
+    /* display: none; */
+    margin: auto;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    height: 500px;
+    width: 650px;
+    z-index: 100;
+    border-radius: 20px;
+    background-color: var(--main-color);
+}
+
+#searched-books-container {
+    display: grid;
+    position: relative;
+    margin: auto;
+    margin-top: 15px;
+    margin-bottom: 50px;
+    justify-content: center;
+    overflow: scroll;
+    height: 425px;
+    width: 95%;
+    grid-template-columns: repeat(auto-fill, 175px);
+    grid-template-rows: repeat(auto-fill, 280px);
+    grid-auto-flow: row;
+    gap: 20px 10px;
 }
 
 #text-inputs {

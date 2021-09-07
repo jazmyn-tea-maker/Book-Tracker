@@ -11,7 +11,11 @@
 <body>
     <div id='overlay'></div>
     <div id='edit-book-ui'>
-
+    </div>
+    <div id='search-books-ui'>
+        <h2>Your search for </h2><h2 id='searchText'></h2>
+        <di id='searched-books-container'>
+        </di>
     </div>
     <div id='new-book-ui'>
             <form id='book-input'>
@@ -72,6 +76,15 @@
             <button id='delete-book'>-</button>
             <button id='edit-book'>Edit</button>
             <div id='book-hover-overlay'></div>
+        </div>
+        <div class='book-covers front-cover'></div>
+        <div class='book-covers pages-div' style='background-color: white;'></div>
+        <div class='book-covers back-cover'></div>
+    </div>
+
+    <div id='search-book-build'>
+        <div class='book-hover-search hover'>
+            <div id='book-hover-overlay-search'><h5 style='color: white; font-size: 575%; position: relative; margin-left: 50px; margin-top: 75px;'>+</h5></div>
         </div>
         <div class='book-covers front-cover'></div>
         <div class='book-covers pages-div' style='background-color: white;'></div>
