@@ -350,7 +350,7 @@ body {
     width: 100vw;
     background-color: #1d1435;
     bottom: 0;
-    z-index: 70;
+    z-index: 1000;
     height: 20px;
 }
 
@@ -379,7 +379,7 @@ body {
 }
 
 #search-books-ui {
-    /* display: none; */
+    display: none;
     margin: auto;
     position: fixed;
     top: 0; left: 0; bottom: 0; right: 0;

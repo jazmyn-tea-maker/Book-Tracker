@@ -1,11 +1,13 @@
 $(function () { 
-    
+    //select/create functions are in the library.js file. Works because it's loaded first!
     let searchFunc = (e) => {
         let apiKey = 'AIzaSyCd0voZ7biNdsZQd6nNjDnHDYwztwprOK8';
         if (e.key == 'Enter' || e.eventCode == 13) {
             if (e.target.value == '') {
             alert('Please enter something to search first.');
             } else {
+                select('overlay').style.display = 'block';
+                select('search-books-ui').style.display = 'block';
 
                 $.get(`https://www.googleapis.com/books/v1/volumes?q=${e.target.value}&key=${apiKey}&maxResults=40`, function(data){
                     function searchedBooks(title, img, author, pages, summary) {

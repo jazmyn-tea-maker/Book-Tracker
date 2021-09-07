@@ -166,6 +166,8 @@ inputClear();
 select('overlay').addEventListener('click', function backToMain () {
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
+    select('search-books-ui').style.display = 'none';
+    select('searched-books-container').innerHTML = '';
     turnHoverOn();
 })
 
