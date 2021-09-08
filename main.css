@@ -367,15 +367,93 @@ body {
 }
 
 #edit-book-ui {
-    display: none;
+    /* display: none; */
     margin: auto;
     position: fixed;
+    overflow: hidden;
     top: 0; left: 0; bottom: 0; right: 0;
     height: 500px;
-    width: 360px;
+    width: 550px;
     z-index: 100;
     border-radius: 20px;
     background-color: var(--main-color);
+}
+
+.edit-titles {
+    color: var(--text-color);
+    text-align: center;
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.small-text {
+    color: rgb(202, 202, 202);
+    text-align: center;
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.small-titles {
+    font-size: 150%;
+    top: 25%;
+}
+
+#contain-book-ops {
+    position: relative;
+    margin: auto;
+    width: 92%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.para-responsive {
+    overflow-y: scroll; 
+    left: 13px;
+    padding-right: 9px;
+    max-height: 60px;
+}
+
+.book-preview {
+    background-color: black;
+    height: 200px;
+    width: 120.68px;
+}
+
+#edit-review-container {
+    display: flex;
+    margin: auto;
+    width: 50%;
+    height: 30px;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#edit-review-btn {
+    width: 75px;
+    height: 20px;
+    line-height: 10px;
+    border-radius: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+#review-stars {
+    display: flex;
+    flex-direction: row;
+}
+
+.stars {
+    display: block;
+    position: relative;
+    width: 30px;
+    height: 20px;
 }
 
 #search-books-ui {
@@ -573,7 +651,7 @@ body {
 }
 
 #overlay {
-    display: none;
+    /* display: none; */
     position: fixed;
     background-color: black;
     opacity: .4;
