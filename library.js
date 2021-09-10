@@ -25,6 +25,33 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags) {
     this.tags = tags
 }
 
+//Shows summary, review and the option to put the book 'down'.
+function applyBookPreviewEL (bookID) {
+    let bookOverlay = select(bookID).children.item(0).children.item(4);
+    bookOverlay.addEventListener('click', function () {
+        select('preview-book-ui').style.display = 'block';
+        select('overlay').style.display = 'block';
+        let bookPreview = select('book-preview');
+        let bookColor = select(bookID).children.item(1).style.backgroundColor;
+        console.log(bookColor);
+        let bookStaticClone = select(bookID).cloneNode(true);
+        bookStaticClone.children.item(0).remove(); // Takes off the hover overlay.
+
+        let frontCover = bookStaticClone.children.item(0);
+        frontCover.style = `height: 189.64px; width: 106.88px; background-color: ${bookColor};`;
+        if (frontCover.children.item(0).nodeName == 'H3') {
+           frontCover.children.item(0).style = 'font-size: revert';
+        } else {
+            frontCover.children.item(0).style = 'border-radius: 10px; height: 189.64px; width: 106.88px; display: block;';
+        }
+        let pages = bookStaticClone.children.item(1);
+        pages.style = `height: 189.64px; width: 108.96px; bottom: 185px; left: 4px;`;
+        let backCover = bookStaticClone.children.item(2);
+        backCover.style = `height: 189.64px; width: 117.23px; left: 1px; bottom: 371px; background-color: ${bookColor};`;
+        bookPreview.appendChild(bookStaticClone);
+
+    });
+}
 book.prototype.pIL = function placeInLibrary() {
     let bookBuild = select('book-build');
     let bookContainer = select('book-container');
@@ -78,6 +105,7 @@ book.prototype.pIL = function placeInLibrary() {
     }
 
     bookContainer.appendChild(newBook);
+    applyBookPreviewEL(newBook.id);
 };
 
 let bookSearchBox = select('book-search-input');
@@ -167,6 +195,8 @@ select('overlay').addEventListener('click', function backToMain () {
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
     select('search-books-ui').style.display = 'none';
+    select('preview-book-ui').style.display = 'none';
+    select('book-preview').innerHTML = '';
     select('searched-books-container').innerHTML = '';
     turnHoverOn();
 })

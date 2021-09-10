@@ -313,6 +313,7 @@ body {
     left: 5px;
     width: 158px;
     border-radius: 50px 20px 10px 10px;
+    background-color: white;
     bottom: 270px;
     z-index: 30;
 }
@@ -366,8 +367,8 @@ body {
     background-color: var(--main-color);
 }
 
-#edit-book-ui {
-    /* display: none; */
+#preview-book-ui {
+    display: none;
     margin: auto;
     position: fixed;
     overflow: hidden;
@@ -379,7 +380,7 @@ body {
     background-color: var(--main-color);
 }
 
-.edit-titles {
+.preview-titles {
     color: var(--text-color);
     text-align: center;
     display: block;
@@ -419,7 +420,8 @@ body {
 }
 
 .book-preview {
-    background-color: black;
+    position: relative;
+    display: flex;
     height: 200px;
     width: 120.68px;
 }
@@ -651,7 +653,7 @@ body {
 }
 
 #overlay {
-    /* display: none; */
+    display: none;
     position: fixed;
     background-color: black;
     opacity: .4;
