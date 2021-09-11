@@ -15,7 +15,7 @@ let tags = {
     favorites : []
 }
 
-function book(title, author, pages, pagesRead, reviewText, reviewStars, tags) {
+function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description) {
     this.title = title,
     this.author = author,
     this.pages = pages,
@@ -23,20 +23,23 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags) {
     this.reviewText = reviewText,
     this.reviewStars = reviewStars
     this.tags = tags
+    this.description = description;
 }
 
 //Shows summary, review and the option to put the book 'down'.
-function applyBookPreviewEL (bookID) {
+function applyBookPreview (bookID, obj) {
     let bookOverlay = select(bookID).children.item(0).children.item(4);
     bookOverlay.addEventListener('click', function () {
+
+        //Applying a clone of the book build:
         select('preview-book-ui').style.display = 'block';
         select('overlay').style.display = 'block';
         let bookPreview = select('book-preview');
         let bookColor = select(bookID).children.item(1).style.backgroundColor;
-        console.log(bookColor);
         let bookStaticClone = select(bookID).cloneNode(true);
         bookStaticClone.children.item(0).remove(); // Takes off the hover overlay.
 
+        // Had to change the sizes of the book parts:
         let frontCover = bookStaticClone.children.item(0);
         frontCover.style = `height: 189.64px; width: 106.88px; background-color: ${bookColor};`;
         if (frontCover.children.item(0).nodeName == 'H3') {
@@ -49,8 +52,33 @@ function applyBookPreviewEL (bookID) {
         let backCover = bookStaticClone.children.item(2);
         backCover.style = `height: 189.64px; width: 117.23px; left: 1px; bottom: 371px; background-color: ${bookColor};`;
         bookPreview.appendChild(bookStaticClone);
+        //Applying data:
+        let defaultSummary = `No summary...would you like to add one?<br>
+        <a id='book-summary-pick' href='#'>Choose from existing book.</a> 
+        <br>
+        <a id='book-summary-create' href='#'>Create your own.</a></p>`;
+        let defaultReview = `Nothing here yet!`;
+        if (obj.reviewText) {
+            select('review-text').innerText = obj.reviewText;
+        } else {
+            select('review-text').innerHTML = defaultReview;
+        }
+        if (obj.description) {
+            select('summary-para').innerText = obj.description; 
+        } else {
+            select('summary-para').innerHTML = defaultSummary;
+        }
 
+        let reviewStarActivate = (i) => {
+            for (x = 1; x <= i; x++){
+                select(`${x}star`).src = 'faveStarActive.svg';
+            }
+        }
+        
+        reviewStarActivate(obj.reviewStars);
+        
     });
+
 }
 book.prototype.pIL = function placeInLibrary() {
     let bookBuild = select('book-build');
@@ -105,7 +133,7 @@ book.prototype.pIL = function placeInLibrary() {
     }
 
     bookContainer.appendChild(newBook);
-    applyBookPreviewEL(newBook.id);
+    applyBookPreview(newBook.id, this);
 };
 
 let bookSearchBox = select('book-search-input');
@@ -198,6 +226,9 @@ select('overlay').addEventListener('click', function backToMain () {
     select('preview-book-ui').style.display = 'none';
     select('book-preview').innerHTML = '';
     select('searched-books-container').innerHTML = '';
+    for (x = 1; x <= 5; x++){
+        select(`${x}star`).src = 'faveStar.svg';
+    }
     turnHoverOn();
 })
 
@@ -273,7 +304,7 @@ select('done-btn').addEventListener('click', function submit (e) {
     } else if (pagesRead == pages) {
         tags = 'read'
     }
-    let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags);
+    let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description);
     newBook.pIL();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
@@ -286,9 +317,6 @@ select('done-btn').addEventListener('click', function submit (e) {
 //Edit button:
 
 
-
-
-
 let gibberish = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish',
     author: 'Big Boy',
@@ -296,27 +324,30 @@ let gibberish = Object.assign(Object.create(book.prototype), {
     pagesRead: 321,
     reviewText: 'It was alright. Didn\'t make any sense, though.',
     reviewStars: 3,
-    tags: 'read'
+    tags: 'read',
+    description: 'Ykasj jnaj lasjonw kjndnsajdad lamdad akndand kann. Ajnnnasf alwopq knsknas.'
 });
 
 let gibberish2 = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish the Sequel',
     author: 'Big Boy',
     pages: 365,
-    pagesRead: 56,
-    reviewText: '',
-    reviewStars: '',
-    tags: 'reading'
+    pagesRead: 365,
+    reviewText: 'It still doesn\'t make any sense...but it was mildly entertaining nonetheless.',
+    reviewStars: '4',
+    tags: 'read',
+    description: 'jafiafi anfofajf akfkajksowws oinkasnfsan. knaknaskla aljmsdkasjdlkal aksnasn akjsnfkanf.'
 });
 
 let gibberish3 = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish: the Prequel',
     author: 'Big Boy',
     pages: 450,
-    pagesRead: 0,
-    reviewText: '',
-    reviewStars: '',
-    tags: 'toBeRead'
+    pagesRead: 450,
+    reviewText: 'Wow. I think I can finally understand why people read this series. My God. It is a masterpiece!!',
+    reviewStars: '5',
+    tags: 'read',
+    description: 'Gib jib gabba wooky. Gahanda foroduki! Jamba laba da, tad aplo bungy.'
 });
 
 let placeholderBook = Object.assign(Object.create(book.prototype), {
@@ -326,22 +357,13 @@ let placeholderBook = Object.assign(Object.create(book.prototype), {
     pagesRead: 0,
     reviewText: '',
     reviewStars: '',
-    tags: 'toBeRead'
+    tags: 'toBeRead',
+    description: ''
 });
 
 gibberish.pIL();
 gibberish2.pIL();
 gibberish3.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
 placeholderBook.pIL();
 placeholderBook.pIL();
 placeholderBook.pIL();
