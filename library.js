@@ -15,6 +15,8 @@ let tags = {
     favorites : []
 }
 
+let allBooks = []; //Gives me access to all the objects.
+
 //Book constructor:
 function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description) {
     this.title = title,
@@ -27,103 +29,33 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, de
     this.description = description;
 }
 
-//Shows summary, review and the option to put the book 'down'.
-function applyBookPreview (bookID, obj) {
-    let bookOverlay = select(bookID).children.item(0).children.item(4);
-    bookOverlay.addEventListener('click', function () {
 
-        //Applying a clone of the book build:
-        select('preview-book-ui').style.display = 'block';
-        select('overlay').style.display = 'block';
-        let bookPreview = select('book-preview');
-        let bookColor = select(bookID).children.item(1).style.backgroundColor;
-        let bookStaticClone = select(bookID).cloneNode(true);
-        bookStaticClone.children.item(0).remove(); // Takes off the hover overlay.
 
-        // Had to change the sizes of the book parts:
-        let frontCover = bookStaticClone.children.item(0);
-        frontCover.style = `height: 189.64px; width: 106.88px; background-color: ${bookColor};`;
-        if (frontCover.children.item(0).nodeName == 'H3') {
-           frontCover.children.item(0).style = 'font-size: revert';
-        } else {
-            frontCover.children.item(0).style = 'border-radius: 10px; height: 189.64px; width: 106.88px; display: block;';
-        }
-        let pages = bookStaticClone.children.item(1);
-        pages.style = `height: 189.64px; width: 108.96px; bottom: 185px; left: 4px;`;
-        let backCover = bookStaticClone.children.item(2);
-        backCover.style = `height: 189.64px; width: 117.23px; left: 1px; bottom: 371px; background-color: ${bookColor};`;
-        bookPreview.appendChild(bookStaticClone);
 
+function applyPreviewDataDefault (bookIndex) {
         //Applying data:
+        let bookObj = allBooks[bookIndex];
+
         let defaultSummary = `No summary...would you like to add one?<br>
         <a id='book-summary-pick' href='#'>Choose from existing book.</a> 
         <br>
         <a id='book-summary-create' href='#'>Create your own.</a></p>`;
         let defaultReview = `Nothing here yet!`;
-        if (obj.reviewText) {
-            select('review-text').innerText = obj.reviewText;
+        if (bookObj.reviewText) {
+            select('review-text').innerText = bookObj.reviewText;
+            console.log(bookObj.reviewText);
         } else {
             select('review-text').innerHTML = defaultReview;
         }
-        if (obj.description) {
-            select('summary-para').innerText = obj.description; 
+        if (bookObj.description) {
+            select('summary-para').innerText = bookObj.description; 
         } else {
             select('summary-para').innerHTML = defaultSummary;
         }
+    }
 
-        //Review stars functionality:
-        function reviewStarActivate (i) {
-            let starNum = this; // Trails back to the stars they're attatched to later.
-            if (starNum.id){ //By default, it's the window obj.
-                starNum = parseInt(starNum.id.replace(/star/gi, ''));
-                i = starNum;
-                obj.reviewStars = i;
-            }
-            for (j = i + 1; j <= 5; j++) {
-                select(`${j}star`).src = 'faveStar.svg';
-            }
-            for (x = 1; x <= i; x++){
-                select(`${x}star`).src = 'faveStarActive.svg';
-            }
-        };
+    let bookSelected;
 
-        reviewStarActivate(obj.reviewStars);
-
-        select('1star').addEventListener('click', reviewStarActivate);
-        select('2star').addEventListener('click', reviewStarActivate);
-        select('3star').addEventListener('click', reviewStarActivate);
-        select('4star').addEventListener('click', reviewStarActivate);
-        select('5star').addEventListener('click', reviewStarActivate);
-
-        //Edit review button:
-        select('edit-review-btn').addEventListener('click', function () {
-            let reviewInput = select('review-input');
-            reviewInput.style.display = 'block';
-            let submitBtn = select('submit-review-btn');
-            submitBtn.style.display = 'block';
-            reviewInput.addEventListener('keydown', function (e) {
-                if (e.key == 'Enter' || e.eventCode == 13) {
-                    obj.reviewText = reviewInput.value;
-                    select('review-text').innerText = reviewInput.value;
-                    e.target.style.display = 'none';
-                    submitBtn.style.display = 'none';
-                }
-            })
-            submitBtn.addEventListener('click', function submit (e) {
-                obj.reviewText = reviewInput.value;
-                select('review-text').innerText = reviewInput.value;
-                reviewInput.style.display = 'none';
-                e.target.style.display = 'none';
-                e.preventDefault();
-            })
-        });
-
-
-        
-        
-    });
-
-}
 book.prototype.pIL = function placeInLibrary() {
     let bookBuild = select('book-build');
     let bookContainer = select('book-container');
@@ -161,23 +93,112 @@ book.prototype.pIL = function placeInLibrary() {
             break;
     }
 
+    let newTitle = create('h3');
+        newTitle.innerText = this.title;
+        newTitle.classList.add('book-titles');
+        newTitle.id = 'bookTitle' + bookContainer.childElementCount;
+        newBook.children.item(1).append(newTitle);
+
     if (select('cover-img')) {
         let img = document.createElement('img');
         img.src = select('cover-img').src;
         img.style = `height: 275px;
                     width: 155px;
                     border-radius: 10px;`;
-        newBook.children.item(1).appendChild(img);//Puts image into front cover div.
-    } else {  //If there isn't a cover image, just use a h3 title.
-        let newTitle = create('h3');
-        newTitle.innerText = this.title;
-        newTitle.classList.add('book-titles');
-        newTitle.id = 'bookTitle' + bookContainer.childElementCount;
-        newBook.children.item(1).append(newTitle);
+        newBook.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);//Puts image into front cover div, in front of the h3 element.
     }
 
     bookContainer.appendChild(newBook);
-    applyBookPreview(newBook.id, this);
+
+    let bookOverlay = select(newBook.id).children.item(0).children.item(4);
+    bookOverlay.id += bookContainer.childElementCount - 1;
+
+
+    //Creates a little version of the book (Thumbnail) when the book is clicked on:
+    select(bookOverlay.id).addEventListener('click', function (e) {
+        select('preview-book-ui').style.display = 'block';
+        select('overlay').style.display = 'block';
+        let bookPreview = select('book-preview');
+        let bookID = e.target.parentElement.parentElement.id;
+        let bookColor = select(bookID).children.item(1).style.backgroundColor;
+        let bookStaticClone = select(bookID).cloneNode(true);
+        // Take off the hover overlay:
+        bookStaticClone.children.item(0).remove(); 
+
+        // Had to change the sizes of the book parts:
+        let frontCover = bookStaticClone.children.item(0);
+        frontCover.style = `height: 189.64px; width: 106.88px; background-color: ${bookColor};`;
+        if (frontCover.children.item(0).nodeName == 'H3') {
+            frontCover.children.item(0).style = 'font-size: revert';
+        } else {
+            frontCover.children.item(0).style = 'border-radius: 10px; height: 189.64px; width: 106.88px; display: block;';
+        }
+        let pages = bookStaticClone.children.item(1);
+        pages.style = `height: 189.64px; width: 108.96px; bottom: 185px; left: 4px;`;
+        let backCover = bookStaticClone.children.item(2);
+        backCover.style = `height: 189.64px; width: 117.23px; left: 1px; bottom: 371px; background-color: ${bookColor};`;
+        bookPreview.appendChild(bookStaticClone);
+
+        bookSelected = newBook.id.replace(/book-build/gi, '');
+        applyPreviewDataDefault(bookSelected);
+
+        //Edit review button:
+        select('edit-review-btn').addEventListener('click', function () {
+            let reviewInput = select('review-input');
+            reviewInput.style.display = 'block';
+            let submitBtn = select('submit-review-btn');
+            submitBtn.style.display = 'block';
+            reviewInput.addEventListener('keydown', function (e) {
+                if (e.key == 'Enter' || e.eventCode == 13) {
+                    allBooks[bookSelected].reviewText = e.target.value;
+                    select('review-text').innerText = e.target.value;
+                    e.target.style.display = 'none';
+                    submitBtn.style.display = 'none';
+                }
+            })
+            submitBtn.addEventListener('click', function submitted (e) {
+                allBooks[bookSelected].reviewText = reviewInput.value;
+                select('review-text').innerText = reviewInput.value;
+                reviewInput.style.display = 'none';
+                e.target.style.display = 'none';
+            })
+        });
+
+        function reviewStarFunc (e) {
+            let obj = allBooks[bookSelected];
+            let starNum;
+            let i;
+            starNum = e.target;
+            starNum = parseInt(starNum.id.replace(/star/gi, ''));
+            i = starNum;
+            obj.reviewStars = starNum;
+    
+            for (j = i + 1; j <= 5; j++) {
+                select(`${j}star`).src = 'faveStar.svg';
+            }
+            for (x = 1; x <= i; x++){
+                select(`${x}star`).src = 'faveStarActive.svg';
+            }
+        };
+    
+        //Default:
+        let i = allBooks[bookSelected].reviewStars;
+        for (j = i + 1; j <= 5; j++) {
+            select(`${j}star`).src = 'faveStar.svg';
+        }
+        for (x = 1; x <= i; x++){
+            select(`${x}star`).src = 'faveStarActive.svg';
+        }
+    
+        for (s = 1; s <= 5; s++) {
+            select(`${s}star`).addEventListener('click', reviewStarFunc);
+        }
+
+    })
+
+    allBooks.push(this);
+
+
 };
 
 let bookSearchBox = select('book-search-input');
@@ -343,6 +364,7 @@ select('done-btn').addEventListener('click', function submit (e) {
     let reviewText = 'Your review would be exquisite, I\'m sure.';
     let reviewStars = 0;
     let tags = ''
+    let description = '';
     if (pagesRead == 0) {
         tags = 'toBeRead';
     } else if (pagesRead == pages) {
@@ -376,7 +398,7 @@ let gibberish2 = Object.assign(Object.create(book.prototype), {
     pages: 365,
     pagesRead: 365,
     reviewText: 'It still doesn\'t make any sense...but it was mildly entertaining nonetheless.',
-    reviewStars: '4',
+    reviewStars: 4,
     tags: 'read',
     description: 'jafiafi anfofajf akfkajksowws oinkasnfsan. knaknaskla aljmsdkasjdlkal aksnasn akjsnfkanf.'
 });
@@ -387,7 +409,7 @@ let gibberish3 = Object.assign(Object.create(book.prototype), {
     pages: 450,
     pagesRead: 450,
     reviewText: 'Wow. I think I can finally understand why people read this series. My God. It is a masterpiece!!',
-    reviewStars: '5',
+    reviewStars: 5,
     tags: 'read',
     description: 'Gib jib gabba wooky. Gahanda foroduki! Jamba laba da, tad aplo bungy.'
 });
@@ -411,4 +433,4 @@ placeholderBook.pIL();
 placeholderBook.pIL();
 
 
-//If pages read is equal to pages, make a change in book appearance / move it to tag read.
+

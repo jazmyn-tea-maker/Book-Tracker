@@ -201,6 +201,10 @@ body {
     z-index: 71;
     opacity: 0;
     transition: opacity .5s;
+    -webkit-transition: opacity .5s;
+    -moz-transition: opacity .5s;
+    -ms-transition: opacity .5s;
+    -o-transition: opacity .5s;
 }
 
 .hover:hover {
@@ -265,7 +269,7 @@ body {
     transition: opacity .5s;
 }
 
-#book-hover-overlay {
+.book-hover-overlay {
     height: 275px;
     width: 155px;
     background-color: rgb(90, 1, 86);
