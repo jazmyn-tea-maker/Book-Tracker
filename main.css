@@ -188,6 +188,7 @@ body {
     margin-bottom: 50px;
     justify-content: center;
     overflow: hidden;
+    min-height: 290px;
     width: 95%;
     grid-template-columns: repeat(auto-fill, 175px);
     grid-template-rows: repeat(auto-fill, 280px);
@@ -456,6 +457,7 @@ body {
     position: relative;
     width: 30px;
     height: 20px;
+    cursor: pointer;
 }
 
 #search-books-ui {
@@ -637,6 +639,29 @@ body {
     font-size: 9px;
     text-align: center;
     line-height: 15px;
+}
+
+#review-input {
+    position: relative;
+    display: none;
+    margin: auto;
+    text-indent: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 70%;
+}
+
+#submit-review-btn {
+    margin: auto;
+    display: none;
+    position: absolute;
+    background-color: #f78cca;
+    left: 0; right: 0;
+    bottom: 10px;
+    color: #380c49;
+    border-color:var(--main-color);
+    border-radius: 10px;
+    width: 200px;
 }
 
 #done-btn {

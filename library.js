@@ -15,6 +15,7 @@ let tags = {
     favorites : []
 }
 
+//Book constructor:
 function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description) {
     this.title = title,
     this.author = author,
@@ -52,6 +53,7 @@ function applyBookPreview (bookID, obj) {
         let backCover = bookStaticClone.children.item(2);
         backCover.style = `height: 189.64px; width: 117.23px; left: 1px; bottom: 371px; background-color: ${bookColor};`;
         bookPreview.appendChild(bookStaticClone);
+
         //Applying data:
         let defaultSummary = `No summary...would you like to add one?<br>
         <a id='book-summary-pick' href='#'>Choose from existing book.</a> 
@@ -69,13 +71,55 @@ function applyBookPreview (bookID, obj) {
             select('summary-para').innerHTML = defaultSummary;
         }
 
-        let reviewStarActivate = (i) => {
+        //Review stars functionality:
+        function reviewStarActivate (i) {
+            let starNum = this; // Trails back to the stars they're attatched to later.
+            if (starNum.id){ //By default, it's the window obj.
+                starNum = parseInt(starNum.id.replace(/star/gi, ''));
+                i = starNum;
+                obj.reviewStars = i;
+            }
+            for (j = i + 1; j <= 5; j++) {
+                select(`${j}star`).src = 'faveStar.svg';
+            }
             for (x = 1; x <= i; x++){
                 select(`${x}star`).src = 'faveStarActive.svg';
             }
-        }
-        
+        };
+
         reviewStarActivate(obj.reviewStars);
+
+        select('1star').addEventListener('click', reviewStarActivate);
+        select('2star').addEventListener('click', reviewStarActivate);
+        select('3star').addEventListener('click', reviewStarActivate);
+        select('4star').addEventListener('click', reviewStarActivate);
+        select('5star').addEventListener('click', reviewStarActivate);
+
+        //Edit review button:
+        select('edit-review-btn').addEventListener('click', function () {
+            let reviewInput = select('review-input');
+            reviewInput.style.display = 'block';
+            let submitBtn = select('submit-review-btn');
+            submitBtn.style.display = 'block';
+            reviewInput.addEventListener('keydown', function (e) {
+                if (e.key == 'Enter' || e.eventCode == 13) {
+                    obj.reviewText = reviewInput.value;
+                    select('review-text').innerText = reviewInput.value;
+                    e.target.style.display = 'none';
+                    submitBtn.style.display = 'none';
+                }
+            })
+            submitBtn.addEventListener('click', function submit (e) {
+                obj.reviewText = reviewInput.value;
+                select('review-text').innerText = reviewInput.value;
+                reviewInput.style.display = 'none';
+                e.target.style.display = 'none';
+                e.preventDefault();
+            })
+        });
+
+
+        
         
     });
 
@@ -313,8 +357,6 @@ select('done-btn').addEventListener('click', function submit (e) {
     e.preventDefault();
     return;
 })
-
-//Edit button:
 
 
 let gibberish = Object.assign(Object.create(book.prototype), {
