@@ -8,6 +8,7 @@ $(function () {
             } else {
                 select('overlay').style.display = 'block';
                 select('search-books-ui').style.display = 'block';
+                select('searchText').innerText = e.target.value;
 
                 $.get(`https://www.googleapis.com/books/v1/volumes?q=${e.target.value}&key=${apiKey}&maxResults=40`, function(data){
                     function searchedBooks(title, img, author, pages, summary) {

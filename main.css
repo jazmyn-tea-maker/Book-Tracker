@@ -381,6 +381,12 @@ body {
     background-color: var(--main-color);
 }
 
+#search-titles {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
 .preview-titles {
     color: var(--text-color);
     text-align: center;
@@ -464,6 +470,7 @@ body {
     display: none;
     margin: auto;
     position: fixed;
+    overflow: hidden;
     top: 0; left: 0; bottom: 0; right: 0;
     height: 500px;
     width: 650px;
@@ -480,8 +487,8 @@ body {
     margin-bottom: 50px;
     justify-content: center;
     overflow: scroll;
-    height: 425px;
-    width: 95%;
+    height: 100%;
+    width: 105%;
     grid-template-columns: repeat(auto-fill, 175px);
     grid-template-rows: repeat(auto-fill, 280px);
     grid-auto-flow: row;
