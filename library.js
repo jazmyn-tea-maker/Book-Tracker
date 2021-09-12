@@ -139,6 +139,7 @@ book.prototype.pIL = function placeInLibrary() {
         backCover.style = `height: 189.64px; width: 117.23px; left: 1px; bottom: 371px; background-color: ${bookColor};`;
         bookPreview.appendChild(bookStaticClone);
 
+        //These puppies (bookSelected variable) need to stay inside this scope so they don't keep changing!!!!
         bookSelected = newBook.id.replace(/book-build/gi, '');
         applyPreviewDataDefault(bookSelected);
 
@@ -165,7 +166,8 @@ book.prototype.pIL = function placeInLibrary() {
         });
 
         function reviewStarFunc (e) {
-            let obj = allBooks[bookSelected];
+            //These puppies (bookSelected variable) need to stay inside another scope so they don't keep changing!!!!
+            let obj = allBooks[bookSelected]; 
             let starNum;
             let i;
             starNum = e.target;
