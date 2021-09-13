@@ -18,7 +18,7 @@ let tags = {
 let allBooks = []; //Gives me access to all the objects.
 
 //Book constructor:
-function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description) {
+function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description, img) {
     this.title = title,
     this.author = author,
     this.pages = pages,
@@ -27,6 +27,7 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, de
     this.reviewStars = reviewStars
     this.tags = tags
     this.description = description;
+    this.img = img;
 }
 
 
@@ -99,13 +100,25 @@ book.prototype.pIL = function placeInLibrary() {
         newTitle.id = 'bookTitle' + bookContainer.childElementCount;
         newBook.children.item(1).append(newTitle);
 
-    if (select('cover-img')) {
-        let img = document.createElement('img');
-        img.src = select('cover-img').src;
-        img.style = `height: 275px;
+    if (select('cover-img') || this.img) {
+        if (this.img) {
+            let img = document.createElement('img');
+            img.src = this.img;
+            img.style = `height: 275px;
                     width: 155px;
                     border-radius: 10px;`;
-        newBook.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);//Puts image into front cover div, in front of the h3 element.
+            newBook.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);
+        } else {
+            newBook.children.item(1).children.item(0).display = 'none';
+            let img = document.createElement('img');
+            img.src = select('cover-img').src;
+            img.style = `height: 275px;
+                        width: 155px;
+                        border-radius: 10px;`;
+            //Puts image into front cover div, in front of the h3 element.
+            newBook.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);
+        }
+        
     }
 
     bookContainer.appendChild(newBook);
@@ -130,9 +143,11 @@ book.prototype.pIL = function placeInLibrary() {
         frontCover.style = `height: 189.64px; width: 106.88px; background-color: ${bookColor};`;
         if (frontCover.children.item(0).nodeName == 'H3') {
             frontCover.children.item(0).style = 'font-size: revert';
-        } else {
+        } else if(frontCover.children.item(0).nodeName == 'IMG'){
             frontCover.children.item(0).style = 'border-radius: 10px; height: 189.64px; width: 106.88px; display: block;';
+            frontCover.children.item(1).style = 'display: none;' //Because the h3 title will be the second child.
         }
+
         let pages = bookStaticClone.children.item(1);
         pages.style = `height: 189.64px; width: 108.96px; bottom: 185px; left: 4px;`;
         let backCover = bookStaticClone.children.item(2);
@@ -185,16 +200,20 @@ book.prototype.pIL = function placeInLibrary() {
     
         //Default:
         let i = allBooks[bookSelected].reviewStars;
-        for (j = i + 1; j <= 5; j++) {
+        if(i) {
+            console.log(i);
+            for (j = i + 1; j <= 5; j++) {
             select(`${j}star`).src = 'faveStar.svg';
+            }
+            for (x = 1; x <= i; x++){
+                select(`${x}star`).src = 'faveStarActive.svg';
+            }
         }
-        for (x = 1; x <= i; x++){
-            select(`${x}star`).src = 'faveStarActive.svg';
-        }
-    
+
         for (s = 1; s <= 5; s++) {
             select(`${s}star`).addEventListener('click', reviewStarFunc);
         }
+        
 
     })
 
@@ -367,12 +386,17 @@ select('done-btn').addEventListener('click', function submit (e) {
     let reviewStars = 0;
     let tags = ''
     let description = '';
+    let imgdiv = select('img-div');
+    let img = imgdiv.src;
     if (pagesRead == 0) {
         tags = 'toBeRead';
     } else if (pagesRead == pages) {
         tags = 'read'
     }
-    let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description);
+    if(imgdiv.src){
+        img = imgdiv.src;
+    }
+    let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description, img);
     newBook.pIL();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
@@ -389,7 +413,7 @@ let gibberish = Object.assign(Object.create(book.prototype), {
     pages: 321,
     pagesRead: 321,
     reviewText: 'It was alright. Didn\'t make any sense, though.',
-    reviewStars: 3,
+    reviewStars: '',
     tags: 'read',
     description: 'Ykasj jnaj lasjonw kjndnsajdad lamdad akndand kann. Ajnnnasf alwopq knsknas.'
 });
@@ -400,7 +424,7 @@ let gibberish2 = Object.assign(Object.create(book.prototype), {
     pages: 365,
     pagesRead: 365,
     reviewText: 'It still doesn\'t make any sense...but it was mildly entertaining nonetheless.',
-    reviewStars: 4,
+    reviewStars: '',
     tags: 'read',
     description: 'jafiafi anfofajf akfkajksowws oinkasnfsan. knaknaskla aljmsdkasjdlkal aksnasn akjsnfkanf.'
 });
@@ -411,28 +435,39 @@ let gibberish3 = Object.assign(Object.create(book.prototype), {
     pages: 450,
     pagesRead: 450,
     reviewText: 'Wow. I think I can finally understand why people read this series. My God. It is a masterpiece!!',
-    reviewStars: 5,
+    reviewStars: '',
     tags: 'read',
     description: 'Gib jib gabba wooky. Gahanda foroduki! Jamba laba da, tad aplo bungy.'
 });
 
-let placeholderBook = Object.assign(Object.create(book.prototype), {
-    title: 'A Book',
-    author: 'An Author',
-    pages: 500,
-    pagesRead: 0,
-    reviewText: '',
+let firstBookHP = Object.assign(Object.create(book.prototype), {
+    title: 'Harry Potter and the Philosopher\'s Stone',
+    author: 'J. K. Rowling',
+    pages: 223,
+    pagesRead: 223,
+    reviewText: 'One of the main players in keeping me sane! Very well-written.',
     reviewStars: '',
-    tags: 'toBeRead',
-    description: ''
-});
+    tags: '',
+    description: 'On his 11th birthday, Harry receives a letter inviting him to study magic at the Hogwarts School of Witchcraft and Wizardry. Harry discovers that not only is he a wizard, but he is a famous one. He meets two best friends, Ron Weasley and Hermione Granger, and makes his first enemy, Draco Malfoy.',
+    img: '81iqZ2HHD-L.jpg'
+})
+
+//Copy Paster:
+//     title: '',
+//     author: '',
+//     pages: 0,
+//     pagesRead: 0,
+//     reviewText: '',
+//     reviewStars: '',
+//     tags: '',
+//     description: '',
+//     img : ''
 
 gibberish.pIL();
 gibberish2.pIL();
 gibberish3.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
-placeholderBook.pIL();
+firstBookHP.pIL();
 
 
+console.log(allBooks);
 
