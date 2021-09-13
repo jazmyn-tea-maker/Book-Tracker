@@ -186,6 +186,7 @@ body {
     margin: auto;
     margin-top: 15px;
     margin-bottom: 50px;
+    padding-bottom: 10px;
     justify-content: center;
     overflow: hidden;
     min-height: 290px;
