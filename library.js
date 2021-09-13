@@ -108,8 +108,9 @@ book.prototype.pIL = function placeInLibrary() {
                     width: 155px;
                     border-radius: 10px;`;
             newBook.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);
+            newBook.children.item(1).children.item(1).style.display = 'none';
         } else {
-            newBook.children.item(1).children.item(0).display = 'none';
+            newBook.children.item(1).children.item(1).display = 'none';
             let img = document.createElement('img');
             img.src = select('cover-img').src;
             img.style = `height: 275px;
@@ -117,6 +118,7 @@ book.prototype.pIL = function placeInLibrary() {
                         border-radius: 10px;`;
             //Puts image into front cover div, in front of the h3 element.
             newBook.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);
+            newBook.children.item(1).children.item(1).style.display = 'none';
         }
         
     }
