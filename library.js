@@ -15,8 +15,6 @@ let tags = {
     favorites : []
 }
 
-let allBooks = []; //Gives me access to all the objects.
-
 //Book constructor:
 function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description, img) {
     this.title = title,
@@ -35,7 +33,7 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, de
 
 function applyPreviewDataDefault (bookIndex) {
         //Applying data:
-        let bookObj = allBooks[bookIndex];
+        let bookObj = tags.userLibraryMain[bookIndex];
 
         let defaultSummary = `No summary...would you like to add one?<br>
         <a id='book-summary-pick' href='#'>Choose from existing book.</a> 
@@ -169,14 +167,14 @@ book.prototype.pIL = function placeInLibrary() {
             submitBtn.style.display = 'block';
             reviewInput.addEventListener('keydown', function (e) {
                 if (e.key == 'Enter' || e.eventCode == 13) {
-                    allBooks[bookSelected].reviewText = e.target.value;
+                    tags.userLibraryMain[bookSelected].reviewText = e.target.value;
                     select('review-text').innerText = e.target.value;
                     e.target.style.display = 'none';
                     submitBtn.style.display = 'none';
                 }
             })
             submitBtn.addEventListener('click', function submitted (e) {
-                allBooks[bookSelected].reviewText = reviewInput.value;
+                tags.userLibraryMain[bookSelected].reviewText = reviewInput.value;
                 select('review-text').innerText = reviewInput.value;
                 reviewInput.style.display = 'none';
                 e.target.style.display = 'none';
@@ -184,9 +182,20 @@ book.prototype.pIL = function placeInLibrary() {
             reviewInput.value = '';
         });
 
+        function shareBook () {
+            //For share button...
+            let shareBtn = select('share-icon');
+            let obj = tags.userLibraryMain[bookSelected];
+            let textToCopy = `Hey! I highly recommend ${obj.title} by ${obj.author}. Here is the summary: ${obj.description}`;
+            navigator.clipboard.writeText(textToCopy);
+            alert('Book info was copied to clipboard!');
+        }
+
+        select('share-icon').addEventListener('click', shareBook);
+
         function reviewStarFunc (e) {
             //These puppies (bookSelected variable) need to stay inside another scope so they don't keep changing!!!!
-            let obj = allBooks[bookSelected]; 
+            let obj = tags.userLibraryMain[bookSelected]; 
             let starNum;
             let i;
             starNum = e.target;
@@ -203,7 +212,7 @@ book.prototype.pIL = function placeInLibrary() {
         };
     
         //Default:
-        let i = allBooks[bookSelected].reviewStars;
+        let i = tags.userLibraryMain[bookSelected].reviewStars;
         if(i) {
             console.log(i);
             for (j = i + 1; j <= 5; j++) {
@@ -220,8 +229,6 @@ book.prototype.pIL = function placeInLibrary() {
         
 
     })
-
-    allBooks.push(this);
 
 
 };
@@ -473,7 +480,4 @@ gibberish.pIL();
 gibberish2.pIL();
 gibberish3.pIL();
 firstBookHP.pIL();
-
-
-console.log(allBooks);
 
