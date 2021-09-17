@@ -436,6 +436,15 @@ body {
     display: flex;
     height: 200px;
     width: 120.68px;
+    left: 20px;
+}
+
+#put-down-icon {
+    cursor: pointer;
+}
+
+#share-icon {
+    cursor: pointer;
 }
 
 #edit-review-container {
@@ -654,9 +663,11 @@ body {
 }
 
 #review-input {
-    position: relative;
+    position: absolute;
     display: none;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0; right: 0;
     text-indent: 10px;
     border-radius: 10px;
     border: none;

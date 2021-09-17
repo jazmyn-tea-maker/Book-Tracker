@@ -1,0 +1,15 @@
+To do:
+- Make searched books addable
+- Edit button
+    ^ Click event brings up the new book Ui, but different. It's connected to that books object, brings the properties into the inputs.
+- Delete Button
+- Favorite button - Puts tag on book. (Or book in tag, more accurately.)
+- Tag Editor
+- Tag Organizing. (Make button specifically for tags, when user clicks category, book container fills only with those books.)
+        ^^ Pull from the actual tag arrays instead of the 'Allbooks' array.
+ - Put it down button - Puts book into tag AND takes it out of main library. (Button will disappear, and show text saying 'You can put the book back into your library by going to the put down category and bringing it back from there.')
+ - Share button puts this on clipboard: "Hey! I highly recommend _____ by _______. Here is the summary: '_____' "
+- If the book container is empty: 'Form is emptiness. Emptiness is form.' - Eckhart Tolle
+- Save the person's info into cache. (Maybe attach it to google account, like the others?)
+- Make options dropdown
+- Progress bar at bottom of book hover

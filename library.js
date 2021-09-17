@@ -95,7 +95,8 @@ book.prototype.pIL = function placeInLibrary() {
     }
 
     let newTitle = create('h3');
-        newTitle.innerText = this.title;
+        newTitle.innerText = this.title  + ` 
+        By: ${this.author}`;
         newTitle.classList.add('book-titles');
         newTitle.id = 'bookTitle' + bookContainer.childElementCount;
         newBook.children.item(1).append(newTitle);
@@ -180,6 +181,7 @@ book.prototype.pIL = function placeInLibrary() {
                 reviewInput.style.display = 'none';
                 e.target.style.display = 'none';
             })
+            reviewInput.value = '';
         });
 
         function reviewStarFunc (e) {
@@ -265,7 +267,7 @@ select('icon-div').addEventListener('mouseenter', function (e) {
     });
 });
 
-//Book overlay hover toggle:
+//Book overlay hover toggles:
 
 let turnHoverOff = () => {
     let booksLength = select('book-container').childElementCount;
@@ -302,7 +304,6 @@ function inputClear () {
     if (select('cover-img')) {
         select('cover-img').src = '';
     }
-    // console.log(document.querySelectorAll('input'));
 };
 
 inputClear();
@@ -313,6 +314,9 @@ select('overlay').addEventListener('click', function backToMain () {
     select('search-books-ui').style.display = 'none';
     select('preview-book-ui').style.display = 'none';
     select('book-preview').innerHTML = '';
+    select('review-input').style.display = 'none';
+    select('review-input').value = '';
+    select('submit-review-btn').style.display = 'none';
     select('searched-books-container').innerHTML = '';
     for (x = 1; x <= 5; x++){
         select(`${x}star`).src = 'faveStar.svg';

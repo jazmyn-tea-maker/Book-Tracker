@@ -1,5 +1,5 @@
 $(function () { 
-    //select/create functions are in the library.js file. Works because it's loaded first!
+    //select/create functions are in the library.js file. Works because it's loaded first! Cool!
     let searchFunc = (e) => {
         let apiKey = 'AIzaSyCd0voZ7biNdsZQd6nNjDnHDYwztwprOK8';
         if (e.key == 'Enter' || e.eventCode == 13) {
