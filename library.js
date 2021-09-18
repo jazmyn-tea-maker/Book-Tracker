@@ -42,7 +42,6 @@ function applyPreviewDataDefault (bookIndex) {
         let defaultReview = `Nothing here yet!`;
         if (bookObj.reviewText) {
             select('review-text').innerText = bookObj.reviewText;
-            console.log(bookObj.reviewText);
         } else {
             select('review-text').innerHTML = defaultReview;
         }
@@ -182,6 +181,19 @@ book.prototype.pIL = function placeInLibrary() {
             reviewInput.value = '';
         });
 
+        select('put-down-icon').addEventListener('click', function putDownBook () {
+            let obj = tags.userLibraryMain[bookSelected];
+            if (tags.putDown.includes(obj)) {
+                alert('You\'ve already put this book down.');
+                return;
+            } else {
+                obj.tags = 'putDown';
+                tags.putDown.push(obj);
+                alert('Your book has been put down.');
+            }
+            e.target.removeEventListener('click', putDownBook);
+        }, {once: true});
+
         function shareBook () {
             //For share button...
             let shareBtn = select('share-icon');
@@ -214,7 +226,6 @@ book.prototype.pIL = function placeInLibrary() {
         //Default:
         let i = tags.userLibraryMain[bookSelected].reviewStars;
         if(i) {
-            console.log(i);
             for (j = i + 1; j <= 5; j++) {
             select(`${j}star`).src = 'faveStar.svg';
             }
