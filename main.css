@@ -180,6 +180,18 @@ body {
     filter: invert();
 }
 
+#empty-quote {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: #0b205147;
+    display: none;
+}
+
 #book-container {
     display: grid;
     position: relative;
@@ -426,6 +438,8 @@ body {
 
 .para-responsive {
     overflow-y: scroll; 
+    overflow-x: visible;
+    overflow-wrap: normal;
     left: 13px;
     padding-right: 9px;
     max-height: 60px;
@@ -667,25 +681,46 @@ body {
     display: none;
     margin-left: auto;
     margin-right: auto;
-    left: 0; right: 0;
+    left: 0; right: 0; bottom: 50px;
     text-indent: 10px;
     border-radius: 10px;
     border: none;
     width: 70%;
 }
 
-#submit-review-btn {
-    margin: auto;
-    display: none;
-    position: absolute;
+
+.review-buttons {
+    position: relative;
     background-color: #f78cca;
-    left: 0; right: 0;
-    bottom: 10px;
     color: #380c49;
     border-color:var(--main-color);
     border-radius: 10px;
-    width: 200px;
 }
+
+.review-btn-cont {
+    display:flex;
+    gap: 5px;
+    width: 43%;
+    height: fit-content;
+    position: absolute;
+    left: 0; right: 0; bottom: 10px;
+    margin: auto;
+}
+
+#submit-review-btn {
+    display: none;
+    height: 30px;
+    width: 64.26%;
+}
+
+#cancel-button {
+    display: none;
+    color: #f78cca;
+    background-color: #380c49;
+    height: 30px;
+    width: 35.7%;
+}
+
 
 #done-btn {
     margin: auto;

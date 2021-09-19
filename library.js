@@ -6,6 +6,7 @@ let create = function (element) {
     return document.createElement(element);
 }
 
+
 let tags = {
     userLibraryMain : [],
     toBeRead : [],
@@ -164,12 +165,15 @@ book.prototype.sUL = function setUpLibrary() {
             reviewInput.style.display = 'block';
             let submitBtn = select('submit-review-btn');
             submitBtn.style.display = 'block';
+            let cancelBtn = select('cancel-button');
+            cancelBtn.style.display = 'block';
             reviewInput.addEventListener('keydown', function (e) {
                 if (e.key == 'Enter' || e.eventCode == 13) {
                     tags.userLibraryMain[bookSelected].reviewText = e.target.value;
                     select('review-text').innerText = e.target.value;
                     e.target.style.display = 'none';
                     submitBtn.style.display = 'none';
+                    cancelBtn.style.display = 'none';
                 }
             })
             submitBtn.addEventListener('click', function submitted (e) {
@@ -177,6 +181,12 @@ book.prototype.sUL = function setUpLibrary() {
                 select('review-text').innerText = reviewInput.value;
                 reviewInput.style.display = 'none';
                 e.target.style.display = 'none';
+                cancelBtn.style.display = 'none';
+            })
+            cancelBtn.addEventListener('click', function cancelReview (e) {
+                e.target.style.display = 'none';
+                reviewInput.style.display = 'none';
+                submitBtn.style.display = 'none';
             })
             reviewInput.value = '';
         });
@@ -345,6 +355,7 @@ select('overlay').addEventListener('click', function backToMain () {
     select('review-input').style.display = 'none';
     select('review-input').value = '';
     select('submit-review-btn').style.display = 'none';
+    select('cancel-button').style.display = 'none';
     select('searched-books-container').innerHTML = '';
     for (x = 1; x <= 5; x++){
         select(`${x}star`).src = 'faveStar.svg';
@@ -502,3 +513,6 @@ gibberish2.sUL();
 gibberish3.sUL();
 firstBookHP.sUL();
 
+if (select('book-container').innerHTML == '') {
+    select('empty-quote').style.display = 'block';
+};
