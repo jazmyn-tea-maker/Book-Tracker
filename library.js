@@ -6,6 +6,13 @@ let create = function (element) {
     return document.createElement(element);
 }
 
+let checkEmptyContainer = () => {
+    if (select('book-container').innerHTML == '') {
+         select('empty-quote').style.display = 'block';
+     } else {
+        select('empty-quote').style.display = 'none';
+     }
+ }
 
 let tags = {
     userLibraryMain : [],
@@ -211,6 +218,7 @@ book.prototype.sUL = function setUpLibrary() {
                 alert('Your book has been put down.');
                 e.stopPropagation();
             }
+            e.stopPropagation();
         }, {once: true});
 
         function shareBook (e) {
@@ -443,6 +451,7 @@ select('done-btn').addEventListener('click', function submit (e) {
     }
     let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description, img);
     newBook.sUL();
+    checkEmptyContainer();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
     inputClear();
@@ -508,11 +517,10 @@ let firstBookHP = Object.assign(Object.create(book.prototype), {
 //     description: '',
 //     img : ''
 
-gibberish.sUL();
-gibberish2.sUL();
-gibberish3.sUL();
-firstBookHP.sUL();
+// gibberish.sUL();
+// gibberish2.sUL();
+// gibberish3.sUL();
+// firstBookHP.sUL();
 
-if (select('book-container').innerHTML == '') {
-    select('empty-quote').style.display = 'block';
-};
+
+checkEmptyContainer();
