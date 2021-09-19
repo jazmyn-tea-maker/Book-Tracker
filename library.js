@@ -52,9 +52,9 @@ function applyPreviewDataDefault (bookIndex) {
         }
     }
 
-    let bookSelected;
+    let bookSelected; //Used in the event listener below...
 
-book.prototype.pIL = function placeInLibrary() {
+book.prototype.sUL = function setUpLibrary() {
     let bookBuild = select('book-build');
     let bookContainer = select('book-container');
     let newBook = bookBuild.cloneNode(true);
@@ -181,29 +181,39 @@ book.prototype.pIL = function placeInLibrary() {
             reviewInput.value = '';
         });
 
-        select('put-down-icon').addEventListener('click', function putDownBook () {
+        let obj = tags.userLibraryMain[bookSelected];
+        if (tags.putDown.includes(obj)) {
+            select('put-down-icon').src = 'putDownIconUsed.svg';
+        } else {
+            select('put-down-icon').src = 'putDownIcon.svg';
+        }
+
+        select('put-down-icon').addEventListener('click', function putDownBook (e) {
             let obj = tags.userLibraryMain[bookSelected];
             if (tags.putDown.includes(obj)) {
+                select('put-down-icon').src = 'putDownIconUsed.svg';
                 alert('You\'ve already put this book down.');
-                return;
+                e.stopPropagation();
             } else {
+                select('put-down-icon').src = 'putDownIconUsed.svg';
                 obj.tags = 'putDown';
                 tags.putDown.push(obj);
                 alert('Your book has been put down.');
+                e.stopPropagation();
             }
-            e.target.removeEventListener('click', putDownBook);
         }, {once: true});
 
-        function shareBook () {
+        function shareBook (e) {
             //For share button...
             let shareBtn = select('share-icon');
             let obj = tags.userLibraryMain[bookSelected];
             let textToCopy = `Hey! I highly recommend ${obj.title} by ${obj.author}. Here is the summary: ${obj.description}`;
             navigator.clipboard.writeText(textToCopy);
             alert('Book info was copied to clipboard!');
+            e.stopPropagation();
         }
 
-        select('share-icon').addEventListener('click', shareBook);
+        select('share-icon').addEventListener('click', shareBook, {once: true});
 
         function reviewStarFunc (e) {
             //These puppies (bookSelected variable) need to stay inside another scope so they don't keep changing!!!!
@@ -421,7 +431,7 @@ select('done-btn').addEventListener('click', function submit (e) {
         img = imgdiv.src;
     }
     let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description, img);
-    newBook.pIL();
+    newBook.sUL();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
     inputClear();
@@ -487,8 +497,8 @@ let firstBookHP = Object.assign(Object.create(book.prototype), {
 //     description: '',
 //     img : ''
 
-gibberish.pIL();
-gibberish2.pIL();
-gibberish3.pIL();
-firstBookHP.pIL();
+gibberish.sUL();
+gibberish2.sUL();
+gibberish3.sUL();
+firstBookHP.sUL();
 
