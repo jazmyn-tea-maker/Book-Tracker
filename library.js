@@ -60,7 +60,7 @@ function applyPreviewDataDefault (bookIndex) {
         }
     }
 
-    let bookSelected; //Used in the event listener below...
+    let bookSelected; //Used in the event listeners below...
 
 book.prototype.sUL = function setUpLibrary() {
     let bookBuild = select('book-build');
@@ -134,8 +134,7 @@ book.prototype.sUL = function setUpLibrary() {
     let bookOverlay = select(newBook.id).children.item(0).children.item(4);
     bookOverlay.id += bookContainer.childElementCount - 1;
 
-
-    //Creates a little version of the book (Thumbnail) when the book is clicked on:
+    //Creates a little version of the book (Thumbnail) when the book is clicked on, also sets up book info preview:
     select(bookOverlay.id).addEventListener('click', function (e) {
         select('preview-book-ui').style.display = 'block';
         select('overlay').style.display = 'block';
@@ -164,6 +163,7 @@ book.prototype.sUL = function setUpLibrary() {
 
         //These puppies (bookSelected variable) need to stay inside this scope so they don't keep changing!!!!
         bookSelected = newBook.id.replace(/book-build/gi, '');
+
         applyPreviewDataDefault(bookSelected);
 
         //Edit review button:
@@ -265,8 +265,71 @@ book.prototype.sUL = function setUpLibrary() {
         for (s = 1; s <= 5; s++) {
             select(`${s}star`).addEventListener('click', reviewStarFunc);
         }
-        
 
+    })
+
+    let editBtn = newBook.children.item(0).children.item(3);
+    editBtn.id += bookContainer.childElementCount;
+
+    select(editBtn.id).addEventListener('click', function (e) {
+        let bookID = e.target.parentElement.parentElement.id;
+        bookSelected = bookID.replace(/book-build/gi, '');
+        let obj = tags.userLibraryMain[bookSelected]; 
+        newBookUI();
+        select('done-btn').style.display = 'none';
+        select('edit-book-title').style.display = 'block';
+        let titleInput = select('title-input');
+        titleInput.value = obj.title;
+        titleInput.addEventListener('keydown', function () {
+            if (e.key == 'Enter'|| e.eventCode == 13) {
+
+            }
+        })
+        let authorInput = select('author-input');
+        authorInput.value = obj.author;
+        authorInput.addEventListener('keydown', function () {
+            if (e.key == 'Enter'|| e.eventCode == 13) {
+                
+            }
+        })
+        select('pagesTotal').innerText = obj.pages;
+        select('pagesRead').innerText = obj.pagesRead;
+        select('pages-read-range').setAttribute('max', obj.pages);
+
+        let pagesInput = select('pages-input');
+        pagesInput.value = obj.pages;
+        pagesInput.removeEventListener('keydown', enterFunc);
+
+        function changeObj (e) {
+            if (e.key == 'Enter'|| e.eventCode == 13) {
+                let pageNum = parseInt(pagesInput.value);
+                if (pageNum && pageNum > select('pagesRead').innerText) {
+                    select('pages-read-range').setAttribute('max', pageNum);
+                    select('pagesTotal').innerText = pageNum;
+                    e.target.value = '';
+                    e.preventDefault(); 
+                    obj.pages = pageNum;
+                    obj.pagesRead = select('pages-read-range').value;
+                } else if (!pageNum) {
+                    alert('Please enter a number.');
+                } else {
+                    alert('Please enter a number greater than the pages read.')
+                }
+            }
+        }
+
+        pagesInput.addEventListener('keydown', changeObj);
+        let pagesReadInput = select('pages-read-input');
+        pagesReadInput.style.display = 'none';
+        if (obj.img) {
+            let img = document.createElement('img');
+            img.style = `height: 55px; width: 40px;`
+            let imgdiv = select('img-div');
+            img.src = obj.img;
+            imgdiv.innerHTML = '';
+            imgdiv.appendChild(img);
+        }
+        
     })
 
 
@@ -333,60 +396,33 @@ let turnHoverOn = () => {
     }
 }
 
-//New Book Button:
-
-let newBookUI = () => {
-    select('overlay').style.display = 'block';
-    select('new-book-ui').style.display = 'block';
-    turnHoverOff();
-}
-
-select('new-book-title').addEventListener('click', newBookUI);
-
-select('plus-icon').addEventListener('click', newBookUI);
-
 function inputClear () {
     document.querySelectorAll('input').forEach(el => el.value = '');
     if (select('cover-img')) {
         select('cover-img').src = '';
     }
+    select('pagesTotal').innerText = 0;
+    select('pagesRead').innerText = 0;
+    select('pages-read-range').setAttribute('max', 0);
 };
 
-inputClear();
-
-select('overlay').addEventListener('click', function backToMain () {
-    select('overlay').style.display = 'none';
-    select('new-book-ui').style.display = 'none';
-    select('search-books-ui').style.display = 'none';
-    select('preview-book-ui').style.display = 'none';
-    select('book-preview').innerHTML = '';
-    select('review-input').style.display = 'none';
-    select('review-input').value = '';
-    select('submit-review-btn').style.display = 'none';
-    select('cancel-button').style.display = 'none';
-    select('searched-books-container').innerHTML = '';
-    for (x = 1; x <= 5; x++){
-        select(`${x}star`).src = 'faveStar.svg';
-    }
-    turnHoverOn();
-})
-
-select('pages-input').addEventListener('keydown', function enterFunc (e) {
+function enterFunc (e) {
     if (e.key == 'Enter' || e.eventCode == 13) {
-        let pages = e.target.value;
-        select('pages-read-range').setAttribute('max', pages);
-        select('pagesTotal').innerText = pages;
-        e.target.value = '';
-        e.preventDefault();
+        let pages = parseInt(e.target.value);
+        if (pages) {
+           select('pages-read-range').setAttribute('max', pages);
+            select('pagesTotal').innerText = pages;
+            e.target.value = '';
+            e.preventDefault(); 
+        } else {
+            console.log(typeof pages);
+            alert('Please enter a number');
+        }
+        
     }
-})
+}
 
-select('pages-read-range').addEventListener('input', function pageReadSlide (e) {
-    let pages = e.target.value;
-    select('pagesRead').innerText = pages;
-})
-
-select('pages-read-input').addEventListener('keydown', function enterFunc (e) {
+function enterFunc2 (e) {
     if (e.key == 'Enter' || e.eventCode == 13) {
         let numberOfPages = parseInt(select('pages-read-range').getAttribute('max'));
         let pagesRead = parseInt(e.target.value);
@@ -405,7 +441,57 @@ select('pages-read-input').addEventListener('keydown', function enterFunc (e) {
             e.preventDefault();
         }
     }
+}
+
+//New Book Button:
+
+let newBookUI = () => {
+    select('overlay').style.display = 'block';
+    select('new-book-ui').style.display = 'block';
+    select('done-btn').style.display = 'block';
+    select('edit-book-title').style.display = 'none';
+    select('pages-read-input').style.display = 'block';
+    select('pages-input').addEventListener('keydown', enterFunc);
+
+    select('pages-read-input').addEventListener('keydown', enterFunc2);
+
+    inputClear();
+    turnHoverOff();
+}
+
+select('new-book-title').addEventListener('click', newBookUI);
+
+select('plus-icon').addEventListener('click', newBookUI);
+
+inputClear();
+
+select('pages-input').addEventListener('keydown', enterFunc);
+
+select('pages-read-input').addEventListener('keydown', enterFunc2);
+
+select('overlay').addEventListener('click', function backToMain () {
+    select('overlay').style.display = 'none';
+    select('new-book-ui').style.display = 'none';
+    select('search-books-ui').style.display = 'none';
+    select('preview-book-ui').style.display = 'none';
+    select('book-preview').innerHTML = '';
+    select('review-input').style.display = 'none';
+    select('review-input').value = '';
+    select('submit-review-btn').style.display = 'none';
+    select('cancel-button').style.display = 'none';
+    select('searched-books-container').innerHTML = '';
+    for (x = 1; x <= 5; x++){
+        select(`${x}star`).src = 'faveStar.svg';
+    }
+    turnHoverOn();
 })
+
+
+select('pages-read-range').addEventListener('input', function pageReadSlide (e) {
+    let pages = e.target.value;
+    select('pagesRead').innerText = pages;
+})
+
 
 select('img-upload').addEventListener('change', function getBookCover (e) {
     let img = document.createElement('img');
@@ -506,6 +592,18 @@ let firstBookHP = Object.assign(Object.create(book.prototype), {
     img: '81iqZ2HHD-L.jpg'
 })
 
+let blankBook = Object.assign(Object.create(book.prototype), {
+        title: 'Book Title',
+        author: 'Author',
+        pages: 0,
+        pagesRead: 0,
+        reviewText: '',
+        reviewStars: '',
+        tags: '',
+        description: '',
+        img : ''
+})
+
 //Copy Paster:
 //     title: '',
 //     author: '',
@@ -517,10 +615,11 @@ let firstBookHP = Object.assign(Object.create(book.prototype), {
 //     description: '',
 //     img : ''
 
-// gibberish.sUL();
-// gibberish2.sUL();
-// gibberish3.sUL();
-// firstBookHP.sUL();
+gibberish.sUL();
+gibberish2.sUL();
+gibberish3.sUL();
+firstBookHP.sUL();
+blankBook.sUL();
 
 
 checkEmptyContainer();
