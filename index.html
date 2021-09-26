@@ -53,7 +53,6 @@
         </div>
     </div>
     <div id='new-book-ui'>
-        <h2 id='edit-book-title'>Press Enter to Make Changes</h2>
             <form id='book-input'>
                 <div id='text-inputs'>
                     <input id='title-input' placeholder='Title' type='text'>
@@ -77,6 +76,31 @@
                 </label>
                 <button type='button' id='done-btn'>Done!</button>
             </form>  
+    </div>
+    <div id='edit-book-ui'>
+        <h2 id='edit-book-title'>Press Enter to Make Changes</h2>
+        <form id='edit-book-input'>
+            <div id='text-inputs-editing'>
+                <input id='edit-title-input' placeholder='Title' type='text'>
+                <input id='edit-author-input' placeholder= 'Author' type='text'>
+                <input id='edit-pages-input' placeholder='Pages' type='text'>
+                <input id='edit-pages-read-input' placeholder='Pages Read' type='text'>
+            </div>
+            <div class='pages-Titles-Div'>
+                <div class='pRContainer'>
+                    <h4 id='pages-total-title-edit'>Pages Total:</h4> <h4 id='pagesTotal-edit'>0</h4>
+                </div>
+                <div class='pRContainer'>
+                    <h4 id='pages-read-title-edit'>Pages Read:</h4> <h4 id='pagesRead-edit'>0</h4>
+                </div>
+            </div>
+            
+            <input id='pages-read-range-edit' class='slider' type='range' min='0' max='0'>
+            <div id='img-div-edit'><br>No image selected</div>
+            <label id='upload-btn-edit' class='uploadContainer' name='file-upload'>
+                <h5>Upload Image</h5></button><input id='img-upload-edit' type='file'>
+            </label>
+        </form> 
     </div>
     <div id='nav'>
         <h1 id='Title'>Book Tracker</h1>

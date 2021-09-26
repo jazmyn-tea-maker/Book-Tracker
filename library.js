@@ -60,7 +60,13 @@ function applyPreviewDataDefault (bookIndex) {
         }
     }
 
-    let bookSelected; //Used in the event listeners below...
+
+
+//Functions below used in the editBtn event listener. Had to make global to be removed later...
+
+
+
+let bookSelected; //Used in the event listeners below...
 
 book.prototype.sUL = function setUpLibrary() {
     let bookBuild = select('book-build');
@@ -223,7 +229,6 @@ book.prototype.sUL = function setUpLibrary() {
 
         function shareBook (e) {
             //For share button...
-            let shareBtn = select('share-icon');
             let obj = tags.userLibraryMain[bookSelected];
             let textToCopy = `Hey! I highly recommend ${obj.title} by ${obj.author}. Here is the summary: ${obj.description}`;
             navigator.clipboard.writeText(textToCopy);
@@ -275,56 +280,95 @@ book.prototype.sUL = function setUpLibrary() {
         let bookID = e.target.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
         let obj = tags.userLibraryMain[bookSelected]; 
-        newBookUI();
-        select('done-btn').style.display = 'none';
-        select('edit-book-title').style.display = 'block';
-        let titleInput = select('title-input');
+        select('overlay').style.display = 'block';
+        select('edit-book-ui').style.display = 'block';
+
+        let titleInput = select('edit-title-input');
         titleInput.value = obj.title;
-        titleInput.addEventListener('keydown', function () {
-            if (e.key == 'Enter'|| e.eventCode == 13) {
 
-            }
-        })
-        let authorInput = select('author-input');
+        let authorInput = select('edit-author-input');
         authorInput.value = obj.author;
-        authorInput.addEventListener('keydown', function () {
+
+        let pagesReadInput = select('edit-pages-read-input');
+        let pagesInput = select('edit-pages-input');
+        let pagesRange = select('pages-read-range-edit');
+
+        function changeTitle (e) {
             if (e.key == 'Enter'|| e.eventCode == 13) {
-                
+                obj.title = e.target.value;
+                select(`bookTitle${bookSelected}`).innerText = obj.title +`
+                By: ${obj.author}`;
             }
-        })
-        select('pagesTotal').innerText = obj.pages;
-        select('pagesRead').innerText = obj.pagesRead;
-        select('pages-read-range').setAttribute('max', obj.pages);
-
-        let pagesInput = select('pages-input');
-        pagesInput.value = obj.pages;
-        pagesInput.removeEventListener('keydown', enterFunc);
-
-        function changeObj (e) {
+        }
+        
+        function changeAuthor (e) {
+            if (e.key == 'Enter'|| e.eventCode == 13) {
+                obj.author = e.target.value;
+                select(`bookTitle${bookSelected}`).innerText = obj.title +`
+                By: ${obj.author}`;
+            }
+        }
+        
+        function changePages (e) {
             if (e.key == 'Enter'|| e.eventCode == 13) {
                 let pageNum = parseInt(pagesInput.value);
-                if (pageNum && pageNum > select('pagesRead').innerText) {
-                    select('pages-read-range').setAttribute('max', pageNum);
-                    select('pagesTotal').innerText = pageNum;
+                if (pageNum) {
+                    select('pages-read-range-edit').setAttribute('max', pageNum);
+                    select('pagesTotal-edit').innerText = pageNum;
                     e.target.value = '';
                     e.preventDefault(); 
                     obj.pages = pageNum;
-                    obj.pagesRead = select('pages-read-range').value;
-                } else if (!pageNum) {
-                    alert('Please enter a number.');
+                    select('pages-read-range-edit').value = 0;
+                    select('pagesRead-edit').innerText = select('pages-read-range-edit').value;
                 } else {
-                    alert('Please enter a number greater than the pages read.')
+                    alert('Please enter a number.');
                 }
             }
         }
+        
+        function changePagesRead (e) {
+            if (e.key == 'Enter'|| e.eventCode == 13) {
+                let pagesReadNum = parseInt(pagesReadInput.value);
+                let pagesTotal = parseInt(select('pagesTotal-edit').innerText);
+                console.log(pagesReadNum, pagesTotal);
+                if (pagesReadNum <= pagesTotal) {
+                    select('pages-read-range-edit').value = pagesReadNum;
+                    select('pagesRead-edit').innerText = pagesReadNum;
+                    e.target.value = '';
+                    e.preventDefault(); 
+                    obj.pagesRead = pagesReadNum;
+                } else if (!(pagesReadNum)){
+                    alert('Please enter a number.');
+                } else {
+                    alert('Please enter a number less than the total page count.')
+                }
+            }
+        }
+        
+        function newPagesSlide (e) {
+            obj.pagesRead = e.target.value;
+            select('pagesRead-edit').innerText = e.target.value;
+        }
 
-        pagesInput.addEventListener('keydown', changeObj);
-        let pagesReadInput = select('pages-read-input');
-        pagesReadInput.style.display = 'none';
+        titleInput.addEventListener('keydown', changeTitle);
+        authorInput.addEventListener('keydown', changeAuthor);
+        select('pagesTotal-edit').innerText = obj.pages;
+        select('pagesRead-edit').innerText = obj.pagesRead;
+        pagesRange.setAttribute('max', obj.pages);
+        pagesRange.value = obj.pagesRead;
+
+        pagesInput.removeEventListener('keydown', enterFunc);
+        pagesInput.addEventListener('keydown', changePages);
+
+        pagesReadInput.removeEventListener('keydown', enterFunc2);
+        pagesReadInput.addEventListener('keydown', changePagesRead);
+
+        pagesRange.addEventListener('input', newPagesSlide);
+
         if (obj.img) {
             let img = document.createElement('img');
             img.style = `height: 55px; width: 40px;`
-            let imgdiv = select('img-div');
+            let imgdiv = select('img-div-edit');
             img.src = obj.img;
             imgdiv.innerHTML = '';
             imgdiv.appendChild(img);
@@ -415,7 +459,6 @@ function enterFunc (e) {
             e.target.value = '';
             e.preventDefault(); 
         } else {
-            console.log(typeof pages);
             alert('Please enter a number');
         }
         
@@ -443,19 +486,27 @@ function enterFunc2 (e) {
     }
 }
 
+function pageReadSlide (e) {
+    let pages = e.target.value;
+    select('pagesRead').innerText = pages;
+}
+
+select('pages-input').addEventListener('keydown', enterFunc);
+
+select('pages-read-input').addEventListener('keydown', enterFunc2);
+
+select('pages-read-range').addEventListener('input', pageReadSlide);
+
 //New Book Button:
 
 let newBookUI = () => {
+    inputClear();
     select('overlay').style.display = 'block';
     select('new-book-ui').style.display = 'block';
-    select('done-btn').style.display = 'block';
-    select('edit-book-title').style.display = 'none';
-    select('pages-read-input').style.display = 'block';
-    select('pages-input').addEventListener('keydown', enterFunc);
-
-    select('pages-read-input').addEventListener('keydown', enterFunc2);
-
-    inputClear();
+    let pagesInput = select('pages-input');
+    pagesInput.addEventListener('keydown', enterFunc);
+    let pagesReadInput = select('pages-read-input');
+    pagesReadInput.addEventListener('keydown', enterFunc2);
     turnHoverOff();
 }
 
@@ -465,13 +516,10 @@ select('plus-icon').addEventListener('click', newBookUI);
 
 inputClear();
 
-select('pages-input').addEventListener('keydown', enterFunc);
-
-select('pages-read-input').addEventListener('keydown', enterFunc2);
-
 select('overlay').addEventListener('click', function backToMain () {
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
+    select('edit-book-ui').style.display = 'none';
     select('search-books-ui').style.display = 'none';
     select('preview-book-ui').style.display = 'none';
     select('book-preview').innerHTML = '';
@@ -486,13 +534,6 @@ select('overlay').addEventListener('click', function backToMain () {
     turnHoverOn();
 })
 
-
-select('pages-read-range').addEventListener('input', function pageReadSlide (e) {
-    let pages = e.target.value;
-    select('pagesRead').innerText = pages;
-})
-
-
 select('img-upload').addEventListener('change', function getBookCover (e) {
     let img = document.createElement('img');
     img.id = 'cover-img';
@@ -505,6 +546,28 @@ select('img-upload').addEventListener('change', function getBookCover (e) {
         img.style = `height: 55px;
                     width: 40px;`
         let imgdiv = select('img-div');
+        imgdiv.innerHTML = '';
+        imgdiv.appendChild(img);
+
+    }, false);
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+})
+
+select('img-upload-edit').addEventListener('change', function getBookCover (e) {
+    let img = document.createElement('img');
+    img.id = 'cover-img';
+    img.alt = 'Cover preview';
+    let file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.addEventListener('load', function convertTobase64 () {
+        img.src = reader.result;
+        img.style = `height: 55px;
+                    width: 40px;`
+        let imgdiv = select('img-div-edit');
         imgdiv.innerHTML = '';
         imgdiv.appendChild(img);
 

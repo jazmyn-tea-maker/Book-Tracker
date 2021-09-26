@@ -385,6 +385,18 @@ body {
     background-color: var(--main-color);
 }
 
+#edit-book-ui {
+    display: none;
+    margin: auto;
+    position: fixed;
+    top: 0; left: 0; bottom: 0; right: 0;
+    height: 500px;
+    width: 250px;
+    z-index: 100;
+    border-radius: 20px;
+    background-color: var(--main-color);
+}
+
 #preview-book-ui {
     display: none;
     margin: auto;
@@ -538,7 +550,33 @@ body {
     width: 90%;
 }
 
+#text-inputs-editing {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#text-inputs-editing > input {
+    margin: auto;
+    margin-top: 30px;
+    text-indent: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 90%;
+}
+
 #pages-total-title {
+    display: block;
+    position: relative;
+    text-align: center;
+    margin-left: 14px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    width: 60%;
+    font-size: 18px;
+}
+
+#pages-total-title-edit {
     display: block;
     position: relative;
     text-align: center;
@@ -558,6 +596,15 @@ body {
     font-size: 18px;
 }
 
+#pagesTotal-edit {
+    display: block;
+    position: relative;
+    margin-top: 11px;
+    width: 20%;
+    text-align: center;
+    font-size: 18px;
+}
+
 #pages-read-title {
     display: block;
     position: relative;
@@ -567,7 +614,25 @@ body {
     font-size: 18px;
 }
 
+#pages-read-title-edit {
+    display: block;
+    position: relative;
+    text-align: center;
+    margin-left: 15px;
+    width: 60%;
+    font-size: 18px;
+}
+
 #pagesRead {
+    display: block;
+    position: relative;
+    margin-top: 1px;
+    width: 20%;
+    text-align: center;
+    font-size: 18px;
+}
+
+#pagesRead-edit {
     display: block;
     position: relative;
     margin-top: 1px;
@@ -594,6 +659,19 @@ body {
 }
 
 #pages-read-range {
+    appearance: none;
+    background-color: rgb(37, 32, 54);
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 30px;
+    padding: 10px;
+    position: relative;
+    border-radius: 10px;
+}
+
+#pages-read-range-edit {
     appearance: none;
     background-color: rgb(37, 32, 54);
     display: block;
@@ -654,13 +732,48 @@ body {
     width: 150px;
 }
 
+#upload-btn-edit {
+    position: absolute;
+    left: 20%;
+    height: 30px;
+    text-align: center;
+    background-color: rgb(37, 32, 54);
+    color: var(--text-color);
+    font-size: 13px;
+    border-color: #f78cca;
+    border-radius: 10px;
+    width: 150px;
+}
+
 #img-upload {
     position: absolute;
     opacity: 0;
     left: 20%;
 }
 
+#img-upload-edit {
+    position: absolute;
+    opacity: 0;
+    left: 20%;
+}
+
 #img-div {
+    display: block;
+    position: relative;
+    margin: auto;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    bottom: 15px;
+    height: 55px;
+    width: 40px;
+    border-radius: 5px;
+    background-color: rgb(250, 241, 193);
+    font-size: 9px;
+    text-align: center;
+    line-height: 15px;
+}
+
+#img-div-edit {
     display: block;
     position: relative;
     margin: auto;
@@ -726,7 +839,7 @@ body {
     position: relative;
     display: block;
     text-align: center;
-    margin-top: 40px;
+    margin-top: 10px;
     margin-bottom: -20px;
     font-size: 20px;
 }
