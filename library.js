@@ -283,6 +283,8 @@ book.prototype.sUL = function setUpLibrary() {
         select('overlay').style.display = 'block';
         select('edit-book-ui').style.display = 'block';
 
+        console.log(select(bookID).children.item(1));
+
         let titleInput = select('edit-title-input');
         titleInput.value = obj.title;
 
@@ -373,9 +375,26 @@ book.prototype.sUL = function setUpLibrary() {
             imgdiv.innerHTML = '';
             imgdiv.appendChild(img);
         }
-        
-    })
 
+        function setCoverBtn () {
+            if (select('cover-img-edit')) {
+                let obj = tags.userLibraryMain[bookSelected];
+                obj.img = select('cover-img-edit').src;
+                let book = select(`book-build${tags.userLibraryMain.indexOf(obj)}`);
+                let img = document.createElement('img');
+                img.src = obj.img;
+                img.style = `height: 275px;
+                            width: 155px;
+                            border-radius: 10px;`;
+                img.id = 'bookCover' + tags.userLibraryMain.indexOf(obj);
+                //Puts image into front cover div, in front of the h3 element.
+                book.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);
+                book.children.item(1).children.item(1).style.display = 'none';
+            }
+        }
+
+        select('set-cover-btn').addEventListener('click', setCoverBtn);
+    })
 
 };
 
@@ -444,6 +463,9 @@ function inputClear () {
     document.querySelectorAll('input').forEach(el => el.value = '');
     if (select('cover-img')) {
         select('cover-img').src = '';
+    }
+    if(select('cover-img-edit')) {
+        select('cover-img-edit').src = '';
     }
     select('pagesTotal').innerText = 0;
     select('pagesRead').innerText = 0;
@@ -525,6 +547,7 @@ select('overlay').addEventListener('click', function backToMain () {
     select('book-preview').innerHTML = '';
     select('review-input').style.display = 'none';
     select('review-input').value = '';
+    select('img-div-edit').innerHTML = '<br>No image selected';
     select('submit-review-btn').style.display = 'none';
     select('cancel-button').style.display = 'none';
     select('searched-books-container').innerHTML = '';
@@ -558,7 +581,7 @@ select('img-upload').addEventListener('change', function getBookCover (e) {
 
 select('img-upload-edit').addEventListener('change', function getBookCover (e) {
     let img = document.createElement('img');
-    img.id = 'cover-img';
+    img.id = 'cover-img-edit';
     img.alt = 'Cover preview';
     let file = e.target.files[0];
     const reader = new FileReader();
