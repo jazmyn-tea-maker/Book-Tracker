@@ -144,7 +144,6 @@ book.prototype.sUL = function setUpLibrary() {
     select(bookReadGauge.id).setAttribute('value', tags.userLibraryMain[bookContainer.childElementCount - 1].pagesRead);
     select(bookReadGauge.id).setAttribute('max', tags.userLibraryMain[bookContainer.childElementCount - 1].pages);
     select(bookReadGauge.id).setAttribute('min', 0);
-    console.log(bookReadGauge);
 
     //Creates a little version of the book (Thumbnail) when the book is clicked on, also sets up book info preview:
     select(bookOverlay.id).addEventListener('click', function (e) {
@@ -288,8 +287,6 @@ book.prototype.sUL = function setUpLibrary() {
         let obj = tags.userLibraryMain[bookSelected]; 
         select('overlay').style.display = 'block';
         select('edit-book-ui').style.display = 'block';
-
-        console.log(select(bookID).children.item(1));
 
         let titleInput = select('edit-title-input');
         titleInput.value = obj.title;
@@ -717,8 +714,5 @@ gibberish2.sUL();
 gibberish3.sUL();
 firstBookHP.sUL();
 blankBook.sUL();
-
-
-tags.userLibraryMain.forEach(obj => console.log(obj));
 
 checkEmptyContainer();
