@@ -256,7 +256,7 @@ body {
     border-color: rgb(25, 25, 128);
 }
 
-#delete-book {
+.delete-btns {
     height: 25px;
     left: 49px;
     top: 238px;

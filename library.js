@@ -278,6 +278,18 @@ book.prototype.sUL = function setUpLibrary() {
 
     })
 
+    let deleteBtn = newBook.children.item(0).children.item(2);
+    deleteBtn.id += bookContainer.childElementCount;
+
+    select(deleteBtn.id).addEventListener('click', function (e) {
+        let bookID = e.target.parentElement.parentElement.id;
+        bookSelected = bookID.replace(/book-build/gi, '');
+        tags.userLibraryMain.splice(bookSelected, 1); 
+        let bookToRemove = select(bookID);
+        bookToRemove.remove();
+        checkEmptyContainer();
+    })
+
     let editBtn = newBook.children.item(0).children.item(3);
     editBtn.id += bookContainer.childElementCount;
 

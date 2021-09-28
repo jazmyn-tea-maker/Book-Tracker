@@ -72,6 +72,7 @@ $(function () {
                                 img: obj.img
                             })
                             bookToPutInLibrary.sUL();
+                            checkEmptyContainer();
                         })
 
                     }
