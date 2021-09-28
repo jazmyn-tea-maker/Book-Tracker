@@ -139,6 +139,12 @@ book.prototype.sUL = function setUpLibrary() {
 
     let bookOverlay = select(newBook.id).children.item(0).children.item(4);
     bookOverlay.id += bookContainer.childElementCount - 1;
+    let bookReadGauge = bookOverlay.children.item(0).children.item(0);
+    bookReadGauge.id = `book-gauge${bookContainer.childElementCount - 1}`;
+    select(bookReadGauge.id).setAttribute('value', tags.userLibraryMain[bookContainer.childElementCount - 1].pagesRead);
+    select(bookReadGauge.id).setAttribute('max', tags.userLibraryMain[bookContainer.childElementCount - 1].pages);
+    select(bookReadGauge.id).setAttribute('min', 0);
+    console.log(bookReadGauge);
 
     //Creates a little version of the book (Thumbnail) when the book is clicked on, also sets up book info preview:
     select(bookOverlay.id).addEventListener('click', function (e) {
@@ -318,11 +324,11 @@ book.prototype.sUL = function setUpLibrary() {
                     select('pages-read-range-edit').setAttribute('max', pageNum);
                     select('pagesTotal-edit').innerText = pageNum;
                     e.target.value = '';
-                    e.preventDefault(); 
                     obj.pages = pageNum;
                     select('pages-read-range-edit').value = 0;
                     select('pagesRead-edit').innerText = select('pages-read-range-edit').value;
                 } else {
+                    e.target.value = '';
                     alert('Please enter a number.');
                 }
             }
@@ -332,17 +338,18 @@ book.prototype.sUL = function setUpLibrary() {
             if (e.key == 'Enter'|| e.eventCode == 13) {
                 let pagesReadNum = parseInt(pagesReadInput.value);
                 let pagesTotal = parseInt(select('pagesTotal-edit').innerText);
-                console.log(pagesReadNum, pagesTotal);
                 if (pagesReadNum <= pagesTotal) {
                     select('pages-read-range-edit').value = pagesReadNum;
                     select('pagesRead-edit').innerText = pagesReadNum;
+                    select(`book-gauge${bookSelected}`).value = pagesReadNum;
                     e.target.value = '';
-                    e.preventDefault(); 
                     obj.pagesRead = pagesReadNum;
                 } else if (!(pagesReadNum)){
                     alert('Please enter a number.');
+                    e.target.value = '';
                 } else {
-                    alert('Please enter a number less than the total page count.')
+                    alert('Please enter a number less than the total page count.');
+                    e.target.value = '';
                 }
             }
         }
@@ -350,6 +357,7 @@ book.prototype.sUL = function setUpLibrary() {
         function newPagesSlide (e) {
             obj.pagesRead = e.target.value;
             select('pagesRead-edit').innerText = e.target.value;
+            select(`book-gauge${bookSelected}`).value = e.target.value;
         }
 
         titleInput.addEventListener('keydown', changeTitle);
@@ -397,6 +405,9 @@ book.prototype.sUL = function setUpLibrary() {
     })
 
 };
+
+//Algorithm for book hover progress bars:
+
 
 let bookSearchBox = select('book-search-input');
 let bookSearchBoxMediaQuery = select('book-search-input2')
@@ -555,7 +566,7 @@ select('overlay').addEventListener('click', function backToMain () {
         select(`${x}star`).src = 'faveStar.svg';
     }
     turnHoverOn();
-})
+});
 
 select('img-upload').addEventListener('change', function getBookCover (e) {
     let img = document.createElement('img');
@@ -577,7 +588,7 @@ select('img-upload').addEventListener('change', function getBookCover (e) {
     if (file) {
         reader.readAsDataURL(file);
     }
-})
+});
 
 select('img-upload-edit').addEventListener('change', function getBookCover (e) {
     let img = document.createElement('img');
@@ -637,7 +648,7 @@ let gibberish = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish',
     author: 'Big Boy',
     pages: 321,
-    pagesRead: 321,
+    pagesRead: 231,
     reviewText: 'It was alright. Didn\'t make any sense, though.',
     reviewStars: '',
     tags: 'read',
@@ -648,7 +659,7 @@ let gibberish2 = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish the Sequel',
     author: 'Big Boy',
     pages: 365,
-    pagesRead: 365,
+    pagesRead: 243,
     reviewText: 'It still doesn\'t make any sense...but it was mildly entertaining nonetheless.',
     reviewStars: '',
     tags: 'read',
@@ -659,7 +670,7 @@ let gibberish3 = Object.assign(Object.create(book.prototype), {
     title: 'Gibberish: the Prequel',
     author: 'Big Boy',
     pages: 450,
-    pagesRead: 450,
+    pagesRead: 100,
     reviewText: 'Wow. I think I can finally understand why people read this series. My God. It is a masterpiece!!',
     reviewStars: '',
     tags: 'read',
@@ -670,7 +681,7 @@ let firstBookHP = Object.assign(Object.create(book.prototype), {
     title: 'Harry Potter and the Philosopher\'s Stone',
     author: 'J. K. Rowling',
     pages: 223,
-    pagesRead: 223,
+    pagesRead: 150,
     reviewText: 'One of the main players in keeping me sane! Very well-written.',
     reviewStars: '',
     tags: '',
@@ -707,5 +718,7 @@ gibberish3.sUL();
 firstBookHP.sUL();
 blankBook.sUL();
 
+
+tags.userLibraryMain.forEach(obj => console.log(obj));
 
 checkEmptyContainer();

@@ -248,7 +248,7 @@ body {
 
 .edit-book-btns {
     height: 25px;
-    left: 10px;
+    left: 5px;
     top: 238px;
     line-height: 12px;
     color: white;
@@ -258,7 +258,7 @@ body {
 
 #delete-book {
     height: 25px;
-    left: 52px;
+    left: 49px;
     top: 238px;
     line-height: 10px;
     font-size: 30px;
@@ -266,6 +266,29 @@ body {
     background-color: rgb(136, 39, 39);
     border-color: rgb(128, 25, 25);
 }
+
+meter {
+    -webkit-appearance: none;
+    width: 150px;
+    height: 6px;
+    background: none;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+:-moz-meter-optimum::-moz-meter-bar {
+    opacity: 1;
+    background: rgb(104, 255, 242);
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
 
 .book-hover-all > button {
     position: absolute;
@@ -285,9 +308,8 @@ body {
 .book-hover-overlay {
     height: 275px;
     width: 155px;
-    background-color: rgb(90, 1, 86);
+    background-color: rgb(90, 1, 86, .45);
     border-radius: 10px;
-    opacity: .45;
     display: block;
     position: absolute;
 }

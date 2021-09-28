@@ -1,12 +1,17 @@
 To do:
-- Make searched books addable
-- Edit button
-    ^ Click event brings up the new book Ui, but different. It's connected to that books object, brings the properties into the inputs.
-- Delete Button
-- Favorite button - Puts tag on book. (Or book in tag, more accurately.)
+- Make searched books addable - A
+- Delete Button - B
+- Make summary editable. - B
+- Favorite button - Puts tag on book. (Or book in tag, more accurately.) - C
 - Tag Editor
-- Tag Organizing. (Make button specifically for tags, when user clicks category, book container fills only with those books.)
+- Tag Organizing. (Make button specifically for tags, when user clicks category, book container fills only with those books.) - A
         ^^ Pull from the actual tag arrays instead of the 'Allbooks' array.
-- Save the person's info into cache. (Maybe attach it to google account, like the others?)
-- Make options dropdown
-- Progress bar at bottom of book hover
+- Save the person's info into cache. (Maybe attach it to google account, like the others?) << Might skip, will be the last. - A
+- Make options dropdown - B
+- Progress bar at bottom of book hover << Next - B
+
+
+Grades:
+A - Demanding and takes a lot more effort.
+B - Not as demanding, but a little more effort.
+C - Simple, quick, not so demanding.
