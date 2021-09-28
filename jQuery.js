@@ -37,6 +37,9 @@ $(function () {
                         newBook.children.item(1).style['background-color'] = chosenColor; //Front cover.
                         newBook.children.item(3).style['background-color'] = chosenColor; //Back cover.
 
+                        let searchedBookOverlay = newBook.children.item(0).children.item(0);
+                        searchedBookOverlay.id += bookContainer.childElementCount;
+
                         if (this.img != 'default') {
                             let image = document.createElement('img');
                             image.src = this.img;
@@ -53,6 +56,23 @@ $(function () {
                         }
 
                         bookContainer.appendChild(newBook);
+
+                        let obj = this;
+                        let narrowedBook = select(searchedBookOverlay.id);
+                        narrowedBook.addEventListener('click', function () {
+                            let bookToPutInLibrary = Object.assign(Object.create(book.prototype), {
+                                title: obj.title,
+                                author: obj.author,
+                                pages: obj.pages,
+                                pagesRead: 0,
+                                reviewText: '',
+                                reviewStars: '',
+                                tags: '',
+                                description: obj.summary,
+                                img: obj.img
+                            })
+                            bookToPutInLibrary.sUL();
+                        })
 
                     }
 

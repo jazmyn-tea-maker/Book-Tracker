@@ -320,13 +320,14 @@ book.prototype.sUL = function setUpLibrary() {
                 if (pageNum) {
                     select('pages-read-range-edit').setAttribute('max', pageNum);
                     select('pagesTotal-edit').innerText = pageNum;
-                    e.target.value = '';
                     obj.pages = pageNum;
                     select('pages-read-range-edit').value = 0;
                     select('pagesRead-edit').innerText = select('pages-read-range-edit').value;
-                } else {
+                    select(`book-gauge${bookSelected}`).setAttribute('max', obj.pages);
                     e.target.value = '';
+                } else {
                     alert('Please enter a number.');
+                    e.target.value = '';
                 }
             }
         }
@@ -339,15 +340,17 @@ book.prototype.sUL = function setUpLibrary() {
                     select('pages-read-range-edit').value = pagesReadNum;
                     select('pagesRead-edit').innerText = pagesReadNum;
                     select(`book-gauge${bookSelected}`).value = pagesReadNum;
-                    e.target.value = '';
                     obj.pagesRead = pagesReadNum;
-                } else if (!(pagesReadNum)){
+                    e.target.value = '';
+                } else if (typeof pagesReadNum !== 'number'){
+                    console.log(pagesReadNum)
                     alert('Please enter a number.');
                     e.target.value = '';
-                } else {
+                } else if (pagesReadNum > pagesTotal) {
                     alert('Please enter a number less than the total page count.');
                     e.target.value = '';
                 }
+                return;
             }
         }
         
