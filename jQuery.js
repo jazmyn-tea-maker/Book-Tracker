@@ -67,11 +67,21 @@ $(function () {
                                 pagesRead: 0,
                                 reviewText: '',
                                 reviewStars: '',
-                                tags: '',
+                                tagsArr: [],
                                 description: obj.summary,
                                 img: obj.img
                             })
-                            bookToPutInLibrary.sUL();
+
+                            let objCheck = tags.userLibraryMain.every(obj => JSON.stringify(obj) !== JSON.stringify(bookToPutInLibrary));
+                            if (!objCheck) {
+                                console.log(objCheck);
+                                alert('You\'ve already added this book.');
+                            } else {
+                                tags.userLibraryMain.push(bookToPutInLibrary);
+                                select('book-container').innerHTML = '';
+                                tags.userLibraryMain.forEach(obj => obj.sUL());
+                            }
+                            
                             checkEmptyContainer();
                         })
 

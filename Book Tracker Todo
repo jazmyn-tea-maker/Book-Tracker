@@ -1,10 +1,8 @@
 To do:
-- Make summary editable. - C
 - Pick back up button - A
 - Favorite button - Puts tag on book. (Or book in tag, more accurately.) - A
-- Tag Editor - Put tag icon where the options dropdown was, use that to organize/make it available to add new tags.- A
-- Tag Organizing. (Make button specifically for tags, when user clicks category, book container fills only with those books.) - A
-        ^^ Pull from the actual tag arrays instead of the 'Allbooks' array.
+- Tag Editor - organize/make it available to add new tags.- A
+   ^^ Pull from the actual tag arrays instead of the 'Allbooks' array.
 - Save the person's info into cache. (Maybe attach it to google account, like the others?) - B
 
 Grades:

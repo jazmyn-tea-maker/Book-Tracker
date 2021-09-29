@@ -30,9 +30,9 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, de
     this.pages = pages,
     this.pagesRead = pagesRead,
     this.reviewText = reviewText,
-    this.reviewStars = reviewStars
-    this.tags = tags
-    this.description = description;
+    this.reviewStars = reviewStars,
+    this.tagsArr = [tags],
+    this.description = description,
     this.img = img;
 }
 
@@ -83,21 +83,20 @@ book.prototype.sUL = function setUpLibrary() {
     newBook.children.item(1).style['background-color'] = chosenColor; //Front cover.
     newBook.children.item(3).style['background-color'] = chosenColor; //Back cover.
 
-    tags.userLibraryMain.push(this);
-    switch (this.tags) {
-        case ('toBeRead'): 
+    switch (true) {
+        case (this.tagsArr.includes('toBeRead')): 
             tags.toBeRead.push(this); 
             break;
-        case 'read': 
+        case (this.tagsArr.includes('read')): 
             tags.read.push(this); 
             break;
-        case 'reading': 
+        case (this.tagsArr.includes('reading')): 
             tags.reading.push(this); 
             break;
-        case 'putDown': 
+        case (this.tagsArr.includes('putDown')): 
             tags.putDown.push(this); 
             break;
-        case 'favorites': 
+        case (this.tagsArr.includes('favorites')): 
             tags.favorites.push(this); 
             break;
     }
@@ -119,7 +118,7 @@ book.prototype.sUL = function setUpLibrary() {
             newBook.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);
             newBook.children.item(1).children.item(1).style.display = 'none';
         } else {
-            newBook.children.item(1).children.item(1).display = 'none';
+            newBook.children.item(1).children.item(0).display = 'none';
             let img = document.createElement('img');
             img.src = select('cover-img').src;
             img.style = `height: 275px;
@@ -305,8 +304,12 @@ book.prototype.sUL = function setUpLibrary() {
         let bookID = e.target.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
         tags.userLibraryMain.splice(bookSelected, 1); 
+        let bookContainer = select('book-container');
         let bookToRemove = select(bookID);
         bookToRemove.remove();
+        for(i = 0; i < bookContainer.childElementCount; i++) {
+            bookContainer.children.item(i).id = `book-build${i}`;
+        }
         checkEmptyContainer();
     })
 
@@ -615,6 +618,7 @@ select('img-upload').addEventListener('change', function getBookCover (e) {
         let imgdiv = select('img-div');
         imgdiv.innerHTML = '';
         imgdiv.appendChild(img);
+        console.log(img);
 
     }, false);
 
@@ -646,27 +650,29 @@ select('img-upload-edit').addEventListener('change', function getBookCover (e) {
 })
 
 
-select('done-btn').addEventListener('click', function submit (e) {
+select('done-btn').addEventListener('click', function done (e) {
     let title = select('title-input').value;
     let author = select('author-input').value;
     let pages = select('pagesTotal').innerText;
     let pagesRead = select('pagesRead').innerText;
     let reviewText = 'Your review would be exquisite, I\'m sure.';
     let reviewStars = 0;
-    let tags = ''
+    let tagArr = [];
     let description = '';
     let imgdiv = select('img-div');
     let img = imgdiv.src;
     if (pagesRead == 0) {
-        tags = 'toBeRead';
+        tagArr.push('toBeRead');
     } else if (pagesRead == pages) {
-        tags = 'read'
+        tagArr.push('read');
     }
     if(imgdiv.src){
         img = imgdiv.src;
     }
-    let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description, img);
-    newBook.sUL();
+    let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tagArr, description, img);
+    tags.userLibraryMain.push(newBook);
+    select('book-container').innerHTML = '';
+    tags.userLibraryMain.forEach(obj => obj.sUL());
     checkEmptyContainer();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
@@ -744,11 +750,5 @@ let blankBook = Object.assign(Object.create(book.prototype), {
 //     tags: '',
 //     description: '',
 //     img : ''
-
-gibberish.sUL();
-gibberish2.sUL();
-gibberish3.sUL();
-firstBookHP.sUL();
-blankBook.sUL();
 
 checkEmptyContainer();
