@@ -467,11 +467,28 @@ book.prototype.sUL = function setUpLibrary() {
         select('set-cover-btn').addEventListener('click', setCoverBtn);
     })
 
+    let bookTagsDropdown = select('bookTags');
+    bookTagsDropdown.id += bookSelected;
+
+    let tag = select('tag');
+    tag.id += bookSelected;
+
+    select(tag.id).addEventListener('click', function (e) {
+        let bookID = e.target.parentElement.parentElement.id;
+        bookSelected = bookID.replace(/book-build/gi, '');
+        select(bookTagsDropdown.id).style.display = 'block';
+        select(bookTagsDropdown.id).addEventListener('mouseleave', function (e) {
+            e.target.style.display = 'none';
+        })
+        
+    });
+
 };
 
 //Tag dropdown:
 let setUpTags = () => {
     let tagsDropdown = select('tags-dropdown');
+
     function organizeContainer (e) {
         select('book-container').innerHTML = '';
         tags[e.target.id].forEach(obj => obj.sUL());
