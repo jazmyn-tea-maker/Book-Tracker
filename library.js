@@ -23,6 +23,8 @@ let tags = {
     favorites : []
 }
 
+let tagSelected = 'All';
+
 //Book constructor:
 function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, description, img) {
     this.title = title,
@@ -98,10 +100,11 @@ book.prototype.sUL = function setUpLibrary() {
             checkNPush('read', this);
         case (this.tagsArr.includes('reading')): 
             checkNPush('reading', this);
-        case (this.tagsArr.includes('putDown')): 
-            checkNPush('putDown', this);
         case (this.tagsArr.includes('favorites')): 
             checkNPush('favorites', this);
+        case (this.tagsArr.includes('putDown')): 
+            checkNPush('putDown', this);
+            break;
         default:
             checkNPush('All', this);
     }
@@ -136,10 +139,11 @@ book.prototype.sUL = function setUpLibrary() {
         
     }
 
-    let bookOverlay = newBook.children.item(0).children.item(4);
-
-
     bookSelected = newBook.id.replace(/book-build/gi, '');
+
+    let bookOverlay = newBook.children.item(0).children.item(4);
+    bookOverlay.id += bookSelected;
+
     let bookReadGauge = bookOverlay.children.item(0).children.item(0);
     bookReadGauge.id += bookSelected;
 
@@ -304,23 +308,41 @@ book.prototype.sUL = function setUpLibrary() {
     })
 
     let deleteBtn = newBook.children.item(0).children.item(2);
-    deleteBtn.id += bookContainer.childElementCount;
+    deleteBtn.id += bookSelected;
 
     select(deleteBtn.id).addEventListener('click', function (e) {
-        let bookID = e.target.parentElement.parentElement.id;
+        bookID = e.target.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
-        tags.All.splice(bookSelected, 1); 
-        let bookContainer = select('book-container');
-        let bookToRemove = select(bookID);
-        bookToRemove.remove();
+        if (tagSelected == 'All') {
+            let obj = tags.All[bookSelected];
+            for (tagArr in tags) {
+                let index = tags[tagArr].indexOf(obj);
+                if (index >= 0) {
+                    tags[tagArr].splice(index, 1);
+                    bookContainer.innerHTML = '';
+                    tags.All.forEach(obj => obj.sUL());
+                    checkEmptyContainer();
+                }
+            }
+        } else {
+            let obj = tags[tagSelected][bookSelected];
+            console.log(obj);
+            let index = tags[tagSelected].indexOf(obj);
+            console.log(tags[tagSelected]);
+                if (index >= 0) {
+                    tags[tagSelected].splice(index, 1);
+                    bookContainer.innerHTML = '';
+                    tags[tagSelected].forEach(obj => obj.sUL());
+                    checkEmptyContainer();
+                }
+        }
         for(i = 0; i < bookContainer.childElementCount; i++) {
             bookContainer.children.item(i).id = `book-build${i}`;
         }
-        checkEmptyContainer();
     })
 
     let editBtn = newBook.children.item(0).children.item(3);
-    editBtn.id += bookContainer.childElementCount;
+    editBtn.id += bookSelected;
 
     select(editBtn.id).addEventListener('click', function (e) {
         let bookID = e.target.parentElement.parentElement.id;
@@ -453,6 +475,8 @@ let setUpTags = () => {
     function organizeContainer (e) {
         select('book-container').innerHTML = '';
         tags[e.target.id].forEach(obj => obj.sUL());
+        tagSelected = e.target.id;
+        checkEmptyContainer();
     }
     for (const tagName in tags) {
         let newTagEl = document.createElement('h5');
