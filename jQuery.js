@@ -72,14 +72,14 @@ $(function () {
                                 img: obj.img
                             })
 
-                            let objCheck = tags.userLibraryMain.every(obj => JSON.stringify(obj) !== JSON.stringify(bookToPutInLibrary));
+                            let objCheck = tags.All.every(obj => JSON.stringify(obj) !== JSON.stringify(bookToPutInLibrary));
                             if (!objCheck) {
                                 console.log(objCheck);
                                 alert('You\'ve already added this book.');
                             } else {
-                                tags.userLibraryMain.push(bookToPutInLibrary);
+                                tags.All.push(bookToPutInLibrary);
                                 select('book-container').innerHTML = '';
-                                tags.userLibraryMain.forEach(obj => obj.sUL());
+                                tags.All.forEach(obj => obj.sUL());
                             }
                             
                             checkEmptyContainer();

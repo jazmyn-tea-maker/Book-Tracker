@@ -162,6 +162,27 @@ body {
     cursor: pointer;
 }
 
+#tags-dropdown {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: #362544;
+    height: 232px;
+    width: 118px;
+    position: fixed;
+    right: 15px;
+    top: 9.6%;
+    border-radius: 12px;
+    z-index: 50;
+}
+
+.tag-titles {
+    color: white;
+    cursor: pointer;
+    margin-top: 7px;
+}
+
 #new-book-title {
     font-size: 20px;
     position: relative;

@@ -15,7 +15,7 @@ let checkEmptyContainer = () => {
  }
 
 let tags = {
-    userLibraryMain : [],
+    All : [],
     toBeRead : [],
     read : [],
     reading : [],
@@ -41,7 +41,7 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, de
 
 function applyPreviewDataDefault (bookIndex) {
         //Applying data:
-        let bookObj = tags.userLibraryMain[bookIndex];
+        let bookObj = tags.All[bookIndex];
 
         let defaultSummary = `No summary...yet!`;
         let defaultReview = `Nothing here yet!`;
@@ -60,7 +60,6 @@ function applyPreviewDataDefault (bookIndex) {
 
 
 //Functions below used in the editBtn event listener. Had to make global to be removed later...
-
 
 
 let bookSelected; //Used in the event listeners below...
@@ -83,22 +82,28 @@ book.prototype.sUL = function setUpLibrary() {
     newBook.children.item(1).style['background-color'] = chosenColor; //Front cover.
     newBook.children.item(3).style['background-color'] = chosenColor; //Back cover.
 
+    let checkNPush = (tag, newObj) => {
+        let objCheck = tags[tag].every(obj => JSON.stringify(obj) !== JSON.stringify(newObj));
+        if (!objCheck) {
+            return;
+        } else {
+            tags[tag].push(newObj);
+        }
+    }
+
     switch (true) {
         case (this.tagsArr.includes('toBeRead')): 
-            tags.toBeRead.push(this); 
-            break;
+            checkNPush('toBeRead', this);
         case (this.tagsArr.includes('read')): 
-            tags.read.push(this); 
-            break;
+            checkNPush('read', this);
         case (this.tagsArr.includes('reading')): 
-            tags.reading.push(this); 
-            break;
+            checkNPush('reading', this);
         case (this.tagsArr.includes('putDown')): 
-            tags.putDown.push(this); 
-            break;
+            checkNPush('putDown', this);
         case (this.tagsArr.includes('favorites')): 
-            tags.favorites.push(this); 
-            break;
+            checkNPush('favorites', this);
+        default:
+            checkNPush('All', this);
     }
 
     let newTitle = create('h3');
@@ -131,16 +136,17 @@ book.prototype.sUL = function setUpLibrary() {
         
     }
 
+    let bookOverlay = newBook.children.item(0).children.item(4);
+
+
+    bookSelected = newBook.id.replace(/book-build/gi, '');
+    let bookReadGauge = bookOverlay.children.item(0).children.item(0);
+    bookReadGauge.id += bookSelected;
+
     bookContainer.appendChild(newBook);
 
-    let bookOverlay = select(newBook.id).children.item(0).children.item(4);
-    bookOverlay.id += bookContainer.childElementCount - 1;
-
-    let bookReadGauge = bookOverlay.children.item(0).children.item(0);
-    bookReadGauge.id += bookContainer.childElementCount - 1;
-
-    select(bookReadGauge.id).setAttribute('value', tags.userLibraryMain[bookContainer.childElementCount - 1].pagesRead);
-    select(bookReadGauge.id).setAttribute('max', tags.userLibraryMain[bookContainer.childElementCount - 1].pages);
+    select(bookReadGauge.id).setAttribute('value', tags.All[bookSelected].pagesRead);
+    select(bookReadGauge.id).setAttribute('max', tags.All[bookSelected].pages);
     select(bookReadGauge.id).setAttribute('min', 0);
 
     //Creates a little version of the book (Thumbnail) when the book is clicked on, also sets up book info preview:
@@ -185,7 +191,7 @@ book.prototype.sUL = function setUpLibrary() {
             cancelBtn.style.display = 'block';
             reviewInput.addEventListener('keydown', function (e) {
                 if (e.key == 'Enter' || e.eventCode == 13) {
-                    tags.userLibraryMain[bookSelected].reviewText = e.target.value;
+                    tags.All[bookSelected].reviewText = e.target.value;
                     select('review-text').innerText = e.target.value;
                     e.target.style.display = 'none';
                     submitBtn.style.display = 'none';
@@ -193,7 +199,7 @@ book.prototype.sUL = function setUpLibrary() {
                 }
             })
             submitBtn.addEventListener('click', function submitted (e) {
-                tags.userLibraryMain[bookSelected].reviewText = reviewInput.value;
+                tags.All[bookSelected].reviewText = reviewInput.value;
                 select('review-text').innerText = reviewInput.value;
                 reviewInput.style.display = 'none';
                 e.target.style.display = 'none';
@@ -214,13 +220,13 @@ book.prototype.sUL = function setUpLibrary() {
                 toggleDiv.style.display = 'none';
             })
             select('submit-summary-btn').addEventListener('click', function () {
-                tags.userLibraryMain[bookSelected].description = select('summary-input').value;
+                tags.All[bookSelected].description = select('summary-input').value;
                 select('summary-para').innerText = select('summary-input').value;
                 toggleDiv.style.display = 'none';
             })
             select('summary-input').addEventListener('keydown', function (e) {
                 if (e.key == 'Enter' || e.eventCode == 13) {
-                    tags.userLibraryMain[bookSelected].description = e.target.value;
+                    tags.All[bookSelected].description = e.target.value;
                     select('summary-para').innerText = e.target.value;
                     toggleDiv.style.display = 'none';
                 }
@@ -228,7 +234,7 @@ book.prototype.sUL = function setUpLibrary() {
             select('summary-input').value = '';
         })
 
-        let obj = tags.userLibraryMain[bookSelected];
+        let obj = tags.All[bookSelected];
         if (tags.putDown.includes(obj)) {
             select('put-down-icon').src = 'putDownIconUsed.svg';
         } else {
@@ -236,7 +242,7 @@ book.prototype.sUL = function setUpLibrary() {
         }
 
         select('put-down-icon').addEventListener('click', function putDownBook (e) {
-            let obj = tags.userLibraryMain[bookSelected];
+            let obj = tags.All[bookSelected];
             if (tags.putDown.includes(obj)) {
                 select('put-down-icon').src = 'putDownIconUsed.svg';
                 alert('You\'ve already put this book down.');
@@ -253,7 +259,7 @@ book.prototype.sUL = function setUpLibrary() {
 
         function shareBook (e) {
             //For share button...
-            let obj = tags.userLibraryMain[bookSelected];
+            let obj = tags.All[bookSelected];
             let textToCopy = `Hey! I highly recommend ${obj.title} by ${obj.author}. Here is the summary: ${obj.description}`;
             navigator.clipboard.writeText(textToCopy);
             alert('Book info was copied to clipboard!');
@@ -264,7 +270,7 @@ book.prototype.sUL = function setUpLibrary() {
 
         function reviewStarFunc (e) {
             //These puppies (bookSelected variable) need to stay inside another scope so they don't keep changing!!!!
-            let obj = tags.userLibraryMain[bookSelected]; 
+            let obj = tags.All[bookSelected]; 
             let starNum;
             let i;
             starNum = e.target;
@@ -281,7 +287,7 @@ book.prototype.sUL = function setUpLibrary() {
         };
     
         //Default:
-        let i = tags.userLibraryMain[bookSelected].reviewStars;
+        let i = tags.All[bookSelected].reviewStars;
         if(i) {
             for (j = i + 1; j <= 5; j++) {
             select(`${j}star`).src = 'faveStar.svg';
@@ -303,7 +309,7 @@ book.prototype.sUL = function setUpLibrary() {
     select(deleteBtn.id).addEventListener('click', function (e) {
         let bookID = e.target.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
-        tags.userLibraryMain.splice(bookSelected, 1); 
+        tags.All.splice(bookSelected, 1); 
         let bookContainer = select('book-container');
         let bookToRemove = select(bookID);
         bookToRemove.remove();
@@ -319,7 +325,7 @@ book.prototype.sUL = function setUpLibrary() {
     select(editBtn.id).addEventListener('click', function (e) {
         let bookID = e.target.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
-        let obj = tags.userLibraryMain[bookSelected]; 
+        let obj = tags.All[bookSelected]; 
         select('overlay').style.display = 'block';
         select('edit-book-ui').style.display = 'block';
 
@@ -421,15 +427,15 @@ book.prototype.sUL = function setUpLibrary() {
 
         function setCoverBtn () {
             if (select('cover-img-edit')) {
-                let obj = tags.userLibraryMain[bookSelected];
+                let obj = tags.All[bookSelected];
                 obj.img = select('cover-img-edit').src;
-                let book = select(`book-build${tags.userLibraryMain.indexOf(obj)}`);
+                let book = select(`book-build${tags.All.indexOf(obj)}`);
                 let img = document.createElement('img');
                 img.src = obj.img;
                 img.style = `height: 275px;
                             width: 155px;
                             border-radius: 10px;`;
-                img.id = 'bookCover' + tags.userLibraryMain.indexOf(obj);
+                img.id = 'bookCover' + tags.All.indexOf(obj);
                 //Puts image into front cover div, in front of the h3 element.
                 book.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);
                 book.children.item(1).children.item(1).style.display = 'none';
@@ -440,6 +446,66 @@ book.prototype.sUL = function setUpLibrary() {
     })
 
 };
+
+//Tag dropdown:
+let setUpTags = () => {
+    let tagsDropdown = select('tags-dropdown');
+    function organizeContainer (e) {
+        select('book-container').innerHTML = '';
+        tags[e.target.id].forEach(obj => obj.sUL());
+    }
+    for (const tagName in tags) {
+        let newTagEl = document.createElement('h5');
+        newTagEl.classList.add('tag-titles');
+        switch(tagName) {
+            case ('All'): {
+                newTagEl.innerText = 'All Books';
+                newTagEl.id = tagName;
+                tagsDropdown.appendChild(newTagEl);
+                select(newTagEl.id).addEventListener('click', organizeContainer);
+            }
+            break;
+            case('toBeRead'): {
+                newTagEl.innerText = 'To Be Read';
+                newTagEl.id = tagName;
+                tagsDropdown.appendChild(newTagEl);
+                select(newTagEl.id).addEventListener('click', organizeContainer);
+            }
+            break;
+            case('read'): {
+                newTagEl.innerText = 'Read';
+                newTagEl.id = tagName;
+                tagsDropdown.appendChild(newTagEl);
+                select(newTagEl.id).addEventListener('click', organizeContainer);
+            }
+            break;
+            case('reading'): {
+                newTagEl.innerText = 'Reading';
+                newTagEl.id = tagName;
+                tagsDropdown.appendChild(newTagEl);
+                select(newTagEl.id).addEventListener('click', organizeContainer);
+            }
+            break;
+            case('putDown'): {
+                newTagEl.innerText = 'Put Down';
+                newTagEl.id = tagName;
+                tagsDropdown.appendChild(newTagEl);
+                select(newTagEl.id).addEventListener('click', organizeContainer);
+            }
+            break;
+            case('favorites'): {
+                newTagEl.innerText = 'Faves';
+                newTagEl.id = tagName;
+                tagsDropdown.appendChild(newTagEl);
+                select(newTagEl.id).addEventListener('click', organizeContainer);
+            }
+        }
+        
+    }
+}
+
+setUpTags();
+
 
 //Algorithm for book hover progress bars:
 
@@ -584,7 +650,18 @@ select('plus-icon').addEventListener('click', newBookUI);
 
 inputClear();
 
-select('overlay').addEventListener('click', function backToMain () {
+select('tagEditorIcon').addEventListener('click', function () {
+    // Show dropdown. Dropdown must have:
+        //List of available tags, clickable, light up on hover.
+        //Overflow is scrollable.
+        //At the top, fixed, is an add tag button.
+        //The add button will show a text input right below and the user
+        //must press enter to push it through. After that, the input will be hidden.
+        //When you click on one of its children, it'll sort the book container, showing
+        //only objects within the selected tag.
+})
+
+select('overlay').addEventListener('click', function backToAll () {
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
     select('edit-book-ui').style.display = 'none';
@@ -670,9 +747,9 @@ select('done-btn').addEventListener('click', function done (e) {
         img = imgdiv.src;
     }
     let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, tagArr, description, img);
-    tags.userLibraryMain.push(newBook);
+    tags.All.push(newBook);
     select('book-container').innerHTML = '';
-    tags.userLibraryMain.forEach(obj => obj.sUL());
+    tags.All.forEach(obj => obj.sUL());
     checkEmptyContainer();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
@@ -690,7 +767,7 @@ let gibberish = Object.assign(Object.create(book.prototype), {
     pagesRead: 231,
     reviewText: 'It was alright. Didn\'t make any sense, though.',
     reviewStars: '',
-    tags: 'read',
+    tagsArr: [],
     description: 'Ykasj jnaj lasjonw kjndnsajdad lamdad akndand kann. Ajnnnasf alwopq knsknas.'
 });
 
@@ -701,7 +778,7 @@ let gibberish2 = Object.assign(Object.create(book.prototype), {
     pagesRead: 243,
     reviewText: 'It still doesn\'t make any sense...but it was mildly entertaining nonetheless.',
     reviewStars: '',
-    tags: 'read',
+    tagsArr: [],
     description: 'jafiafi anfofajf akfkajksowws oinkasnfsan. knaknaskla aljmsdkasjdlkal aksnasn akjsnfkanf.'
 });
 
@@ -712,7 +789,7 @@ let gibberish3 = Object.assign(Object.create(book.prototype), {
     pagesRead: 100,
     reviewText: 'Wow. I think I can finally understand why people read this series. My God. It is a masterpiece!!',
     reviewStars: '',
-    tags: 'read',
+    tagsArr: [],
     description: 'Gib jib gabba wooky. Gahanda foroduki! Jamba laba da, tad aplo bungy.'
 });
 
@@ -723,7 +800,7 @@ let firstBookHP = Object.assign(Object.create(book.prototype), {
     pagesRead: 150,
     reviewText: 'One of the main players in keeping me sane! Very well-written.',
     reviewStars: '',
-    tags: '',
+    tagsArr: [],
     description: 'On his 11th birthday, Harry receives a letter inviting him to study magic at the Hogwarts School of Witchcraft and Wizardry. Harry discovers that not only is he a wizard, but he is a famous one. He meets two best friends, Ron Weasley and Hermione Granger, and makes his first enemy, Draco Malfoy.',
     img: '81iqZ2HHD-L.jpg'
 })
@@ -735,7 +812,7 @@ let blankBook = Object.assign(Object.create(book.prototype), {
         pagesRead: 0,
         reviewText: '',
         reviewStars: '',
-        tags: '',
+        tagsArr: [],
         description: '',
         img : ''
 })
@@ -750,5 +827,9 @@ let blankBook = Object.assign(Object.create(book.prototype), {
 //     tags: '',
 //     description: '',
 //     img : ''
+
+firstBookHP.sUL();
+blankBook.sUL();
+gibberish3.sUL();
 
 checkEmptyContainer();
