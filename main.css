@@ -137,17 +137,29 @@ body {
     position: relative;
     display: block;
     align-self: center;
+    cursor: pointer;
     filter: invert();
 }
 
-.person-profile {
+#person-profile {
     height: 30px;
     width: auto;
     left: 20px;
     position: relative;
     display: block;
     align-self: center;
+    cursor: pointer;
     filter: invert();
+}
+
+#tagEditorIcon {
+    height: 40px;
+    width: auto;
+    position: relative;
+    display: block;
+    left: 40px;
+    align-self: center;
+    cursor: pointer;
 }
 
 #new-book-title {
@@ -157,6 +169,7 @@ body {
     align-self: center;
     top: 3px;
     left: 4px;
+    cursor: pointer;
     filter: invert();
 }
 
@@ -167,6 +180,7 @@ body {
     align-self: center;
     top: 3px;
     left: 25px;
+    cursor: pointer;
     filter: invert();
 }
 
@@ -311,6 +325,7 @@ meter {
     background-color: rgb(90, 1, 86, .45);
     border-radius: 10px;
     display: block;
+    cursor: pointer;
     position: absolute;
 }
 
@@ -504,10 +519,30 @@ meter {
     justify-content: space-around;
 }
 
+.edit-btns-style {
+    background-color: rgb(100, 50, 146);
+    border: none;
+    padding: 10px;
+    line-height: 3px;
+    color: white;
+}
+
 #edit-review-btn {
     width: 75px;
     height: 20px;
-    line-height: 10px;
+    border-radius: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+#edit-summary-btn {
+    position: absolute;
+    right: 26%;
+    top: 4%;
+    width: 50px;
+    height: 20px;
     border-radius: 10px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 10px;
@@ -836,6 +871,89 @@ meter {
     font-size: 9px;
     text-align: center;
     line-height: 15px;
+}
+
+#toggle-summary-btns {
+    display: none;
+    position: absolute;
+    width: 75%;
+    height: 39%;
+    top: -20px;
+    left: 0; right: 0;
+    margin: auto;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    z-index: 49;
+}
+
+.overlay-editing {
+    display: block;
+    position: absolute;
+    background-color: rgb(28, 5, 39, .45);
+    width: 75%;
+    height: 104%;
+    top: -20px;
+    left: 0; right: 0;
+    margin: auto;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    z-index: 49;
+}
+
+.edit-summary-btns-div {
+    display:flex;
+    gap: 5px;
+    width: 43%;
+    height: fit-content;
+    position: absolute;
+    left: 0; right: 0; top: 20px;
+    margin: auto;
+ }
+
+ #summary-input {
+    position: absolute;
+    /*display: none;
+    */margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    top: -10px;
+    text-indent: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 70%;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    z-index: 51;
+}
+
+.summary-btns {
+    position: relative;
+    background-color: #f78cca;
+    color: #380c49;
+    border-color:var(--main-color);
+    border-radius: 10px;
+    z-index: 50;
+}
+
+#submit-summary-btn {
+    height: 30px;
+    width: 63%;
+}
+
+#cancel-summary-btn {
+    color: #f78cca;
+    background-color: #380c49;
+    height: 30px;
+    width: 47%;
 }
 
 #review-input {

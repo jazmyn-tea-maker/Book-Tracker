@@ -43,10 +43,7 @@ function applyPreviewDataDefault (bookIndex) {
         //Applying data:
         let bookObj = tags.userLibraryMain[bookIndex];
 
-        let defaultSummary = `No summary...would you like to add one?<br>
-        <a id='book-summary-pick' href='#'>Choose from existing book.</a> 
-        <br>
-        <a id='book-summary-create' href='#'>Create your own.</a></p>`;
+        let defaultSummary = `No summary...yet!`;
         let defaultReview = `Nothing here yet!`;
         if (bookObj.reviewText) {
             select('review-text').innerText = bookObj.reviewText;
@@ -139,8 +136,10 @@ book.prototype.sUL = function setUpLibrary() {
 
     let bookOverlay = select(newBook.id).children.item(0).children.item(4);
     bookOverlay.id += bookContainer.childElementCount - 1;
+
     let bookReadGauge = bookOverlay.children.item(0).children.item(0);
-    bookReadGauge.id = `book-gauge${bookContainer.childElementCount - 1}`;
+    bookReadGauge.id += bookContainer.childElementCount - 1;
+
     select(bookReadGauge.id).setAttribute('value', tags.userLibraryMain[bookContainer.childElementCount - 1].pagesRead);
     select(bookReadGauge.id).setAttribute('max', tags.userLibraryMain[bookContainer.childElementCount - 1].pages);
     select(bookReadGauge.id).setAttribute('min', 0);
@@ -208,6 +207,27 @@ book.prototype.sUL = function setUpLibrary() {
             })
             reviewInput.value = '';
         });
+
+        select('edit-summary-btn').addEventListener('click', function () {
+            let toggleDiv = select('toggle-summary-btns')
+            toggleDiv.style.display = 'block';
+            select('cancel-summary-btn').addEventListener('click', function () {
+                toggleDiv.style.display = 'none';
+            })
+            select('submit-summary-btn').addEventListener('click', function () {
+                tags.userLibraryMain[bookSelected].description = select('summary-input').value;
+                select('summary-para').innerText = select('summary-input').value;
+                toggleDiv.style.display = 'none';
+            })
+            select('summary-input').addEventListener('keydown', function (e) {
+                if (e.key == 'Enter' || e.eventCode == 13) {
+                    tags.userLibraryMain[bookSelected].description = e.target.value;
+                    select('summary-para').innerText = e.target.value;
+                    toggleDiv.style.display = 'none';
+                }
+            })
+            select('summary-input').value = '';
+        })
 
         let obj = tags.userLibraryMain[bookSelected];
         if (tags.putDown.includes(obj)) {
@@ -574,6 +594,7 @@ select('overlay').addEventListener('click', function backToMain () {
     select('submit-review-btn').style.display = 'none';
     select('cancel-button').style.display = 'none';
     select('searched-books-container').innerHTML = '';
+    select('toggle-summary-btns').style.display = 'none';
     for (x = 1; x <= 5; x++){
         select(`${x}star`).src = 'faveStar.svg';
     }

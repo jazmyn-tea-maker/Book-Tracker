@@ -11,12 +11,17 @@
 <body>
     <div id='overlay'></div>
     <div id='preview-book-ui'>
-        <h2 class='preview-titles' style='margin-top: 10px;'>Summary</h2>
-        <p id='summary-para' class='small-text para-responsive' style='margin-top: -10px; max-height: 70px;'>No summary...would you like to add one?<br>
-            <a id='book-summary-pick' href='#'>Choose from existing book.</a> 
-            <br>
-            <a id='book-summary-create' href='#'>Create your own.</a></p>
-        <div id='contain-book-ops'>
+        <h2 class='preview-titles' style='margin-top: 10px;'>Summary</h2> <button class='edit-btns-style' id='edit-summary-btn'>Edit</button>
+        <p id='summary-para' class='small-text para-responsive' style='margin-top: -10px; max-height: 70px;'>No summary...yet!</p><div id='contain-book-ops'>
+            <div id='toggle-summary-btns'>
+                <div class='overlay-editing'></div>
+                <input type='text' id='summary-input'>
+                <div class='edit-summary-btns-div'>
+                    <button class='summary-btns' id='submit-summary-btn' type='button'>Submit</button>
+                    <button class='summary-btns' id='cancel-summary-btn'>Cancel</button>
+                </div>
+            </div>
+            
             <div class='img-button-container'>
                 <h2 class='preview-titles small-titles' style='width: 64.05px;'>Put it down</h2>
                 <img id='put-down-icon' src='putDownIcon.svg' style='position: relative; display: block; top: 25%;'>
@@ -30,7 +35,7 @@
         </div>
         <h2 class='preview-titles' style='font-size: 20px; margin-top: 10px;'>Your Review/Notes:</h2>
         <div id='edit-review-container'>
-            <button id='edit-review-btn'>Edit</button>
+            <button class='edit-btns-style' id='edit-review-btn'>Edit</button>
             <div id='review-stars'>
                 <img class='stars' id='1star' src='faveStar.svg'>
                 <img class='stars' id='2star' src='faveStar.svg'>
@@ -41,7 +46,9 @@
         </div>
         <p id='review-text' class='small-text para-responsive' style='max-height: 85px;'>Nothing here yet!</p>
         <input type='text' id='review-input'>
-        <div class='review-btn-cont'><button id='submit-review-btn' class='review-buttons'>Submit Review</button> <button id='cancel-button' class='review-buttons'>Cancel</button></div>
+        <div class='review-btn-cont'>
+            <button id='submit-review-btn' class='review-buttons'>Submit Review</button>
+            <button id='cancel-button' class='review-buttons'>Cancel</button></div>
     </div>
     <div id='search-books-ui'>
         <div id='search-titles'>
@@ -119,8 +126,9 @@
         <div class='end-nav-bar-items'>
             <img id='plus-icon' src='plus-icon.png'>
             <h2 id='new-book-title'>New Book</h2>
-            <img class='person-profile' src='person-profile.png'>
+            <img id='person-profile' src='person-profile.png'>
             <h2 id='account-title'>Account</h2>
+            <img id='tagEditorIcon' src='tagEditor.svg'>
         </div>
     </div>
     <h3 id='empty-quote'>'Form is emptiness. Emptiness is form.' - Eckhart Tolle</h3>
@@ -137,7 +145,7 @@
             <button id='edit-book' class='edit-book-btns'>Edit</button>
             <div id='book-hover-overlay' class='book-hover-overlay'>
                 <label for='gauge-bar' style='z-index: 100px; position: absolute; top: 252px; left: 2px;'>
-                    <meter class='gauge-bars'></meter>
+                    <meter class='gauge-bars' id='book-gauge'></meter>
                 </label>
             </div>
         </div>
