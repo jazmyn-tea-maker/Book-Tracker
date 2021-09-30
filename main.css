@@ -317,6 +317,12 @@ body {
     bottom: 3px;
 }
 
+.footer-tip-style { 
+    position: absolute;
+    right: 20px;
+    bottom: -10px;
+}
+
 
 
 .edit-book-btns {
@@ -1094,6 +1100,34 @@ meter {
     z-index: 99;
 }
 
+@media (max-width: 881px) {
+    #footer {
+        height: 40px;
+        justify-content: center;
+    }
+    #footer-tip {
+        font-size: 17px;
+        padding-bottom: 5px;
+        left: 0; right: 0;
+        margin: auto;
+        text-align: center;
+    }
+}
+
+@media (max-width: 684px) {
+    #footer {
+        height: 60px;
+        justify-content: center;
+    }
+    #footer-tip {
+        font-size: 17px;
+        padding-bottom: 5px;
+        left: 0; right: 0; bottom: 5px;
+        margin: auto;
+        text-align: center;
+    }
+}
+
 @media (max-width: 825px) {
     #nav {
         flex-flow: column;
@@ -1117,9 +1151,6 @@ meter {
         display: flex;
         align-self: center;
         z-index: 20;
-    }
-    #footer-tip {
-        display: none;
     }
     
     .animateIcons {

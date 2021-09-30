@@ -17,9 +17,12 @@ let create = function (element) {
         'Quick Tip: You\'re not ugly.',
         'Quick Tip: You can’t enjoy art or books in a hurry.',
         'Quick Tip: Ask yourself how you feel every blue moon.',
-        'Quick Tip: Deleting a book while in another tag will only remove it from that tag.'
+        'Quick Tip: Deleting a book in a tag will only remove it from that tag. (Except All Books)'
     ];
     let choice = Math.floor(quickTipArr.length * Math.random());
+    if (choice == 9) {
+        select('footer-tip').style = `position: absolute; right: 20px; bottom: -7px;font-size: 17px;`
+    }
     select('footer-tip').innerText = quickTipArr[choice];
 })();
 
