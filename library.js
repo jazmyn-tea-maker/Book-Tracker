@@ -504,11 +504,14 @@ book.prototype.sUL = function setUpLibrary() {
     tag.id += bookSelected;
 
     select(tag.id).addEventListener('click', function (e) {
-        let bookID = e.target.parentElement.parentElement.id;
+        let bookID = e.target.parentElement.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
         select(bookTagsDropdown.id).style.display = 'block';
         select(bookTagsDropdown.id).addEventListener('mouseleave', function (e) {
             e.target.style.display = 'none';
+        })
+        select(bookID).addEventListener('mouseleave', function () {
+            select(bookTagsDropdown.id).style.display = 'none';
         })
         
     });
@@ -723,14 +726,10 @@ select('plus-icon').addEventListener('click', newBookUI);
 inputClear();
 
 select('tagEditorIcon').addEventListener('click', function () {
-    // Show dropdown. Dropdown must have:
-        //List of available tags, clickable, light up on hover.
-        //Overflow is scrollable.
-        //At the top, fixed, is an add tag button.
-        //The add button will show a text input right below and the user
-        //must press enter to push it through. After that, the input will be hidden.
-        //When you click on one of its children, it'll sort the book container, showing
-        //only objects within the selected tag.
+    select('tags-dropdown').style.display = 'flex';
+    select('tags-dropdown').addEventListener('mouseleave', function (e) {
+        e.target.style.display = 'none';
+    })
 })
 
 select('overlay').addEventListener('click', function backToAll () {

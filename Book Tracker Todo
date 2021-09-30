@@ -1,8 +1,4 @@
 To do:
-- Pick back up button - A
-- Favorite button - Puts tag on book. (Or book in tag, more accurately.) - A
-- Tag Editor - organize/make it available to add new tags.- A
-   ^^ Pull from the actual tag arrays instead of the 'Allbooks' array.
 - Save the person's info into cache. (Maybe attach it to google account, like the others?) - B
 
 Grades:
