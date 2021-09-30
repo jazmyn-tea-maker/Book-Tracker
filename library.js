@@ -6,6 +6,24 @@ let create = function (element) {
     return document.createElement(element);
 }
 
+let quickTipArr = [
+    'Quick Tip: Delete a book from All Books tag to remove from all tags.', 
+    'Quick Tip: You can organize books by preexisting tags.',
+    'Quick Tip: You can search for an already existing book.', 
+    'Quick Tip: You can do this.', 
+    'Quick Tip: Reading is great for the brain, a study shows.',
+    'Quick Tip: Leaving a review can be like a sticky note for the future.',
+    'Quick Tip: You\'re not ugly.',
+    'Quick Tip: You can’t enjoy art or books in a hurry.',
+    'Quick Tip: Ask yourself how you feel every blue moon.'
+];
+
+let selectRandomTip = () => {
+    let choice = Math.floor(quickTipArr.length * Math.random());
+    return quickTipArr[choice];
+}
+select('footer-tip').innerText = selectRandomTip();
+
 let checkEmptyContainer = () => {
     if (select('book-container').innerHTML == '') {
          select('empty-quote').style.display = 'block';
@@ -89,7 +107,6 @@ book.prototype.sUL = function setUpLibrary() {
         if (!objCheck) {
             return;
         } else {
-            console.log('doing it!')
             tags[tag].push(newObj);
         }
     }
