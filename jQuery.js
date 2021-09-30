@@ -67,7 +67,7 @@ $(function () {
                                 pagesRead: 0,
                                 reviewText: '',
                                 reviewStars: '',
-                                tagsArr: [],
+                                tagsArr: ['All'],
                                 description: obj.summary,
                                 img: obj.img
                             })
