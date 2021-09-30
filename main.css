@@ -287,7 +287,7 @@ body {
     height: 155px;
     width: 75px;
     background-color: rgb(194, 147, 221);
-    display: none;
+    /* display: none; */
     position: absolute;
     z-index: 70;
     top: 40px;
@@ -307,6 +307,14 @@ body {
     background-color: rgb(226, 194, 225);
     font-weight: bold;
     text-align: center;
+}
+
+.footer-titles {
+    margin-left: 10px;
+    font-size: 20px;
+    color: rgb(212, 175, 255);
+    position: relative;
+    bottom: 3px;
 }
 
 
@@ -454,7 +462,7 @@ meter {
 
 #footer {
     position: fixed;
-    display: block;
+    display: flex;
     width: 100vw;
     background-color: #1d1435;
     bottom: 0;

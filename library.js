@@ -33,7 +33,7 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, tags, de
     this.pagesRead = pagesRead,
     this.reviewText = reviewText,
     this.reviewStars = reviewStars,
-    this.tagsArr = [tags],
+    this.tagsArr = ['All', tags],
     this.description = description,
     this.img = img;
 }
@@ -89,6 +89,7 @@ book.prototype.sUL = function setUpLibrary() {
         if (!objCheck) {
             return;
         } else {
+            console.log('doing it!')
             tags[tag].push(newObj);
         }
     }
@@ -470,6 +471,35 @@ book.prototype.sUL = function setUpLibrary() {
     let bookTagsDropdown = select('bookTags');
     bookTagsDropdown.id += bookSelected;
 
+    let eachTag;
+
+    for (i = 0; i < select(bookTagsDropdown.id).childElementCount; i++) {
+        select(bookTagsDropdown.id).children.item(i).id += bookSelected;
+        eachTag = select(bookTagsDropdown.id).children.item(i).id;
+
+        select(eachTag).addEventListener('click', function (e) {
+            e.target.style['background-color'] = '#FFF';
+            let bookID = e.target.parentElement.parentElement.parentElement.parentElement.id;
+            let bookSelected = bookID.replace(/book-build/gi, '');
+            let thisTag = (e.target.id).replace(/[0-9]/gi, '');
+            let chosenObj = tags.All[bookSelected];
+            let tagCheck = tags[thisTag].every(obj => JSON.stringify(obj) !== JSON.stringify(chosenObj));
+            console.log(tagCheck, tags[thisTag]);
+            if (tagCheck) {
+                tags[thisTag].push(chosenObj);
+                return;
+            }
+        })
+    }
+
+    for (const tagToCheck in tags) {
+        let thereCheck = tags[tagToCheck].every(obj => JSON.stringify(obj) !== JSON.stringify(tags.All[bookSelected]));
+        if (!thereCheck) {
+           let tagID = tagToCheck + '2' + bookSelected;
+           select(tagID).style['background-color'] = '#FFF';
+        }
+    }
+
     let tag = select('tag');
     tag.id += bookSelected;
 
@@ -490,6 +520,7 @@ let setUpTags = () => {
     let tagsDropdown = select('tags-dropdown');
 
     function organizeContainer (e) {
+        select('book-tag-cat-title').innerText = e.target.innerText;
         select('book-container').innerHTML = '';
         tags[e.target.id].forEach(obj => obj.sUL());
         tagSelected = e.target.id;
