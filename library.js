@@ -34,7 +34,7 @@ let checkEmptyContainer = () => {
      }
  };
 
-let tags = {
+let tagsObj = {
     All : [],
     toBeRead : [],
     read : [],
@@ -43,7 +43,7 @@ let tags = {
     favorites : []
 };
 
-let tagSelected = 'All';
+let tags;
 
 //Book constructor:
 function book(title, author, pages, pagesRead, reviewText, reviewStars, description, img) {
@@ -58,10 +58,11 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, descript
     this.img = img;
 };
 
-
-
+let tagSelected = 'All'; //Default to load.
 
 function applyPreviewDataDefault (bookIndex) {
+    tags = JSON.parse(localStorage['tags']);
+    console.log(tags);
     //Applying data:
     let bookObj = tags.All[bookIndex];
 
@@ -87,6 +88,8 @@ function applyPreviewDataDefault (bookIndex) {
 let bookSelected; //Used in the event listeners below...
 
 book.prototype.sUL = function setUpLibrary() {
+    tags = JSON.parse(localStorage['tags']);
+
     let bookBuild = select('book-build');
     let bookContainer = select('book-container');
     let newBook = bookBuild.cloneNode(true);
@@ -110,6 +113,8 @@ book.prototype.sUL = function setUpLibrary() {
             return;
         } else {
             tags[tag].push(newObj);
+            localStorage['tags'] = JSON.stringify(tags);
+            tags = JSON.parse(localStorage['tags']);
         }
     }
 
@@ -207,6 +212,7 @@ book.prototype.sUL = function setUpLibrary() {
 
         //Edit review button:
         select('edit-review-btn').addEventListener('click', function () {
+            tags = JSON.parse(localStorage['tags']);
             let reviewInput = select('review-input');
             reviewInput.style.display = 'block';
             let submitBtn = select('submit-review-btn');
@@ -216,6 +222,7 @@ book.prototype.sUL = function setUpLibrary() {
             reviewInput.addEventListener('keydown', function (e) {
                 if (e.key == 'Enter' || e.eventCode == 13) {
                     tags.All[bookSelected].reviewText = e.target.value;
+                    localStorage['tags'] = JSON.stringify(tags);
                     select('review-text').innerText = e.target.value;
                     e.target.style.display = 'none';
                     submitBtn.style.display = 'none';
@@ -224,6 +231,7 @@ book.prototype.sUL = function setUpLibrary() {
             })
             submitBtn.addEventListener('click', function submitted (e) {
                 tags.All[bookSelected].reviewText = reviewInput.value;
+                localStorage['tags'] = JSON.stringify(tags);
                 select('review-text').innerText = reviewInput.value;
                 reviewInput.style.display = 'none';
                 e.target.style.display = 'none';
@@ -238,6 +246,7 @@ book.prototype.sUL = function setUpLibrary() {
         });
 
         select('edit-summary-btn').addEventListener('click', function () {
+            tags = JSON.parse(localStorage['tags']);
             let toggleDiv = select('toggle-summary-btns')
             toggleDiv.style.display = 'block';
             select('cancel-summary-btn').addEventListener('click', function () {
@@ -245,12 +254,14 @@ book.prototype.sUL = function setUpLibrary() {
             })
             select('submit-summary-btn').addEventListener('click', function () {
                 tags.All[bookSelected].description = select('summary-input').value;
+                localStorage['tags'] = JSON.stringify(tags);
                 select('summary-para').innerText = select('summary-input').value;
                 toggleDiv.style.display = 'none';
             })
             select('summary-input').addEventListener('keydown', function (e) {
                 if (e.key == 'Enter' || e.eventCode == 13) {
                     tags.All[bookSelected].description = e.target.value;
+                    localStorage['tags'] = JSON.stringify(tags);
                     select('summary-para').innerText = e.target.value;
                     toggleDiv.style.display = 'none';
                 }
@@ -266,6 +277,7 @@ book.prototype.sUL = function setUpLibrary() {
         }
 
         select('put-down-icon').addEventListener('click', function putDownBook (e) {
+            tags = JSON.parse(localStorage['tags']);
             let obj = tags.All[bookSelected];
             if (tags.putDown.includes(obj)) {
                 select('put-down-icon').src = 'putDownIconUsed.svg';
@@ -275,6 +287,7 @@ book.prototype.sUL = function setUpLibrary() {
                 select('put-down-icon').src = 'putDownIconUsed.svg';
                 obj.tags = 'putDown';
                 tags.putDown.push(obj);
+                localStorage['tags'] = JSON.stringify(tags);
                 alert('Your book has been put down.');
                 e.stopPropagation();
             }
@@ -283,6 +296,7 @@ book.prototype.sUL = function setUpLibrary() {
 
         function shareBook (e) {
             //For share button...
+            tags = JSON.parse(localStorage['tags']);
             let obj = tags.All[bookSelected];
             let textToCopy = `Hey! I highly recommend ${obj.title} by ${obj.author}. Here is the summary: ${obj.description}`;
             navigator.clipboard.writeText(textToCopy);
@@ -293,7 +307,7 @@ book.prototype.sUL = function setUpLibrary() {
         select('share-icon').addEventListener('click', shareBook, {once: true});
 
         function reviewStarFunc (e) {
-            //These puppies (bookSelected variable) need to stay inside another scope so they don't keep changing!!!!
+            tags = JSON.parse(localStorage['tags']);
             let obj = tags.All[bookSelected]; 
             let starNum;
             let i;
@@ -308,8 +322,9 @@ book.prototype.sUL = function setUpLibrary() {
             for (x = 1; x <= i; x++){
                 select(`${x}star`).src = 'faveStarActive.svg';
             }
+            localStorage['tags'] = JSON.stringify(tags);
         };
-    
+        
         //Default:
         let i = tags.All[bookSelected].reviewStars;
         if(i) {
@@ -331,28 +346,39 @@ book.prototype.sUL = function setUpLibrary() {
     deleteBtn.id += bookSelected;
 
     select(deleteBtn.id).addEventListener('click', function (e) {
-        bookID = e.target.parentElement.parentElement.id;
-        bookSelected = bookID.replace(/book-build/gi, '');
+        let bookID = e.target.parentElement.parentElement.id;
+        let bookSelected = bookID.replace(/book-build/gi, '');
         if (tagSelected == 'All') {
+            tags = JSON.parse(localStorage['tags']);
             let obj = tags.All[bookSelected];
+            console.log(obj);
             for (tagArr in tags) {
                 let index = tags[tagArr].indexOf(obj);
                 if (index >= 0) {
                     tags[tagArr].splice(index, 1);
+                    localStorage['tags'] = JSON.stringify(tags);
                     bookContainer.innerHTML = '';
-                    tags.All.forEach(obj => obj.sUL());
-                    checkEmptyContainer();
+                    tags.All.forEach(obj => {
+                        Object.setPrototypeOf(obj, book.prototype);
+                        obj.sUL();
+                    });
                 }
             }
+            checkEmptyContainer();
         } else {
+            tags = JSON.parse(localStorage['tags']);
             let obj = tags[tagSelected][bookSelected];
             let index = tags[tagSelected].indexOf(obj);
-                if (index >= 0) {
-                    tags[tagSelected].splice(index, 1);
-                    bookContainer.innerHTML = '';
-                    tags[tagSelected].forEach(obj => obj.sUL());
-                    checkEmptyContainer();
-                }
+            if (index >= 0) {
+                tags[tagSelected].splice(index, 1);
+                bookContainer.innerHTML = '';
+                tags[tagSelected].forEach(obj => {
+                    Object.setPrototypeOf(obj, book.prototype);
+                    obj.sUL();
+                });
+            }
+            localStorage['tags'] = JSON.stringify(tags);
+            checkEmptyContainer();
         }
         for(i = 0; i < bookContainer.childElementCount; i++) {
             bookContainer.children.item(i).id = `book-build${i}`;
@@ -363,6 +389,7 @@ book.prototype.sUL = function setUpLibrary() {
     editBtn.id += bookSelected;
 
     select(editBtn.id).addEventListener('click', function (e) {
+        tags = JSON.parse(localStorage['tags']);
         let bookID = e.target.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
         let obj = tags.All[bookSelected]; 
@@ -455,7 +482,7 @@ book.prototype.sUL = function setUpLibrary() {
 
         pagesRange.addEventListener('input', newPagesSlide);
 
-        if (obj.img) {
+        if (obj.img && select('img-div')) {
             let img = create('img');
             img.style = `height: 55px; width: 40px;`
             let imgdiv = select('img-div-edit');
@@ -465,23 +492,53 @@ book.prototype.sUL = function setUpLibrary() {
         }
 
         function setCoverBtn () {
+            function getBase64Image(img) {
+                img.style = `height: 275px;
+                width: 155px;`
+                var imgCanvas = document.createElement("canvas"),
+                imgContext = imgCanvas.getContext("2d");
+        
+            // Make sure canvas is as big as the picture
+            imgCanvas.width = img.width;
+            imgCanvas.height = img.height;
+        
+            // Draw image into canvas element
+            imgContext.drawImage(img, 0, 0, img.width, img.height);
+        
+            // Get canvas contents as a data URL
+            var imgAsDataURL = imgCanvas.toDataURL("image/png");
+        
+            // Save image into localStorage
+            try {
+                localStorage.setItem(`img${bookSelected}`, imgAsDataURL);
+            }
+            catch {
+                console.log("Storage failed");
+            }
+            img.style = `height: 55px; width: 40px;`
+        }
             if (select('cover-img-edit')) {
                 let obj = tags.All[bookSelected];
-                obj.img = select('cover-img-edit').src;
+                getBase64Image(select('cover-img-edit'));
+                obj.img = localStorage[`img${bookSelected}`];
                 let book = select(`book-build${tags.All.indexOf(obj)}`);
                 let img = create('img');
                 img.src = obj.img;
-                img.style = `height: 275px;
+                img.style = `
+                            border-radius: 10px;
+                            height: 275px;
                             width: 155px;
                             border-radius: 10px;`;
                 img.id = 'bookCover' + tags.All.indexOf(obj);
                 //Puts image into front cover div, in front of the h3 element.
                 book.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);
                 book.children.item(1).children.item(1).style.display = 'none';
+                localStorage['tags'] = JSON.stringify(tags);
             }
         }
 
         select('set-cover-btn').addEventListener('click', setCoverBtn);
+        localStorage['tags'] = JSON.stringify(tags);
     })
 
     let bookTagsDropdown = select('bookTags');
@@ -490,10 +547,12 @@ book.prototype.sUL = function setUpLibrary() {
     let eachTag;
 
     for (i = 0; i < select(bookTagsDropdown.id).childElementCount; i++) {
+        tags = JSON.parse(localStorage['tags']);
         select(bookTagsDropdown.id).children.item(i).id += bookSelected;
         eachTag = select(bookTagsDropdown.id).children.item(i).id;
 
         select(eachTag).addEventListener('click', function (e) {
+            console.log(tags);
             e.target.style['background-color'] = '#FFF';
             let bookID = e.target.parentElement.parentElement.parentElement.parentElement.id;
             let bookSelected = bookID.replace(/book-build/gi, '');
@@ -502,6 +561,7 @@ book.prototype.sUL = function setUpLibrary() {
             let tagCheck = tags[thisTag].every(obj => JSON.stringify(obj) !== JSON.stringify(chosenObj));
             if (tagCheck) {
                 tags[thisTag].push(chosenObj);
+                localStorage['tags'] = JSON.stringify(tags);
                 return;
             }
         })
@@ -512,7 +572,6 @@ book.prototype.sUL = function setUpLibrary() {
         if (!thereCheck) {
             if (tagToCheck !== 'putDown') {
                 let tagID = tagToCheck + '2' + bookSelected;
-                console.log(tagID);
                 select(tagID).style['background-color'] = '#FFF';
             }
         }
@@ -534,16 +593,73 @@ book.prototype.sUL = function setUpLibrary() {
         
     });
 
+    localStorage['tags'] = JSON.stringify(tags);
+
 };
+
+if (localStorage['tags']) {
+    console.log('working')
+    tags = JSON.parse(localStorage['tags']);
+    tags.All.forEach(obj => {
+        Object.setPrototypeOf(obj, book.prototype);
+        obj.sUL();
+    });
+} else {
+    localStorage.setItem('tags', JSON.stringify(tagsObj));
+}
+
+// let templateBook = Object.assign(Object.create(book.prototype), {
+//     title: 'Edit me!',
+//     author: '(Or delete me, it\'s whatever.)',
+//     pages: 0,
+//     pagesRead: 0,
+//     reviewText: '',
+//     reviewStars: '',
+//     tagsArr: ['All'],
+//     description: '',
+//     img : '' 
+// });
+
+// let templateBook2 = Object.assign(Object.create(book.prototype), {
+//     title: 'Wooooo!',
+//     author: 'Jazz',
+//     pages: 14,
+//     pagesRead: 2,
+//     reviewText: '',
+//     reviewStars: '',
+//     tagsArr: ['All'],
+//     description: '',
+//     img : '' 
+// });
+
+
+
+//Template:
+//     title: '',
+//     author: '',
+//     pages: 0,
+//     pagesRead: 0,
+//     reviewText: '',
+//     reviewStars: '',
+//     tags: '',
+//     description: '',
+//     img : ''
+
+// templateBook.sUL();
+
+// templateBook2.sUL();
 
 //Tag dropdown:
 let setUpTags = () => {
     let tagsDropdown = select('tags-dropdown');
-
     function organizeContainer (e) {
         select('book-tag-cat-title').innerText = e.target.innerText;
         select('book-container').innerHTML = '';
-        tags[e.target.id].forEach(obj => obj.sUL());
+        tags = JSON.parse(localStorage['tags'])
+        tags[e.target.id].forEach(obj => {
+            Object.setPrototypeOf(obj, book.prototype); //When stringified, the prototype goes away.
+            obj.sUL()
+        });
         tagSelected = e.target.id;
         checkEmptyContainer();
     }
@@ -770,27 +886,7 @@ select('overlay').addEventListener('click', function backToAll () {
     turnHoverOn();
 });
 
-select('img-upload').addEventListener('change', function getBookCover (e) {
-    let img = create('img');
-    img.id = 'cover-img';
-    img.alt = 'Cover preview';
-    let file = e.target.files[0];
-    const reader = new FileReader();
 
-    reader.addEventListener('load', function convertTobase64 () {
-        img.src = reader.result;
-        img.style = `height: 55px;
-                    width: 40px;`
-        let imgdiv = select('img-div');
-        imgdiv.innerHTML = '';
-        imgdiv.appendChild(img);
-
-    }, false);
-
-    if (file) {
-        reader.readAsDataURL(file);
-    }
-});
 
 select('img-upload-edit').addEventListener('change', function getBookCover (e) {
     let img = create('img');
@@ -823,15 +919,15 @@ select('done-btn').addEventListener('click', function done (e) {
     let reviewText = 'Your review would be exquisite, I\'m sure.';
     let reviewStars = 0;
     let description = '';
-    let imgdiv = select('img-div');
-    let img = imgdiv.src;
-    if(imgdiv.src){
-        img = imgdiv.src;
-    }
+    let img = '';
     let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, description, img);
     tags.All.push(newBook);
     select('book-container').innerHTML = '';
-    tags.All.forEach(obj => obj.sUL());
+    tags.All.forEach(obj => {
+        Object.setPrototypeOf(obj, book.prototype);
+        obj.sUL();
+    });
+    localStorage['tags'] = JSON.stringify(tags);
     checkEmptyContainer();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
@@ -840,30 +936,5 @@ select('done-btn').addEventListener('click', function done (e) {
     e.preventDefault();
     return;
 })
-
-let templateBook = Object.assign(Object.create(book.prototype), {
-    title: 'Edit me!',
-    author: '(Or delete me, it\'s whatever.)',
-    pages: 0,
-    pagesRead: 0,
-    reviewText: '',
-    reviewStars: '',
-    tagsArr: ['All'],
-    description: '',
-    img : '' 
-})
-
-//Template:
-//     title: '',
-//     author: '',
-//     pages: 0,
-//     pagesRead: 0,
-//     reviewText: '',
-//     reviewStars: '',
-//     tags: '',
-//     description: '',
-//     img : ''
-
-templateBook.sUL();
 
 checkEmptyContainer();

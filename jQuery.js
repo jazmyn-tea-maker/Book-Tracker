@@ -79,7 +79,11 @@ $(function () {
                             } else {
                                 tags.All.push(bookToPutInLibrary);
                                 select('book-container').innerHTML = '';
-                                tags.All.forEach(obj => obj.sUL());
+                                console.log(book);
+                                tags.All.forEach(obj => {
+                                    Object.setPrototypeOf(obj, book.prototype);
+                                    obj.sUL();
+                                })
                             }
                             
                             checkEmptyContainer();

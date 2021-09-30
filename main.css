@@ -480,12 +480,19 @@ meter {
     display: none;
     margin: auto;
     position: fixed;
-    top: 0; left: 0; bottom: 0; right: 0;
-    height: 500px;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 405px;
     width: 250px;
     z-index: 100;
     border-radius: 20px;
     background-color: var(--main-color);
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
 }
 
 #edit-book-ui {
