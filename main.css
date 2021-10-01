@@ -348,6 +348,7 @@ body {
 }
 
 .footer-tip-style { 
+    color:rgb(226, 106, 196);
     position: absolute;
     right: 20px;
     bottom: -10px;
@@ -1020,8 +1021,8 @@ meter {
 
  #summary-input {
     position: absolute;
-    /*display: none;
-    */margin-left: auto;
+    display: none;
+    margin-left: auto;
     margin-right: auto;
     left: 0;
     right: 0;
@@ -1257,7 +1258,22 @@ meter {
         margin: auto;
     }
     .end-nav-bar-items {
+        appearance: none;
         margin: auto;
         bottom: 5px;
+    }
+
+    #tagEditorIcon {
+        left: 100px;
+    }
+    #plus-icon {
+        left: 70px;
+    }
+    #new-book-title {
+        left: 70px;
+    }
+    #tags-dropdown {
+        top: 145px;
+        right: 20%;
     }
 }

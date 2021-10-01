@@ -629,7 +629,7 @@ book.prototype.sUL = function setUpLibrary() {
         let bookID = e.target.parentElement.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
         select(bookTagsDropdown.id).style.display = 'block';
-        select(bookTagsDropdown.id).addEventListener('mouseleave', function (e) {
+        select(bookTagsDropdown.id).addEventListener('mouseup', function (e) {
             e.target.style.display = 'none';
         })
         select(bookID).addEventListener('mouseleave', function () {
@@ -904,7 +904,7 @@ inputClear();
 select('tagEditorIcon').addEventListener('click', function () {
     select('tags-dropdown').style.display = 'flex';
     select('tags-dropdown').addEventListener('mouseleave', function (e) {
-        e.target.style.display = 'none';
+        select('tags-dropdown').style.display = 'none';
     })
 });
 
