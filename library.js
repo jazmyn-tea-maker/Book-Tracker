@@ -60,10 +60,10 @@ function book(title, author, pages, pagesRead, reviewText, reviewStars, descript
 
 let tagSelected = 'All'; //Default to load.
 
-function applyPreviewDataDefault (bookIndex) {
+function applyPreviewDataDefault (obj) {
     tags = JSON.parse(localStorage['tags']);
     //Applying data:
-    let bookObj = tags.All[bookIndex];
+    let bookObj = obj;
 
     let defaultSummary = `No summary...yet!`;
     let defaultReview = `Nothing here yet!`;
@@ -194,6 +194,7 @@ book.prototype.sUL = function setUpLibrary() {
     select(bookReadGauge.id).setAttribute('max', this.pages);
     select(bookReadGauge.id).setAttribute('min', 0);
 
+    let currentObjForPreview = this;
     //Creates a little version of the book (Thumbnail) when the book is clicked on, also sets up book info preview:
     select(bookOverlay.id).addEventListener('click', function (e) {
         select('preview-book-ui').style.display = 'block';
@@ -224,7 +225,7 @@ book.prototype.sUL = function setUpLibrary() {
         //These puppies (bookSelected variable) need to stay inside this scope so they don't keep changing!!!!
         bookSelected = newBook.id.replace(/book-build/gi, '');
 
-        applyPreviewDataDefault(bookSelected);
+        applyPreviewDataDefault(currentObjForPreview);
 
         //Edit review button:
         select('edit-review-btn').addEventListener('click', function () {
@@ -237,7 +238,8 @@ book.prototype.sUL = function setUpLibrary() {
             cancelBtn.style.display = 'block';
             reviewInput.addEventListener('keydown', function (e) {
                 if (e.key == 'Enter' || e.eventCode == 13) {
-                    tags.All[bookSelected].reviewText = e.target.value;
+                    currentObjForPreview.reviewText = e.target.value;
+                    tags.All[bookSelected] = currentObjForPreview;
                     localStorage['tags'] = JSON.stringify(tags);
                     select('review-text').innerText = e.target.value;
                     e.target.style.display = 'none';
@@ -246,7 +248,8 @@ book.prototype.sUL = function setUpLibrary() {
                 }
             })
             submitBtn.addEventListener('click', function submitted (e) {
-                tags.All[bookSelected].reviewText = reviewInput.value;
+                currentObjForPreview.reviewText = reviewInput.value;
+                tags.All[bookSelected] = currentObjForPreview;
                 localStorage['tags'] = JSON.stringify(tags);
                 select('review-text').innerText = reviewInput.value;
                 reviewInput.style.display = 'none';
@@ -259,6 +262,7 @@ book.prototype.sUL = function setUpLibrary() {
                 submitBtn.style.display = 'none';
             })
             reviewInput.value = '';
+            localStorage['tags'] = JSON.stringify(tags);
         });
 
         select('edit-summary-btn').addEventListener('click', function () {
@@ -269,14 +273,16 @@ book.prototype.sUL = function setUpLibrary() {
                 toggleDiv.style.display = 'none';
             })
             select('submit-summary-btn').addEventListener('click', function () {
-                tags.All[bookSelected].description = select('summary-input').value;
+                currentObjForPreview.description = select('summary-input').value;
+                tags.All[bookSelected] = currentObjForPreview;
                 localStorage['tags'] = JSON.stringify(tags);
                 select('summary-para').innerText = select('summary-input').value;
                 toggleDiv.style.display = 'none';
             })
             select('summary-input').addEventListener('keydown', function (e) {
                 if (e.key == 'Enter' || e.eventCode == 13) {
-                    tags.All[bookSelected].description = e.target.value;
+                    currentObjForPreview.description = e.target.value;
+                    tags.All[bookSelected] = currentObjForPreview;
                     localStorage['tags'] = JSON.stringify(tags);
                     select('summary-para').innerText = e.target.value;
                     toggleDiv.style.display = 'none';
@@ -285,8 +291,8 @@ book.prototype.sUL = function setUpLibrary() {
             select('summary-input').value = '';
         })
 
-        let obj = tags.All[bookSelected];
-        if (tags.putDown.includes(obj)) {
+        let obj = currentObjForPreview;
+        if (obj.tagsArr.includes('putDown')) {
             select('put-down-icon').src = 'putDownIconUsed.svg';
         } else {
             select('put-down-icon').src = 'putDownIcon.svg';
@@ -294,15 +300,15 @@ book.prototype.sUL = function setUpLibrary() {
 
         select('put-down-icon').addEventListener('click', function putDownBook (e) {
             tags = JSON.parse(localStorage['tags']);
-            let obj = tags.All[bookSelected];
-            if (tags.putDown.includes(obj)) {
+            let obj = currentObjForPreview;
+            if (obj.tagsArr.includes('putDown')) {
                 select('put-down-icon').src = 'putDownIconUsed.svg';
                 alert('You\'ve already put this book down.');
                 e.stopPropagation();
             } else {
                 select('put-down-icon').src = 'putDownIconUsed.svg';
                 obj.tagsArr.push('putDown');
-                tags.putDown.push(obj);
+                tags.All[bookSelected] = currentObjForPreview;
                 localStorage['tags'] = JSON.stringify(tags);
                 alert('Your book has been put down.');
                 e.stopPropagation();
@@ -313,7 +319,7 @@ book.prototype.sUL = function setUpLibrary() {
         function shareBook (e) {
             //For share button...
             tags = JSON.parse(localStorage['tags']);
-            let obj = tags.All[bookSelected];
+            let obj = currentObjForPreview;
             let textToCopy = `Hey! I highly recommend ${obj.title} by ${obj.author}. Here is the summary: ${obj.description}`;
             navigator.clipboard.writeText(textToCopy);
             alert('Book info was copied to clipboard!');
@@ -324,13 +330,14 @@ book.prototype.sUL = function setUpLibrary() {
 
         function reviewStarFunc (e) {
             tags = JSON.parse(localStorage['tags']);
-            let obj = tags.All[bookSelected]; 
+            let obj = currentObjForPreview; 
             let starNum;
             let i;
             starNum = e.target;
             starNum = parseInt(starNum.id.replace(/star/gi, ''));
             i = starNum;
             obj.reviewStars = starNum;
+            tags.All[bookSelected] = obj;
     
             for (j = i + 1; j <= 5; j++) {
                 select(`${j}star`).src = 'faveStar.svg';
@@ -342,7 +349,7 @@ book.prototype.sUL = function setUpLibrary() {
         };
         
         //Default:
-        let i = tags.All[bookSelected].reviewStars;
+        let i = currentObjForPreview.reviewStars;
         if(i) {
             for (j = i + 1; j <= 5; j++) {
             select(`${j}star`).src = 'faveStar.svg';
@@ -365,14 +372,14 @@ book.prototype.sUL = function setUpLibrary() {
     select(deleteBtn.id).addEventListener('click', function () {
         tags = JSON.parse(localStorage['tags']);
         let strTags = tags.All.map(obj => JSON.stringify(obj));
-            for (i = 0; i < strTags.length; i++) {
-                if (currentObj == strTags[i]) {
-                    strTags.splice(i, 1);
-                    strTags = strTags.map(obj => JSON.parse(obj));
-                    tags.All = strTags;
-                    localStorage['tags'] = JSON.stringify(tags);
-                }
+        for (i = 0; i < strTags.length; i++) {
+            if (currentObj == strTags[i]) {
+                strTags.splice(i, 1);
+                strTags = strTags.map(obj => JSON.parse(obj));
+                tags.All = strTags;
+                localStorage['tags'] = JSON.stringify(tags);
             }
+        }
         if (tagSelected != 'All') {
             tags = JSON.parse(localStorage['tags']);
             currentObj = JSON.parse(currentObj);
@@ -404,7 +411,7 @@ book.prototype.sUL = function setUpLibrary() {
         tags = JSON.parse(localStorage['tags']);
         let bookID = e.target.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
-        let obj = tags.All[bookSelected]; 
+        let obj = currentObjForPreview; 
         select('overlay').style.display = 'block';
         select('edit-book-ui').style.display = 'block';
 
@@ -421,6 +428,7 @@ book.prototype.sUL = function setUpLibrary() {
         function changeTitle (e) {
             if (e.key == 'Enter'|| e.eventCode == 13) {
                 obj.title = e.target.value;
+                tags.All[bookSelected] = obj;
                 select(`bookTitle${bookSelected}`).innerText = obj.title +`
                 By: ${obj.author}`;
                 localStorage['tags'] = JSON.stringify(tags);
@@ -430,6 +438,7 @@ book.prototype.sUL = function setUpLibrary() {
         function changeAuthor (e) {
             if (e.key == 'Enter'|| e.eventCode == 13) {
                 obj.author = e.target.value;
+                tags.All[bookSelected] = obj;
                 select(`bookTitle${bookSelected}`).innerText = obj.title +`
                 By: ${obj.author}`;
                 localStorage['tags'] = JSON.stringify(tags);
@@ -443,6 +452,7 @@ book.prototype.sUL = function setUpLibrary() {
                     select('pages-read-range-edit').setAttribute('max', pageNum);
                     select('pagesTotal-edit').innerText = pageNum;
                     obj.pages = pageNum;
+                    tags.All[bookSelected] = obj;
                     select('pages-read-range-edit').value = 0;
                     select('pagesRead-edit').innerText = select('pages-read-range-edit').value;
                     select(`book-gauge${bookSelected}`).setAttribute('max', obj.pages);
@@ -464,6 +474,7 @@ book.prototype.sUL = function setUpLibrary() {
                     select('pagesRead-edit').innerText = pagesReadNum;
                     select(`book-gauge${bookSelected}`).value = pagesReadNum;
                     obj.pagesRead = pagesReadNum;
+                    tags.All[bookSelected] = obj;
                     e.target.value = '';
                     localStorage['tags'] = JSON.stringify(tags);
                 } else if (typeof pagesReadNum !== 'number'){
@@ -479,6 +490,7 @@ book.prototype.sUL = function setUpLibrary() {
         
         function newPagesSlide (e) {
             obj.pagesRead = e.target.value;
+            tags.All[bookSelected] = obj;
             select('pagesRead-edit').innerText = e.target.value;
             select(`book-gauge${bookSelected}`).value = e.target.value;
             localStorage['tags'] = JSON.stringify(tags);
@@ -538,6 +550,7 @@ book.prototype.sUL = function setUpLibrary() {
                 let obj = tags.All[bookSelected];
                 getBase64Image(select('cover-img-edit'));
                 obj.img = localStorage[`img${bookSelected}`];
+                tags.All[bookSelected] = obj;
                 let book = select(`book-build${tags.All.indexOf(obj)}`);
                 let img = create('img');
                 img.src = obj.img;
@@ -617,30 +630,17 @@ if (localStorage['tags']) {
     localStorage.setItem('tags', JSON.stringify(tagsObj));
 }
 
-// let templateBook = Object.assign(Object.create(book.prototype), {
-//     title: 'Edit me!',
-//     author: '(Or delete me, it\'s whatever.)',
-//     pages: 0,
-//     pagesRead: 0,
-//     reviewText: '',
-//     reviewStars: '',
-//     tagsArr: ['All'],
-//     description: '',
-//     img : '' 
-// });
-
-// let templateBook2 = Object.assign(Object.create(book.prototype), {
-//     title: 'Wooooo!',
-//     author: 'Jazz',
-//     pages: 14,
-//     pagesRead: 2,
-//     reviewText: '',
-//     reviewStars: '',
-//     tagsArr: ['All'],
-//     description: '',
-//     img : '' 
-// });
-
+let templateBook = Object.assign(Object.create(book.prototype), {
+    title: 'Edit me!',
+    author: '(Or delete me, it\'s whatever.)',
+    pages: 0,
+    pagesRead: 0,
+    reviewText: '',
+    reviewStars: '',
+    tagsArr: ['All'],
+    description: '',
+    img : '' 
+});
 
 
 //Template:
@@ -653,10 +653,6 @@ if (localStorage['tags']) {
 //     tags: '',
 //     description: '',
 //     img : ''
-
-// templateBook.sUL();
-
-// templateBook2.sUL();
 
 //Tag dropdown:
 let setUpTags = () => {
