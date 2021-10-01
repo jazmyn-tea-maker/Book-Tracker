@@ -1,5 +1,6 @@
 $(function () { 
-    //select/create functions are in the library.js file. Works because it's loaded first! Cool!
+    //select/create functions are in the library.js file. Works because it's loaded first! GREAT!
+    //Totally NEVER became an issue. Right!
     let searchFunc = (e) => {
         let apiKey = 'AIzaSyCd0voZ7biNdsZQd6nNjDnHDYwztwprOK8';
         if (e.key == 'Enter' || e.eventCode == 13) {
@@ -91,7 +92,7 @@ $(function () {
                         })
 
                     }
-
+                    //Where the cookie actually crumbles, using the data from google's API.
                     data.items.forEach(bookObj => {
                         let book = bookObj.volumeInfo;
                         let images = book.imageLinks;

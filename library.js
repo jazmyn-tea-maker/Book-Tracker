@@ -62,7 +62,7 @@ let tagSelected = 'All'; //Default to load.
 
 function applyPreviewDataDefault (obj) {
     tags = JSON.parse(localStorage['tags']);
-    //Applying data:
+    //Applying data if it's already there:
     let bookObj = obj;
 
     let defaultSummary = `No summary...yet!`;
@@ -86,7 +86,9 @@ function applyPreviewDataDefault (obj) {
 
 let bookSelected; //Used in the event listeners below...
 
-book.prototype.sUL = function setUpLibrary() {
+book.prototype.sUL = function setUpLibrary() { 
+    //Sets up almost all event listeners, allows for book object editting, creates the actual book icons--hence
+    //why it's named 'setUpLIBRARY' now.
     tags = JSON.parse(localStorage['tags']);
 
     let bookBuild = select('book-build');
@@ -106,8 +108,15 @@ book.prototype.sUL = function setUpLibrary() {
     newBook.children.item(1).style['background-color'] = chosenColor; //Front cover.
     newBook.children.item(3).style['background-color'] = chosenColor; //Back cover.
 
-    let checkNPush = (tag, newObj) => {
+    let checkNPush = (tag, newObj) => { 
+        //Makes the books available to their tag arrays temporarily,
+        //So that they can become visible and accessible. 
+        //Afterwards, so that duplicates do not happen,
+        //and so the objects are all referencing the same ones,
+        //the arrays are emptied, and if needed again can be pulled by checking if their tag
+        //Matches the one selected. (See tagSelected variable)
         tags = JSON.parse(localStorage['tags']);
+        //tags variable is used so often to keep up to date with the current localStorage.
         let objCheck = tags[tag].every(obj => JSON.stringify(obj) !== JSON.stringify(newObj));
         let tagCheck = newObj.tagsArr.includes(tag);
         if (!objCheck || !tagCheck) {
@@ -116,6 +125,8 @@ book.prototype.sUL = function setUpLibrary() {
             tags[tag].push(newObj);
         }
         localStorage['tags'] = JSON.stringify(tags);
+        //This is used often to make changes.
+        //Often. VERY often
     }
 
     switch (true) {
@@ -139,6 +150,8 @@ book.prototype.sUL = function setUpLibrary() {
     }
 
     (function reset () {
+        //Empties the arrays, forcing program to pull from the same one
+        //over and over.
         tags = JSON.parse(localStorage['tags']);
         for (const tag in tags) {
             if (tag !== 'All') {
@@ -368,12 +381,14 @@ book.prototype.sUL = function setUpLibrary() {
     let deleteBtn = newBook.children.item(0).children.item(2);
     deleteBtn.id += bookSelected;
 
-    let currentObj = JSON.stringify(this);
+    let currentObjForDelete = JSON.stringify(this); 
+    //Made into string to be able to compare it to the other stringified objects below.
+    //(Really wish I knew a way to compare objects WITHOUT doing this, but I don't, so oh well!)
     select(deleteBtn.id).addEventListener('click', function () {
         tags = JSON.parse(localStorage['tags']);
         let strTags = tags.All.map(obj => JSON.stringify(obj));
         for (i = 0; i < strTags.length; i++) {
-            if (currentObj == strTags[i]) {
+            if (currentObjForDelete == strTags[i]) {
                 strTags.splice(i, 1);
                 strTags = strTags.map(obj => JSON.parse(obj));
                 tags.All = strTags;
@@ -382,18 +397,22 @@ book.prototype.sUL = function setUpLibrary() {
         }
         if (tagSelected != 'All') {
             tags = JSON.parse(localStorage['tags']);
-            currentObj = JSON.parse(currentObj);
-            let currentBookTag = currentObj.tagsArr.indexOf(tagSelected);
-            currentObj.tagsArr.splice(currentBookTag, 1);
-            tags.All.push(currentObj);
+            currentObjForDelete = JSON.parse(currentObjForDelete );
+            let currentBookTag = currentObjForDelete.tagsArr.indexOf(tagSelected);
+            currentObjForDelete.tagsArr.splice(currentBookTag, 1);
+            tags.All.push(currentObjForDelete);
+            localStorage['tags'] = JSON.stringify(tags);
+            //Don't ask me why, but if I do foreach and THEN put the tags obj in local storage,
+            //it won't save any changes above. So there. Fixed.
+            console.log(tags.All);
             bookContainer.innerHTML = '';
+            tags = JSON.parse(localStorage['tags']);
             tags.All.forEach(obj => {
                 if(obj.tagsArr.includes(tagSelected)) {
                     Object.setPrototypeOf(obj, book.prototype);
                     obj.sUL();
                 }
             })
-            localStorage['tags'] = JSON.stringify(tags);
         } else {
             bookContainer.innerHTML = '';
             tags.All.forEach(obj => {
@@ -524,6 +543,8 @@ book.prototype.sUL = function setUpLibrary() {
             function getBase64Image(img) {
                 img.style = `height: 275px;
                 width: 155px;`
+                //Styling applied, so I can trick the computer into making the image
+                //look nicer and not as heavily pixelated.
                 var imgCanvas = document.createElement("canvas"),
                 imgContext = imgCanvas.getContext("2d");
         
@@ -571,13 +592,11 @@ book.prototype.sUL = function setUpLibrary() {
         localStorage['tags'] = JSON.stringify(tags);
     })
 
-    let bookTagsDropdown = select('bookTags');
-    bookTagsDropdown.id += bookSelected;
-
     function placeBookInTag (e) {
         tags = JSON.parse(localStorage['tags']);
         e.target.style['background-color'] = '#FFF';
         let bookID = e.target.parentElement.parentElement.parentElement.parentElement.id;
+        //^^^ Looks ridiculous and probably is, but it's the easiest way I know how to get that index number!!
         bookSelected = bookID.replace(/book-build/gi, '');
         let thisTag = (e.target.id).replace(/[0-9]/gi, '');
         let chosenObj = tags[tagSelected][bookSelected];
@@ -589,6 +608,9 @@ book.prototype.sUL = function setUpLibrary() {
         e.stopPropagation();
     }
 
+    let bookTagsDropdown = select('bookTags');
+    bookTagsDropdown.id += bookSelected;
+
     let currentBookTags = select(bookTagsDropdown.id)
     for (j = 0; j < currentBookTags.childElementCount; j++) {
         currentBookTags.children.item(j).id += bookSelected;
@@ -599,7 +621,8 @@ book.prototype.sUL = function setUpLibrary() {
         }
     }
 
-    let tag = select('tag');
+    //The red tag on the book overlays.
+    let tag = select('tag'); 
     tag.id += bookSelected;
 
     select(tag.id).addEventListener('click', function (e) {
@@ -614,12 +637,12 @@ book.prototype.sUL = function setUpLibrary() {
         })
     });
 
-    
-
     localStorage['tags'] = JSON.stringify(tags);
 
 };
 
+//If it exists, make it available. If not, make it off of the template. (tabsObj, at the top) AKA available.
+//Needs to be down here because it references the sUL func.
 if (localStorage['tags']) {
     tags = JSON.parse(localStorage['tags']);
     tags.All.forEach(obj => {
@@ -653,6 +676,7 @@ let templateBook = Object.assign(Object.create(book.prototype), {
 //     tags: '',
 //     description: '',
 //     img : ''
+
 
 //Tag dropdown:
 let setUpTags = () => {
@@ -737,11 +761,8 @@ let setUpTags = () => {
 setUpTags();
 
 
-//Algorithm for book hover progress bars:
-
-
 let bookSearchBox = select('book-search-input');
-let bookSearchBoxMediaQuery = select('book-search-input2')
+let bookSearchBoxMediaQuery = select('book-search-input2');
 
 //Website view search bar animations:
 
@@ -872,7 +893,7 @@ let newBookUI = () => {
     let pagesReadInput = select('pages-read-input');
     pagesReadInput.addEventListener('keydown', enterFunc2);
     turnHoverOff();
-}
+};
 
 select('new-book-title').addEventListener('click', newBookUI);
 
@@ -885,7 +906,7 @@ select('tagEditorIcon').addEventListener('click', function () {
     select('tags-dropdown').addEventListener('mouseleave', function (e) {
         e.target.style.display = 'none';
     })
-})
+});
 
 select('overlay').addEventListener('click', function backToAll () {
     select('overlay').style.display = 'none';
@@ -933,6 +954,7 @@ select('img-upload-edit').addEventListener('change', function getBookCover (e) {
 
 
 select('done-btn').addEventListener('click', function done (e) {
+    tags = JSON.parse(localStorage['tags']);
     let title = select('title-input').value;
     let author = select('author-input').value;
     let pages = select('pagesTotal').innerText;
@@ -942,13 +964,34 @@ select('done-btn').addEventListener('click', function done (e) {
     let description = '';
     let img = '';
     let newBook = new book(title, author, pages, pagesRead, reviewText, reviewStars, description, img);
-    tags.All.push(newBook);
-    select('book-container').innerHTML = '';
-    tags.All.forEach(obj => {
-        Object.setPrototypeOf(obj, book.prototype);
-        obj.sUL();
-    });
-    localStorage['tags'] = JSON.stringify(tags);
+    //If you're in another tag, it'll just go ahead and add that tag to the book you've just made.
+    //But since there is a reset, I couldn't use the original array from the tags in localStorage.
+    //Hence why I had to push the tagged books into a new array. (tempTagArr).
+    if (tagSelected != 'All') {
+        newBook.tagsArr.push(tagSelected);
+        tags.All.push(newBook);
+        localStorage['tags'] = JSON.stringify(tags);
+        let tempTagArr = [];
+        tags.All.forEach(obj => {
+            if (obj.tagsArr.includes(tagSelected)) {
+                tempTagArr.push(obj);
+            }
+        });
+        select('book-container').innerHTML = '';
+        tempTagArr.forEach(obj => {
+            Object.setPrototypeOf(obj, book.prototype);
+            obj.sUL();
+        });
+    } else {
+        tags.All.push(newBook);
+        localStorage['tags'] = JSON.stringify(tags);
+        tags = JSON.parse(localStorage['tags']);
+        tags.All.forEach(obj => {
+            Object.setPrototypeOf(obj, book.prototype);
+            obj.sUL();
+        });
+    }
+    
     checkEmptyContainer();
     select('overlay').style.display = 'none';
     select('new-book-ui').style.display = 'none';
