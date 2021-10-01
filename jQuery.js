@@ -48,6 +48,7 @@ $(function () {
                                         border-radius: 10px;`;
                             newBook.children.item(1).appendChild(image);//Puts image into front cover div.
                         } else {  //If there isn't a cover image, just use a h3 title.
+                            this.img = '';
                             let newTitle = create('h3');
                             newTitle.innerText = this.title;
                             newTitle.classList.add('book-titles');
@@ -60,6 +61,7 @@ $(function () {
                         let obj = this;
                         let narrowedBook = select(searchedBookOverlay.id);
                         narrowedBook.addEventListener('click', function () {
+                            tags = JSON.parse(localStorage['tags']);
                             let bookToPutInLibrary = Object.assign(Object.create(book.prototype), {
                                 title: obj.title,
                                 author: obj.author,
@@ -74,16 +76,15 @@ $(function () {
 
                             let objCheck = tags.All.every(obj => JSON.stringify(obj) !== JSON.stringify(bookToPutInLibrary));
                             if (!objCheck) {
-                                console.log(objCheck);
                                 alert('You\'ve already added this book.');
                             } else {
                                 tags.All.push(bookToPutInLibrary);
                                 select('book-container').innerHTML = '';
-                                console.log(book);
                                 tags.All.forEach(obj => {
                                     Object.setPrototypeOf(obj, book.prototype);
                                     obj.sUL();
                                 })
+                                localStorage['tags'] = JSON.stringify(tags);
                             }
                             
                             checkEmptyContainer();

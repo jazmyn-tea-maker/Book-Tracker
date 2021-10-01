@@ -239,13 +239,17 @@ body {
     margin-bottom: 50px;
     padding-bottom: 10px;
     justify-content: center;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
     min-height: 290px;
     width: 95%;
     grid-template-columns: repeat(auto-fill, 175px);
     grid-template-rows: repeat(auto-fill, 280px);
     grid-auto-flow: row;
     gap: 20px 10px;
+    padding-right: 50px;
+    left: 32px;
+    height: max-content;
 }
 
 .book-hover-all {
@@ -287,7 +291,6 @@ body {
     height: 155px;
     width: 75px;
     background-color: rgb(194, 147, 221);
-    /* display: none; */
     position: absolute;
     z-index: 70;
     top: 40px;

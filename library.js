@@ -62,7 +62,6 @@ let tagSelected = 'All'; //Default to load.
 
 function applyPreviewDataDefault (bookIndex) {
     tags = JSON.parse(localStorage['tags']);
-    console.log(tags);
     //Applying data:
     let bookObj = tags.All[bookIndex];
 
@@ -108,31 +107,47 @@ book.prototype.sUL = function setUpLibrary() {
     newBook.children.item(3).style['background-color'] = chosenColor; //Back cover.
 
     let checkNPush = (tag, newObj) => {
+        tags = JSON.parse(localStorage['tags']);
         let objCheck = tags[tag].every(obj => JSON.stringify(obj) !== JSON.stringify(newObj));
-        if (!objCheck) {
+        let tagCheck = newObj.tagsArr.includes(tag);
+        if (!objCheck || !tagCheck) {
             return;
         } else {
             tags[tag].push(newObj);
-            localStorage['tags'] = JSON.stringify(tags);
-            tags = JSON.parse(localStorage['tags']);
         }
+        localStorage['tags'] = JSON.stringify(tags);
     }
 
     switch (true) {
         case (this.tagsArr.includes('toBeRead')): 
             checkNPush('toBeRead', this);
+            break;
         case (this.tagsArr.includes('read')): 
             checkNPush('read', this);
+            break;
         case (this.tagsArr.includes('reading')): 
             checkNPush('reading', this);
+            break;
         case (this.tagsArr.includes('favorites')): 
             checkNPush('favorites', this);
+            break;
         case (this.tagsArr.includes('putDown')): 
             checkNPush('putDown', this);
             break;
         default:
             checkNPush('All', this);
     }
+
+    (function reset () {
+        tags = JSON.parse(localStorage['tags']);
+        for (const tag in tags) {
+            if (tag !== 'All') {
+                tags[tag] = [];
+                localStorage['tags'] = JSON.stringify(tags);
+            }
+        }
+        checkEmptyContainer();
+    })();
 
     let newTitle = create('h3');
         newTitle.innerText = this.title  + ` 
@@ -174,8 +189,9 @@ book.prototype.sUL = function setUpLibrary() {
 
     bookContainer.appendChild(newBook);
 
-    select(bookReadGauge.id).setAttribute('value', tags.All[bookSelected].pagesRead);
-    select(bookReadGauge.id).setAttribute('max', tags.All[bookSelected].pages);
+
+    select(bookReadGauge.id).setAttribute('value', this.pagesRead);
+    select(bookReadGauge.id).setAttribute('max', this.pages);
     select(bookReadGauge.id).setAttribute('min', 0);
 
     //Creates a little version of the book (Thumbnail) when the book is clicked on, also sets up book info preview:
@@ -285,7 +301,7 @@ book.prototype.sUL = function setUpLibrary() {
                 e.stopPropagation();
             } else {
                 select('put-down-icon').src = 'putDownIconUsed.svg';
-                obj.tags = 'putDown';
+                obj.tagsArr.push('putDown');
                 tags.putDown.push(obj);
                 localStorage['tags'] = JSON.stringify(tags);
                 alert('Your book has been put down.');
@@ -345,45 +361,56 @@ book.prototype.sUL = function setUpLibrary() {
     let deleteBtn = newBook.children.item(0).children.item(2);
     deleteBtn.id += bookSelected;
 
+    let objIndexing = (obj, arr) => {
+        let strObj = JSON.stringify(obj);
+        let newArr = [...arr]
+        for (i = 0; i < newArr.length; i++) {
+            newArr[i] = JSON.stringify(newArr[i]);
+            let toComp = newArr[i];
+            if (toComp === strObj) {
+                return i;
+            }
+        }
+    }
+
     select(deleteBtn.id).addEventListener('click', function (e) {
+        tags = JSON.parse(localStorage['tags']);
         let bookID = e.target.parentElement.parentElement.id;
         let bookSelected = bookID.replace(/book-build/gi, '');
+        // console.log(bookSelected)
+        let obj = tags.All[bookSelected];
         if (tagSelected == 'All') {
-            tags = JSON.parse(localStorage['tags']);
-            let obj = tags.All[bookSelected];
-            console.log(obj);
-            for (tagArr in tags) {
-                let index = tags[tagArr].indexOf(obj);
-                if (index >= 0) {
-                    tags[tagArr].splice(index, 1);
-                    localStorage['tags'] = JSON.stringify(tags);
-                    bookContainer.innerHTML = '';
-                    tags.All.forEach(obj => {
-                        Object.setPrototypeOf(obj, book.prototype);
-                        obj.sUL();
-                    });
-                }
+            for (j = 0; j < obj.tagsArr.length; j++) {
+                let arr = obj.tagsArr[j];
+                let index = objIndexing(obj, tags[arr]);
+                // tags[tagArr].splice(index, 1);
+                localStorage['tags'] = JSON.stringify(tags);
             }
-            checkEmptyContainer();
-        } else {
+            bookContainer.innerHTML = '';
             tags = JSON.parse(localStorage['tags']);
-            let obj = tags[tagSelected][bookSelected];
-            let index = tags[tagSelected].indexOf(obj);
-            if (index >= 0) {
-                tags[tagSelected].splice(index, 1);
-                bookContainer.innerHTML = '';
-                tags[tagSelected].forEach(obj => {
-                    Object.setPrototypeOf(obj, book.prototype);
-                    obj.sUL();
-                });
-            }
-            localStorage['tags'] = JSON.stringify(tags);
+            tags.All.forEach(obj => {
+                Object.setPrototypeOf(obj, book.prototype);
+                obj.sUL();
+            });
             checkEmptyContainer();
-        }
-        for(i = 0; i < bookContainer.childElementCount; i++) {
-            bookContainer.children.item(i).id = `book-build${i}`;
-        }
-    })
+        // } else {
+        //     tags = JSON.parse(localStorage['tags']);
+        //     let obj = tags[tagSelected][bookSelected];
+        //     let index = tags[tagSelected].indexOf(obj);
+        //     tags[tagSelected].splice(index, 1);
+        //     bookContainer.innerHTML = '';
+        //     tags[tagSelected].forEach(obj => {
+        //         Object.setPrototypeOf(obj, book.prototype);
+        //         obj.sUL();
+        //     });
+        //     localStorage['tags'] = JSON.stringify(tags);
+        //     checkEmptyContainer();
+        // }
+        // for(i = 0; i < bookContainer.childElementCount; i++) {
+        //     bookContainer.children.item(i).id = `book-build${i}`;
+        // }
+    }
+})
 
     let editBtn = newBook.children.item(0).children.item(3);
     editBtn.id += bookSelected;
@@ -411,6 +438,7 @@ book.prototype.sUL = function setUpLibrary() {
                 obj.title = e.target.value;
                 select(`bookTitle${bookSelected}`).innerText = obj.title +`
                 By: ${obj.author}`;
+                localStorage['tags'] = JSON.stringify(tags);
             }
         }
         
@@ -419,6 +447,7 @@ book.prototype.sUL = function setUpLibrary() {
                 obj.author = e.target.value;
                 select(`bookTitle${bookSelected}`).innerText = obj.title +`
                 By: ${obj.author}`;
+                localStorage['tags'] = JSON.stringify(tags);
             }
         }
         
@@ -433,6 +462,7 @@ book.prototype.sUL = function setUpLibrary() {
                     select('pagesRead-edit').innerText = select('pages-read-range-edit').value;
                     select(`book-gauge${bookSelected}`).setAttribute('max', obj.pages);
                     e.target.value = '';
+                    localStorage['tags'] = JSON.stringify(tags);
                 } else {
                     alert('Please enter a number.');
                     e.target.value = '';
@@ -450,6 +480,7 @@ book.prototype.sUL = function setUpLibrary() {
                     select(`book-gauge${bookSelected}`).value = pagesReadNum;
                     obj.pagesRead = pagesReadNum;
                     e.target.value = '';
+                    localStorage['tags'] = JSON.stringify(tags);
                 } else if (typeof pagesReadNum !== 'number'){
                     alert('Please enter a number.');
                     e.target.value = '';
@@ -465,6 +496,7 @@ book.prototype.sUL = function setUpLibrary() {
             obj.pagesRead = e.target.value;
             select('pagesRead-edit').innerText = e.target.value;
             select(`book-gauge${bookSelected}`).value = e.target.value;
+            localStorage['tags'] = JSON.stringify(tags);
         }
 
         titleInput.addEventListener('keydown', changeTitle);
@@ -544,36 +576,28 @@ book.prototype.sUL = function setUpLibrary() {
     let bookTagsDropdown = select('bookTags');
     bookTagsDropdown.id += bookSelected;
 
-    let eachTag;
-
-    for (i = 0; i < select(bookTagsDropdown.id).childElementCount; i++) {
+    function placeBookInTag (e) {
         tags = JSON.parse(localStorage['tags']);
-        select(bookTagsDropdown.id).children.item(i).id += bookSelected;
-        eachTag = select(bookTagsDropdown.id).children.item(i).id;
-
-        select(eachTag).addEventListener('click', function (e) {
-            console.log(tags);
-            e.target.style['background-color'] = '#FFF';
-            let bookID = e.target.parentElement.parentElement.parentElement.parentElement.id;
-            let bookSelected = bookID.replace(/book-build/gi, '');
-            let thisTag = (e.target.id).replace(/[0-9]/gi, '');
-            let chosenObj = tags.All[bookSelected];
-            let tagCheck = tags[thisTag].every(obj => JSON.stringify(obj) !== JSON.stringify(chosenObj));
-            if (tagCheck) {
-                tags[thisTag].push(chosenObj);
-                localStorage['tags'] = JSON.stringify(tags);
-                return;
-            }
-        })
+        e.target.style['background-color'] = '#FFF';
+        let bookID = e.target.parentElement.parentElement.parentElement.parentElement.id;
+        bookSelected = bookID.replace(/book-build/gi, '');
+        let thisTag = (e.target.id).replace(/[0-9]/gi, '');
+        let chosenObj = tags[tagSelected][bookSelected];
+        let tagCheck2 = chosenObj.tagsArr.includes(thisTag);
+        if (!tagCheck2) {
+            chosenObj.tagsArr.push(thisTag);
+            localStorage['tags'] = JSON.stringify(tags);
+        }
+        e.stopPropagation();
     }
 
-    for (const tagToCheck in tags) {
-        let thereCheck = tags[tagToCheck].every(obj => JSON.stringify(obj) !== JSON.stringify(tags.All[bookSelected]));
-        if (!thereCheck) {
-            if (tagToCheck !== 'putDown') {
-                let tagID = tagToCheck + '2' + bookSelected;
-                select(tagID).style['background-color'] = '#FFF';
-            }
+    let currentBookTags = select(bookTagsDropdown.id)
+    for (j = 0; j < currentBookTags.childElementCount; j++) {
+        currentBookTags.children.item(j).id += bookSelected;
+        select(currentBookTags.children.item(j).id).addEventListener('click', placeBookInTag);
+        let bookTag = currentBookTags.children.item(j).id.replace(/[0-9]/gi, '');
+        if (this.tagsArr.includes(bookTag)) {
+            select(currentBookTags.children.item(j).id).style.backgroundColor = 'white';
         }
     }
 
@@ -590,15 +614,15 @@ book.prototype.sUL = function setUpLibrary() {
         select(bookID).addEventListener('mouseleave', function () {
             select(bookTagsDropdown.id).style.display = 'none';
         })
-        
     });
+
+    
 
     localStorage['tags'] = JSON.stringify(tags);
 
 };
 
 if (localStorage['tags']) {
-    console.log('working')
     tags = JSON.parse(localStorage['tags']);
     tags.All.forEach(obj => {
         Object.setPrototypeOf(obj, book.prototype);
@@ -655,14 +679,30 @@ let setUpTags = () => {
     function organizeContainer (e) {
         select('book-tag-cat-title').innerText = e.target.innerText;
         select('book-container').innerHTML = '';
-        tags = JSON.parse(localStorage['tags'])
-        tags[e.target.id].forEach(obj => {
+
+        tags.All.forEach(obj => {
+            tags = JSON.parse(localStorage['tags']);
+            tagSelected = e.target.id;
             Object.setPrototypeOf(obj, book.prototype); //When stringified, the prototype goes away.
-            obj.sUL()
+            if(e.target.id == 'All') {
+                obj.sUL();
+            } else {
+                let objCheck = tags[e.target.id].every(tagsObj => JSON.stringify(tagsObj) !== JSON.stringify(obj));
+                if (obj.tagsArr.includes(e.target.id) && objCheck) {
+                    tags[e.target.id].push(obj);
+                }
+                tags[e.target.id].forEach(obj => {
+                    Object.setPrototypeOf(obj, book.prototype);
+                    obj.sUL();
+                })
+            }
+            
+            localStorage['tags'] = JSON.stringify(tags);
         });
-        tagSelected = e.target.id;
+
         checkEmptyContainer();
     }
+    tags = JSON.parse(localStorage['tags']);
     for (const tagName in tags) {
         let newTagEl = create('h5');
         newTagEl.classList.add('tag-titles');
