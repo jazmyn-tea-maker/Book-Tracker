@@ -361,55 +361,40 @@ book.prototype.sUL = function setUpLibrary() {
     let deleteBtn = newBook.children.item(0).children.item(2);
     deleteBtn.id += bookSelected;
 
-    let objIndexing = (obj, arr) => {
-        let strObj = JSON.stringify(obj);
-        let newArr = [...arr]
-        for (i = 0; i < newArr.length; i++) {
-            newArr[i] = JSON.stringify(newArr[i]);
-            let toComp = newArr[i];
-            if (toComp === strObj) {
-                return i;
-            }
-        }
-    }
-
-    select(deleteBtn.id).addEventListener('click', function (e) {
+    let currentObj = JSON.stringify(this);
+    select(deleteBtn.id).addEventListener('click', function () {
         tags = JSON.parse(localStorage['tags']);
-        let bookID = e.target.parentElement.parentElement.id;
-        let bookSelected = bookID.replace(/book-build/gi, '');
-        // console.log(bookSelected)
-        let obj = tags.All[bookSelected];
-        if (tagSelected == 'All') {
-            for (j = 0; j < obj.tagsArr.length; j++) {
-                let arr = obj.tagsArr[j];
-                let index = objIndexing(obj, tags[arr]);
-                // tags[tagArr].splice(index, 1);
-                localStorage['tags'] = JSON.stringify(tags);
+        let strTags = tags.All.map(obj => JSON.stringify(obj));
+            for (i = 0; i < strTags.length; i++) {
+                if (currentObj == strTags[i]) {
+                    strTags.splice(i, 1);
+                    strTags = strTags.map(obj => JSON.parse(obj));
+                    tags.All = strTags;
+                    localStorage['tags'] = JSON.stringify(tags);
+                }
             }
-            bookContainer.innerHTML = '';
+        if (tagSelected != 'All') {
             tags = JSON.parse(localStorage['tags']);
+            currentObj = JSON.parse(currentObj);
+            let currentBookTag = currentObj.tagsArr.indexOf(tagSelected);
+            currentObj.tagsArr.splice(currentBookTag, 1);
+            tags.All.push(currentObj);
+            bookContainer.innerHTML = '';
+            tags.All.forEach(obj => {
+                if(obj.tagsArr.includes(tagSelected)) {
+                    Object.setPrototypeOf(obj, book.prototype);
+                    obj.sUL();
+                }
+            })
+            localStorage['tags'] = JSON.stringify(tags);
+        } else {
+            bookContainer.innerHTML = '';
             tags.All.forEach(obj => {
                 Object.setPrototypeOf(obj, book.prototype);
                 obj.sUL();
-            });
-            checkEmptyContainer();
-        // } else {
-        //     tags = JSON.parse(localStorage['tags']);
-        //     let obj = tags[tagSelected][bookSelected];
-        //     let index = tags[tagSelected].indexOf(obj);
-        //     tags[tagSelected].splice(index, 1);
-        //     bookContainer.innerHTML = '';
-        //     tags[tagSelected].forEach(obj => {
-        //         Object.setPrototypeOf(obj, book.prototype);
-        //         obj.sUL();
-        //     });
-        //     localStorage['tags'] = JSON.stringify(tags);
-        //     checkEmptyContainer();
-        // }
-        // for(i = 0; i < bookContainer.childElementCount; i++) {
-        //     bookContainer.children.item(i).id = `book-build${i}`;
-        // }
-    }
+            })
+        }
+        checkEmptyContainer();
 })
 
     let editBtn = newBook.children.item(0).children.item(3);
