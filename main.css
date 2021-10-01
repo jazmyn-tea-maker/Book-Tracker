@@ -7,6 +7,7 @@
 
 html {
     overflow-y: scroll;
+    overflow-x: hidden;
     height: 100%;
     padding: 0;
 }
@@ -333,10 +334,10 @@ body {
 .bookTagStyle:hover {
     background-color: rgb(226, 194, 225);
     border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    -ms-border-radius: 10px;
-    -o-border-radius: 10px;
+    -webkit-border-radius:;
+    -moz-border-radius:;
+    -ms-border-radius:;
+    -o-border-radius:;
 }
 
 .footer-titles {
