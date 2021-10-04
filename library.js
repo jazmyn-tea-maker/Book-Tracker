@@ -404,7 +404,6 @@ book.prototype.sUL = function setUpLibrary() {
             localStorage['tags'] = JSON.stringify(tags);
             //Don't ask me why, but if I do foreach and THEN put the tags obj in local storage,
             //it won't save any changes above. So there. Fixed.
-            console.log(tags.All);
             bookContainer.innerHTML = '';
             tags = JSON.parse(localStorage['tags']);
             tags.All.forEach(obj => {
@@ -560,31 +559,29 @@ book.prototype.sUL = function setUpLibrary() {
         
             // Save image into localStorage
             try {
-                localStorage.setItem(`img${bookSelected}`, imgAsDataURL);
+                obj.img = imgAsDataURL;
             }
             catch {
                 console.log("Storage failed");
             }
-            img.style = `height: 55px; width: 40px;`
+            img.style = `height: 55px; width: 40px;`;
         }
             if (select('cover-img-edit')) {
-                let obj = tags.All[bookSelected];
+                tags = JSON.parse(localStorage['tags']);
                 getBase64Image(select('cover-img-edit'));
-                obj.img = localStorage[`img${bookSelected}`];
-                tags.All[bookSelected] = obj;
-                let book = select(`book-build${tags.All.indexOf(obj)}`);
                 let img = create('img');
+                tags.All[bookSelected] = obj;
+                localStorage['tags'] = JSON.stringify(tags);
                 img.src = obj.img;
                 img.style = `
                             border-radius: 10px;
                             height: 275px;
                             width: 155px;
                             border-radius: 10px;`;
-                img.id = 'bookCover' + tags.All.indexOf(obj);
                 //Puts image into front cover div, in front of the h3 element.
+                let book = select(`book-build${bookSelected}`);
                 book.children.item(1).insertBefore(img, newBook.children.item(1).firstChild);
                 book.children.item(1).children.item(1).style.display = 'none';
-                localStorage['tags'] = JSON.stringify(tags);
             }
         }
 
@@ -629,9 +626,6 @@ book.prototype.sUL = function setUpLibrary() {
         let bookID = e.target.parentElement.parentElement.parentElement.id;
         bookSelected = bookID.replace(/book-build/gi, '');
         select(bookTagsDropdown.id).style.display = 'block';
-        select(bookTagsDropdown.id).addEventListener('mouseup', function (e) {
-            e.target.style.display = 'none';
-        })
         select(bookID).addEventListener('mouseleave', function () {
             select(bookTagsDropdown.id).style.display = 'none';
         })
@@ -986,6 +980,7 @@ select('done-btn').addEventListener('click', function done (e) {
         tags.All.push(newBook);
         localStorage['tags'] = JSON.stringify(tags);
         tags = JSON.parse(localStorage['tags']);
+        select('book-container').innerHTML = '';
         tags.All.forEach(obj => {
             Object.setPrototypeOf(obj, book.prototype);
             obj.sUL();
